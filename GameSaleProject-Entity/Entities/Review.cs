@@ -16,7 +16,7 @@ namespace GameSaleProject_Entity.Entities
         //Nav
         public virtual Game Game { get; set; }
         
-        public virtual Customer Customer { get; set; }
+        public virtual User Customer { get; set; }
 
         
 

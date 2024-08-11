@@ -15,6 +15,6 @@ namespace GameSaleProject_Entity.Entities
         public virtual List<GameSaleDetail> GameSaleDetails { get; set; }
 
         
-        public virtual Customer Customer { get; set; }
+        public virtual User Customer { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameSaleProject_Entity.ViewModels
 {
-	public class CustomerViewModel
+	public class UserViewModel
 	{
 		public int Id { get; set; }
 		public string FirstName { get; set; }

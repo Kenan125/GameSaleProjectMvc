@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace GameSaleProject_Entity.ViewModels
 {
-    public class CustomerInvoiceViewModel
+    public class UserInvoiceViewModel
     {
-        public CustomerViewModel customerViewModel { get; set; }
+        public UserViewModel customerViewModel { get; set; }
         public GameSaleViewModel GameSaleViewModel { get; set; }
         public List<CartItem> cartItems { get; set; }
     }

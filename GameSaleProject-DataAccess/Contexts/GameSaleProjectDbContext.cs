@@ -12,7 +12,7 @@ namespace GameSaleProject_DataAccess.Contexts
 
         public DbSet<Game> Games { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Customer> Customers { get; set; }
+        public DbSet<User> Customers { get; set; }
         public DbSet<GameSale> GameSales { get; set; }
         public DbSet<GameSaleDetail> GameSaleDetails { get; set; }
         public DbSet<Review> Reviews { get; set; }
@@ -42,7 +42,7 @@ namespace GameSaleProject_DataAccess.Contexts
             .WithOne(i => i.Game)
             .HasForeignKey(i => i.GameId);
 
-            modelBuilder.Entity<Customer>().Property(m => m.ProfilePictureUrl).HasDefaultValue("/images/customerpic.jpg");
+            modelBuilder.Entity<User>().Property(m => m.ProfilePictureUrl).HasDefaultValue("/images/customerpic.jpg");
 
             modelBuilder.Entity<Game>()
                 .HasOne(g => g.Publisher)
@@ -78,13 +78,7 @@ namespace GameSaleProject_DataAccess.Contexts
                 new Category { Id = 5, Name = "Simulation", Description = "Simulation games" }
             );
 
-            // Seed data for Customer
-            modelBuilder.Entity<Customer>().HasData(
-                new Customer { Id = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com", Password = "123", UserName = "johndoe", Address = "123 Main St", PhoneNumber = "555-1234" },
-                new Customer { Id = 2, FirstName = "Jane", LastName = "Smith", Email = "jane.smith@example.com", Password = "123", UserName = "janesmith", Address = "456 Elm St", PhoneNumber = "555-5678" },
-                new Customer { Id = 3, FirstName = "Alice", LastName = "Johnson", Email = "alice.johnson@example.com", Password = "123", UserName = "alicejohnson", Address = "789 Maple St", PhoneNumber = "555-7890" },
-                new Customer { Id = 4, FirstName = "Bob", LastName = "Brown", Email = "bob.brown@example.com", Password = "123", UserName = "bobbrown", Address = "321 Oak St", PhoneNumber = "555-6543" }
-            );
+            
 
             // Seed data for Game
             modelBuilder.Entity<Game>().HasData(

@@ -1,3 +1,6 @@
+using GameSaleProject_DataAccess.Contexts;
+using GameSaleProject_Service.Extensions;
+using Microsoft.EntityFrameworkCore;
 namespace GameSaleProject_Mvc
 {
     public class Program
@@ -8,7 +11,12 @@ namespace GameSaleProject_Mvc
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<GameSaleProjectDbContext>(
+        options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("ConnStr")
+    ));
 
+            builder.Services.AddExtensions();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

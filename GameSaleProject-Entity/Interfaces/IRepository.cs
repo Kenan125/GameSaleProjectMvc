@@ -3,7 +3,7 @@
 namespace GameSaleProject_Entity.Interfaces
 {
     public interface IRepository<T> where T : class
-    {        
+    {
 
         Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null, params Expression<Func<T, object>>[] includes);
         Task<IEnumerable<T>> GetAllAsync();
@@ -15,3 +15,4 @@ namespace GameSaleProject_Entity.Interfaces
         void Delete(int id);
         void Delete(T entity);
     }
+}
