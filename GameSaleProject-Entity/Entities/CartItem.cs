@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace GameSaleProject_Entity.Entities
 {
-    public class Cart
+    public class CartItem
     {
         public int GameId { get; set; }
         public string GameName { get; set; }
+        public int GameQuantity { get; set; }
         public decimal GamePrice { get; set; }
     }
 }
