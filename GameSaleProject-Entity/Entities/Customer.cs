@@ -12,7 +12,8 @@
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         
-
+        //nav
         public ICollection<GameSale> GameSales { get; set; }
+        public ICollection<Review> Reviews { get; set; }
     }
 }

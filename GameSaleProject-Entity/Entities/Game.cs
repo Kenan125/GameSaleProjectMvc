@@ -27,8 +27,10 @@ namespace GameSaleProject_Entity.Entities
 
         public string Platform { get; set; }
 
+        //Nav
         public virtual Publisher Publisher { get; set; }
         public virtual Category Category { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
         public virtual ICollection<Image> Images { get; set; }
     }
 }

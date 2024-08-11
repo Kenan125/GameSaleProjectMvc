@@ -9,16 +9,16 @@ namespace GameSaleProject_Entity.Entities
         public int GameId { get; set; }
         public int CustomerId { get; set; }
 
-
-        [Required] // Rating zorunlu alan
         public int Rating { get; set; }
         public string CustomerReview { get; set; }
         
+        
+        //Nav
+        public virtual Game Game { get; set; }
+        
+        public virtual Customer Customer { get; set; }
 
+        
 
-        [ForeignKey("GameId")]
-        public Game Game { get; set; }
-        [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; }
     }
 }

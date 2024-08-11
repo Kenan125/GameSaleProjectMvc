@@ -14,7 +14,7 @@ namespace GameSaleProject_Entity.Entities
 
         public virtual List<GameSaleDetail> GameSaleDetails { get; set; }
 
-        [ForeignKey("CustomerId")]
+        
         public virtual Customer Customer { get; set; }
     }
 }

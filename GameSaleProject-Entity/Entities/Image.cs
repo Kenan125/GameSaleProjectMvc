@@ -13,7 +13,7 @@ namespace GameSaleProject_Entity.Entities
         public string ImageUrl { get; set; }
         public int GameId { get; set; }
 
-        public Game Game { get; set; }
+        public virtual Game Game { get; set; }
 
     }
 }
