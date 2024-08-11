@@ -1,3 +1,4 @@
+using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -7,15 +8,18 @@ namespace GameSaleProject_Mvc.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IGameService _gameService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IGameService gameService)
         {
             _logger = logger;
+            _gameService = gameService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var gamesWithImages = await _gameService.GetAllGamesWithImagesAsync();
+            return View(gamesWithImages);
         }
 
         public IActionResult Privacy()

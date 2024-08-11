@@ -13,7 +13,11 @@ namespace GameSaleProject_Service.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<Game, GameViewModel>().ReverseMap();
+            CreateMap<Game, GameViewModel>()                
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src=> src.Images)).ReverseMap();
+
+
+
             CreateMap<Category, CategoryViewModel>().ReverseMap();
             CreateMap<Image, ImageViewModel>().ReverseMap();
             CreateMap<Publisher, PublisherViewModel>().ReverseMap();

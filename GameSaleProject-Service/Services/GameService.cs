@@ -101,5 +101,13 @@ namespace GameSaleProject_Service.Services
             _unitOfWork.Commit();
             return "Game updated successfully.";
         }
+        public async Task<List<GameViewModel>> GetAllGamesWithImagesAsync()
+        {
+            var repository = _unitOfWork.GetRepository<Game>();
+            var games = await repository.GetAll(
+                includes: g => g.Images // Include Images in the query
+            );
+            return _mapper.Map<List<GameViewModel>>(games);
+        }
     }
 }

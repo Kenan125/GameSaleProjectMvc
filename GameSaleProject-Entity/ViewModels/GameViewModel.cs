@@ -30,6 +30,9 @@ namespace GameSaleProject_Entity.ViewModels
 
         public string Platform { get; set; }
 
+        //new prop
+        public ICollection<ImageViewModel> Images { get; set; }
+
 
     }
 }
