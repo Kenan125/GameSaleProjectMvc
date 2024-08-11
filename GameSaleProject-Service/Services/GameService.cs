@@ -7,6 +7,7 @@ using GameSaleProject_Entity.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -105,7 +106,11 @@ namespace GameSaleProject_Service.Services
         {
             var repository = _unitOfWork.GetRepository<Game>();
             var games = await repository.GetAll(
-                includes: g => g.Images // Include Images in the query
+                includes: new Expression<Func<Game, object>>[]
+                {
+            g => g.Images,
+            g => g.Reviews
+                }
             );
             return _mapper.Map<List<GameViewModel>>(games);
         }

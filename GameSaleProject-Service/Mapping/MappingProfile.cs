@@ -14,7 +14,9 @@ namespace GameSaleProject_Service.Mapping
         public MappingProfile()
         {
             CreateMap<Game, GameViewModel>()                
-                .ForMember(dest => dest.Images, opt => opt.MapFrom(src=> src.Images)).ReverseMap();
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src=> src.Images))
+                .ForMember(dest=>dest.Reviews,opt=>opt.MapFrom(src=> src.Reviews))
+                .ReverseMap();
 
 
 

@@ -32,7 +32,7 @@ namespace GameSaleProject_Entity.ViewModels
 
         //new prop
         public ICollection<ImageViewModel> Images { get; set; }
-
+        public ICollection<ReviewViewModel> Reviews { get; set; }
 
     }
 }
