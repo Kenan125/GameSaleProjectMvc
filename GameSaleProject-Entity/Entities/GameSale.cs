@@ -6,7 +6,7 @@ namespace GameSaleProject_Entity.Entities
 	{
         
         
-        public int CustomerId { get; set; }
+        public int UserId { get; set; }
         public int TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
         public bool IsDiscountApplied { get; set; }
@@ -15,6 +15,6 @@ namespace GameSaleProject_Entity.Entities
         public virtual List<GameSaleDetail> GameSaleDetails { get; set; }
 
         
-        public virtual User Customer { get; set; }
+        public virtual User User { get; set; }
     }
 }

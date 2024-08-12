@@ -1,22 +1,136 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #121212; /* Dark background color */
+    color: #ffffff; /* Light text color */
 }
+
+
+/*gpt home page*/
+
+.custom-carousel {
+    width: 80%; /* Adjust to desired width */
+    height: 600px; /* Adjust to desired height */
+    margin: 0 auto; /* Center the carousel */
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card {
+    margin-bottom: 30px;
+    background-color: #1f1f1f; /* Dark background for cards */
+    border: none; /* Remove borders for a cleaner look */
+}
+
+.card-body {
+    color: #ffffff; /* Ensure card text is readable */
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+.card-img-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.1); /* Lighter overlay */
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    background-color: rgba(255, 255, 255, 0.2); /* Lighter overlay */
+    color: #000000; /* Dark text color for overlay */
+}
+
+.card-body {
+    color: #ffffff; /* Ensure card text is readable */
+}
+
+.navbar {
+    background-color: #1f1f1f; /* Dark background for the navbar */
+}
+
+    .navbar .navbar-nav .nav-link {
+        color: #ffffff; /* Light text color for navbar links */
+    }
+
+        .navbar .navbar-nav .nav-link:hover,
+        .navbar .navbar-nav .nav-link:focus {
+            color: #bb86fc; /* Highlight color for hover/focus */
+        }
+
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for captions */
+    color: #ffffff; /* Light text color */
+}
+
+a {
+    color: #bb86fc; /* Light purple for links to stand out */
+}
+
+.footer {
+    background-color: #1f1f1f; /* Dark background for the footer */
+    color: #ffffff; /* Light text color */
+}
+
+.card:hover .card-img-overlay {
+    opacity: 1;
+}
+
+.card-img-container {
+    position: relative;
+}
+
+    .card-img-container img {
+        display: block;
+        width: 100%;
+        height: auto; /* Maintain aspect ratio */
+    }
+
+.table {
+    background-color: #1f1f1f; /* Dark background for table */
+    color: #ffffff; /* Light text color */
+}
+
+    .table thead th {
+        background-color: #343a40; /* Darker background for table header */
+        color: #ffffff; /* Light text color for table header */
+    }
+
+    .table tbody tr {
+        background-color: #1f1f1f; /* Dark background for table rows */
+        color: #ffffff; /* Light text color for table rows */
+    }
+
+        .table tbody tr:hover {
+            background-color: #343a40; /* Darker background for hover */
+        }
+
+    .table td img {
+        display: block;
+        width: 100px;
+        height: auto; /* Maintain aspect ratio */
+    }

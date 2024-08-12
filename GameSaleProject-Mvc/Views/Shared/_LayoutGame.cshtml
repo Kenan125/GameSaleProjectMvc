@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GameSaleProject_Mvc.styles.css" asp-append-version="true" />
+    
 </head>
-<body>
+<body class="bg-black" >
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -25,44 +26,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Game" asp-action="Index">Tüm Oyunlar</a>
                         </li>
-                        
-                        
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <li>
-                                <span>Hoşgeldin @User.Identity.Name</span>
-                                <span class="mx-lg-4 mx-md-2  mx-1">
-                                    <a class=" nav-link text-light" asp-action="Logout" asp-controller="Account">
-                                        <i class="fas fa-lock"></i> Çıkış Yap
-                                    </a>
-                                </span>
-                            </li>
-                            }
-                            else
-                            {
-                                <li>
-                                
-                                    <a class=" nav-link text-light" asp-action="Login" asp-controller="Account">
-                                        <i class="fas fa-lock"></i> Üye Giriş
-                                    </a>
-                                
-                            </li>
-                            <li>
-                                
-                                    <a class=" nav-link text-light" asp-action="Register" asp-controller="Account">
-                                         Kullanıcı Kayıt
-                                    </a>
-                                
-                            </li>
-                            }
-                           
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Login">Giriş yap</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Register">Hesap oluştur</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container bg-black">
+        <main role="main" class="pb-3 bg-black">
             @RenderBody()
         </main>
     </div>

@@ -3,7 +3,7 @@
     ViewData["Title"] = "Home Page";
     var causImages = Model.SelectMany(g => g.Images).Where(img => img.ImageUrl.Contains("Caus")).ToList();
 }
-<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+<div id="carouselExampleIndicators" class="carousel slide custom-carousel mb-4" data-bs-ride="carousel">
     <div class="carousel-indicators">
         @for (int i = 0; i < causImages.Count; i++)
         {
@@ -14,7 +14,7 @@
         @foreach (var image in causImages.Select((value, index) => new { Value = value, Index = index }))
         {
             <div class="carousel-item @(image.Index == 0 ? "active" : "")">
-                <img src="@Url.Content(image.Value.ImageUrl)" class="d-block w-100" alt="Featured Game">
+                <img src="@Url.Content(image.Value.ImageUrl)" class="d-block w-100 carousel-image" alt="Featured Game">
                 
             </div>
         }

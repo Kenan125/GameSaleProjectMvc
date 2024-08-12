@@ -55,9 +55,9 @@ namespace GameSaleProject_DataAccess.Contexts
                 .HasForeignKey(g => g.CategoryId);
 
             modelBuilder.Entity<GameSale>()
-                .HasOne(gs => gs.Customer)
+                .HasOne(gs => gs.User)
                 .WithMany(c => c.GameSales)
-                .HasForeignKey(gs => gs.CustomerId);
+                .HasForeignKey(gs => gs.UserId);
 
             modelBuilder.Entity<GameSaleDetail>()
                 .HasOne(gsd => gsd.GameSale)
