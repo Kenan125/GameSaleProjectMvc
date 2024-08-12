@@ -18,14 +18,33 @@ namespace GameSaleProject_Mvc.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string? ReturnUrl)
         {
-            return View();
+            LoginViewModel model = new LoginViewModel()
+            {
+                ReturnUrl = ReturnUrl
+            };
+            TempData["message"] = null;
+            return View(model);
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                string result = await _accountService.FindByNameAsync(model);
+
+                if (result == "OK")
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", result);
+                }
+            }
+
+            return View(model);
         }
         public IActionResult Register() 
         {
@@ -35,7 +54,7 @@ namespace GameSaleProject_Mvc.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model) 
         {
             string msg = await _accountService.CreateUserAsync(model);
-            if (msg == "Ok")
+            if (msg == "OK")
             {
                 return RedirectToAction("Login");
             }

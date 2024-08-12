@@ -19,6 +19,7 @@ namespace GameSaleProject_DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -221,7 +222,7 @@ namespace GameSaleProject_DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     TotalQuantity = table.Column<int>(type: "int", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsDiscountApplied = table.Column<bool>(type: "bit", nullable: false),
@@ -232,8 +233,8 @@ namespace GameSaleProject_DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_GameSales", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GameSales_Customers_CustomerId",
-                        column: x => x.CustomerId,
+                        name: "FK_GameSales_Customers_UserId",
+                        column: x => x.UserId,
                         principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -336,6 +337,7 @@ namespace GameSaleProject_DataAccess.Migrations
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     CustomerReview = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -343,8 +345,8 @@ namespace GameSaleProject_DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Reviews", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reviews_Customers_CustomerId",
-                        column: x => x.CustomerId,
+                        name: "FK_Reviews_Customers_UserId",
+                        column: x => x.UserId,
                         principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -388,11 +390,11 @@ namespace GameSaleProject_DataAccess.Migrations
                 columns: new[] { "Id", "CreatedDate", "Description", "IsDeleted", "Name" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8680), "Action games", false, "Action" },
-                    { 2, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8694), "Adventure games", false, "Adventure" },
-                    { 3, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8695), "Role-playing games", false, "RPG" },
-                    { 4, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8696), "Strategy games", false, "Strategy" },
-                    { 5, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8696), "Simulation games", false, "Simulation" }
+                    { 1, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2274), "Action games", false, "Action" },
+                    { 2, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2286), "Adventure games", false, "Adventure" },
+                    { 3, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2287), "Role-playing games", false, "RPG" },
+                    { 4, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2288), "Strategy games", false, "Strategy" },
+                    { 5, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2289), "Simulation games", false, "Simulation" }
                 });
 
             migrationBuilder.InsertData(
@@ -400,14 +402,14 @@ namespace GameSaleProject_DataAccess.Migrations
                 columns: new[] { "Id", "CreatedDate", "IsDeleted", "Name" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8885), false, "CD Projekt" },
-                    { 2, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8887), false, "Rockstar Games" },
-                    { 3, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8888), false, "2K Games" },
-                    { 4, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8889), false, "Electronic Arts" },
-                    { 5, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8889), false, "Bandai Namco Entertainment" },
-                    { 6, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8890), false, "Mojang" },
-                    { 7, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8891), false, "Epic Games" },
-                    { 8, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8892), false, "ConcernedApe" }
+                    { 1, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2519), false, "CD Projekt" },
+                    { 2, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2521), false, "Rockstar Games" },
+                    { 3, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2522), false, "2K Games" },
+                    { 4, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2522), false, "Electronic Arts" },
+                    { 5, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2523), false, "Bandai Namco Entertainment" },
+                    { 6, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2524), false, "Mojang" },
+                    { 7, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2525), false, "Epic Games" },
+                    { 8, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2525), false, "ConcernedApe" }
                 });
 
             migrationBuilder.InsertData(
@@ -432,19 +434,19 @@ namespace GameSaleProject_DataAccess.Migrations
                 columns: new[] { "Id", "CreatedDate", "GameId", "ImageUrl", "IsDeleted", "Name" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8914), 1, "/images/witcher3.jpg", false, "witcher3" },
-                    { 2, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8916), 2, "/images/gtav.jpg", false, "gtav" },
-                    { 3, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8917), 3, "/images/cyberpunk2077.jpg", false, "cyberpunk2077" },
-                    { 4, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8918), 4, "/images/rdr2.jpg", false, "rdr2" },
-                    { 5, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8919), 5, "/images/civ6.jpg", false, "civ6" },
-                    { 6, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8920), 6, "/images/sims4.jpg", false, "sims4" },
-                    { 7, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8921), 7, "/images/darksouls3.jpg", false, "darksouls3" },
-                    { 8, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8922), 8, "/images/minecraft.jpg", false, "minecraft" },
-                    { 9, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8923), 9, "/images/fortnite.jpg", false, "fortnite" },
-                    { 10, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8924), 10, "/images/stardewvalley.jpg", false, "stardewvalley" },
-                    { 11, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8925), 7, "/images/darksouls3Caus.jpg", false, "darksouls3Caus" },
-                    { 12, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8926), 4, "/images/rdr2Caus.jpg", false, "rdr2Caus" },
-                    { 13, new DateTime(2024, 8, 11, 19, 4, 0, 487, DateTimeKind.Local).AddTicks(8927), 9, "/images/fortniteCaus.jpg", false, "fortniteCaus" }
+                    { 1, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2548), 1, "/images/witcher3.jpg", false, "witcher3" },
+                    { 2, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2550), 2, "/images/gtav.jpg", false, "gtav" },
+                    { 3, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2551), 3, "/images/cyberpunk2077.jpg", false, "cyberpunk2077" },
+                    { 4, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2552), 4, "/images/rdr2.jpg", false, "rdr2" },
+                    { 5, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2553), 5, "/images/civ6.jpg", false, "civ6" },
+                    { 6, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2554), 6, "/images/sims4.jpg", false, "sims4" },
+                    { 7, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2555), 7, "/images/darksouls3.jpg", false, "darksouls3" },
+                    { 8, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2556), 8, "/images/minecraft.jpg", false, "minecraft" },
+                    { 9, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2556), 9, "/images/fortnite.jpg", false, "fortnite" },
+                    { 10, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2557), 10, "/images/stardewvalley.jpg", false, "stardewvalley" },
+                    { 11, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2558), 7, "/images/darksouls3Caus.jpg", false, "darksouls3Caus" },
+                    { 12, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2559), 4, "/images/rdr2Caus.jpg", false, "rdr2Caus" },
+                    { 13, new DateTime(2024, 8, 12, 18, 56, 35, 682, DateTimeKind.Local).AddTicks(2560), 9, "/images/fortniteCaus.jpg", false, "fortniteCaus" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -507,9 +509,9 @@ namespace GameSaleProject_DataAccess.Migrations
                 column: "GameSaleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GameSales_CustomerId",
+                name: "IX_GameSales_UserId",
                 table: "GameSales",
-                column: "CustomerId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Images_GameId",
@@ -517,14 +519,14 @@ namespace GameSaleProject_DataAccess.Migrations
                 column: "GameId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_CustomerId",
-                table: "Reviews",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Reviews_GameId",
                 table: "Reviews",
                 column: "GameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_UserId",
+                table: "Reviews",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SystemRequirements_GameId",
