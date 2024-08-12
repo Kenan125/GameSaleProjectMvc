@@ -83,20 +83,18 @@ namespace GameSaleProject_Service.Services
 
         public async Task<string> FindByNameAsync(LoginViewModel model)
         {
-            string message = string.Empty;
             var user = await _userManager.FindByNameAsync(model.UserName);
             if (user == null)
             {
-                message = "Kullanıcı bulunamadı!";
-                return message;
+                return "Kullanıcı bulunamadı!";
             }
-            var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
 
+            var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
             if (signInResult.Succeeded)
             {
-                message = "OK";
+                return "OK";
             }
-            return message;
+            return "Giriş başarısız!";
         }
 
         public async Task<UserViewModel> FindByUserNameAsync(string username)
@@ -123,5 +121,6 @@ namespace GameSaleProject_Service.Services
         {
             await _signInManager.SignOutAsync();
         }
+
     }
 }

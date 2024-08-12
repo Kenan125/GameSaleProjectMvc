@@ -10,7 +10,7 @@
         <div class="title">
             <p>Giriş Yap</p>
         </div>
-        <form asp-action="Login" method="post">
+        <form asp-action="Login" asp-controller="Account" method="post">
             <input type="hidden" asp-for="ReturnUrl" value="@Model.ReturnUrl" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="user_details">

@@ -166,7 +166,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1567),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5470),
                             Description = "Action games",
                             IsDeleted = false,
                             Name = "Action"
@@ -174,7 +174,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1579),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5483),
                             Description = "Adventure games",
                             IsDeleted = false,
                             Name = "Adventure"
@@ -182,7 +182,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1580),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5484),
                             Description = "Role-playing games",
                             IsDeleted = false,
                             Name = "RPG"
@@ -190,7 +190,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1581),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5485),
                             Description = "Strategy games",
                             IsDeleted = false,
                             Name = "Strategy"
@@ -198,7 +198,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1582),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5486),
                             Description = "Simulation games",
                             IsDeleted = false,
                             Name = "Simulation"
@@ -502,7 +502,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1884),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5793),
                             GameId = 1,
                             ImageUrl = "/images/witcher3.jpg",
                             IsDeleted = false,
@@ -511,7 +511,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1887),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5795),
                             GameId = 2,
                             ImageUrl = "/images/gtav.jpg",
                             IsDeleted = false,
@@ -520,7 +520,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1888),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5796),
                             GameId = 3,
                             ImageUrl = "/images/cyberpunk2077.jpg",
                             IsDeleted = false,
@@ -529,7 +529,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1889),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5796),
                             GameId = 4,
                             ImageUrl = "/images/rdr2.jpg",
                             IsDeleted = false,
@@ -538,7 +538,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1890),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5797),
                             GameId = 5,
                             ImageUrl = "/images/civ6.jpg",
                             IsDeleted = false,
@@ -547,7 +547,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1890),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5800),
                             GameId = 6,
                             ImageUrl = "/images/sims4.jpg",
                             IsDeleted = false,
@@ -556,7 +556,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1891),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5802),
                             GameId = 7,
                             ImageUrl = "/images/darksouls3.jpg",
                             IsDeleted = false,
@@ -565,7 +565,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1892),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5803),
                             GameId = 8,
                             ImageUrl = "/images/minecraft.jpg",
                             IsDeleted = false,
@@ -574,7 +574,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 9,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1893),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5804),
                             GameId = 9,
                             ImageUrl = "/images/fortnite.jpg",
                             IsDeleted = false,
@@ -583,7 +583,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 10,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1894),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5804),
                             GameId = 10,
                             ImageUrl = "/images/stardewvalley.jpg",
                             IsDeleted = false,
@@ -592,7 +592,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 11,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1895),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5806),
                             GameId = 7,
                             ImageUrl = "/images/darksouls3Caus.jpg",
                             IsDeleted = false,
@@ -601,7 +601,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 12,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1896),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5806),
                             GameId = 4,
                             ImageUrl = "/images/rdr2Caus.jpg",
                             IsDeleted = false,
@@ -610,7 +610,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 13,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1897),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5807),
                             GameId = 9,
                             ImageUrl = "/images/fortniteCaus.jpg",
                             IsDeleted = false,
@@ -644,56 +644,56 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1852),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5762),
                             IsDeleted = false,
                             Name = "CD Projekt"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1854),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5764),
                             IsDeleted = false,
                             Name = "Rockstar Games"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1854),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5765),
                             IsDeleted = false,
                             Name = "2K Games"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1855),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5765),
                             IsDeleted = false,
                             Name = "Electronic Arts"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1856),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5766),
                             IsDeleted = false,
                             Name = "Bandai Namco Entertainment"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1857),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5767),
                             IsDeleted = false,
                             Name = "Mojang"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1857),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5767),
                             IsDeleted = false,
                             Name = "Epic Games"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2024, 8, 12, 18, 57, 32, 863, DateTimeKind.Local).AddTicks(1858),
+                            CreatedDate = new DateTime(2024, 8, 12, 23, 42, 34, 870, DateTimeKind.Local).AddTicks(5768),
                             IsDeleted = false,
                             Name = "ConcernedApe"
                         });

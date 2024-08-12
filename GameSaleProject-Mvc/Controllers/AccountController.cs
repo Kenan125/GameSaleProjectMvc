@@ -1,5 +1,7 @@
-﻿using GameSaleProject_Entity.Interfaces;
+﻿using GameSaleProject_DataAccess.Identity;
+using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameSaleProject_Mvc.Controllers
@@ -7,10 +9,12 @@ namespace GameSaleProject_Mvc.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, SignInManager<AppUser> signInManager)
         {
             _accountService = accountService;
+            _signInManager = signInManager;
         }
 
         public IActionResult Index()
@@ -22,7 +26,7 @@ namespace GameSaleProject_Mvc.Controllers
         {
             LoginViewModel model = new LoginViewModel()
             {
-                ReturnUrl = ReturnUrl
+                ReturnUrl = ReturnUrl ?? Url.Content("~/") // Default to home page if null
             };
             TempData["message"] = null;
             return View(model);
@@ -36,7 +40,10 @@ namespace GameSaleProject_Mvc.Controllers
 
                 if (result == "OK")
                 {
-                    return RedirectToAction("Index", "Home");
+                    
+                    
+                        return RedirectToAction("Index", "Home");
+                    
                 }
                 else
                 {
@@ -64,9 +71,9 @@ namespace GameSaleProject_Mvc.Controllers
             }
             return View(model);
         }
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
     }
