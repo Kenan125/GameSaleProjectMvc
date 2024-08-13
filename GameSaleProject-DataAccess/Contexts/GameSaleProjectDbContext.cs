@@ -22,6 +22,25 @@ namespace GameSaleProject_DataAccess.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AppUser>(entity =>
+            {
+                entity.ToTable("AspNetUsers"); // Ensuring it maps to AspNetUsers
+                entity.Property(e => e.FirstName).HasMaxLength(100);
+                entity.Property(e => e.LastName).HasMaxLength(100);
+                entity.Property(e => e.ProfilePictureUrl)
+                      .HasMaxLength(200)
+                      .HasDefaultValue("/images/DefaultPfp.jpg");
+            });
+
+            // Additional configuration for your custom User entity
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.Property(u => u.ProfilePictureUrl)
+                      .HasDefaultValue("/images/DefaultPfp.jpg");
+
+                // Add any other necessary configurations here
+            });
+
             modelBuilder.Entity<Game>()
             .Property(g => g.Price)
             .HasColumnType("decimal(18, 2)");

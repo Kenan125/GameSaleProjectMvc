@@ -60,15 +60,38 @@ namespace GameSaleProject_Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model) 
         {
-            string msg = await _accountService.CreateUserAsync(model);
-            if (msg == "OK")
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Login");
+                string profilePictureUrl = "/images/default-profile.png"; // Default picture
+
+                if (model.ProfilePicture != null)
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(model.ProfilePicture.FileName);
+                    var extension = Path.GetExtension(model.ProfilePicture.FileName);
+                    fileName = fileName + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + extension;
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await model.ProfilePicture.CopyToAsync(stream);
+                    }
+
+                    profilePictureUrl = "/images/" + fileName;
+                }
+
+                model.ProfilePictureUrl = profilePictureUrl;
+
+                string msg = await _accountService.CreateUserAsync(model);
+                if (msg == "OK")
+                {
+                    return RedirectToAction("Login");
+                }
+                else 
+                {
+                    ModelState.AddModelError("", msg);
+                }
             }
-            else 
-            {
-                ModelState.AddModelError("",msg);
-            }
+
             return View(model);
         }
         public async Task<IActionResult> Logout()

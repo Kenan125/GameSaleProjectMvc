@@ -51,7 +51,11 @@
                     <input asp-for="ConfirmPassword" class="form-control" placeholder="Şifrenizi onaylayınız" required />
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
-                </div>
+                    <div class="input_box">
+                        <label asp-for="ProfilePicture" class="control-label">Profil Resmi (Optional)</label>
+                        <input asp-for="ProfilePicture" type="file" class="form-control" />
+                        <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                    </div>
             </div>
             <div class="reg_btn">
                 <input type="submit" value="Kayıt Ol">

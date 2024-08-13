@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using GameSaleProject_DataAccess.Contexts;
 using GameSaleProject_DataAccess.Identity;
+using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -17,12 +19,14 @@ namespace GameSaleProject_Service.Services
         private readonly RoleManager<AppRole> _roleManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IMapper _mapper;
-        public AccountService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, SignInManager<AppUser> signInManager, IMapper mapper)
+        private readonly GameSaleProjectDbContext _context;
+        public AccountService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, SignInManager<AppUser> signInManager, IMapper mapper, GameSaleProjectDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _mapper = mapper;
+            _context = context;
         }
 
 
@@ -63,12 +67,29 @@ namespace GameSaleProject_Service.Services
                 LastName = model.LastName,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
-                UserName = model.UserName
+                UserName = model.UserName,
+                ProfilePictureUrl = model.ProfilePictureUrl // Assuming this is included in RegisterViewModel
             };
+
             var identityResult = await _userManager.CreateAsync(user, model.Password);
 
             if (identityResult.Succeeded)
             {
+                // Synchronize data with the Users table
+                var customUser = new User
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    UserName = user.UserName,
+                    ProfilePictureUrl = user.ProfilePictureUrl,
+                    Password = user.PasswordHash // Store hashed password or manage it as per your requirements
+                };
+
+                _context.Users.Add(customUser);
+                await _context.SaveChangesAsync();
+
                 message = "OK";
             }
             else
@@ -80,6 +101,7 @@ namespace GameSaleProject_Service.Services
             }
             return message;
         }
+
 
         public async Task<string> FindByNameAsync(LoginViewModel model)
         {

@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\css\Register.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\ScrollBar.css" />
   </ItemGroup>
 
   <ItemGroup>

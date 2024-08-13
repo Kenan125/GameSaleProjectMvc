@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+
 
 namespace GameSaleProject_Entity.ViewModels
 {
@@ -31,5 +33,8 @@ namespace GameSaleProject_Entity.ViewModels
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Şifreler uyuşmuyor!")]
         public string ConfirmPassword { get; set; }
+
+        public IFormFile? ProfilePicture { get; set; }
+        public string? ProfilePictureUrl { get; set; }
     }
 }
