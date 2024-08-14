@@ -57,6 +57,17 @@ namespace GameSaleProject_Service.Services
             }
             return message;
         }
+        public async Task<bool> AssignRoleToUserAsync(string userId, string roleName)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var result = await _userManager.AddToRoleAsync(user, roleName);
+            return result.Succeeded;
+        }
 
         public async Task<string> CreateUserAsync(RegisterViewModel model)
         {

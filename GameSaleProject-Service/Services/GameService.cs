@@ -28,6 +28,18 @@ namespace GameSaleProject_Service.Services
         public async Task<string> AddGameAsync(GameViewModel model)
         {
             var game = _mapper.Map<Game>(model);
+
+            // Ensure that the Images collection in Game is initialized
+            if (model.Images != null && model.Images.Any())
+            {
+                game.Images = model.Images.Select(img => new Image
+                {
+                    Name = img.Name,
+                    ImageUrl = img.ImageUrl,
+                    // GameId will be automatically assigned once the game is saved
+                }).ToList();
+            }
+
             var repository = _unitOfWork.GetRepository<Game>();
             await repository.Add(game);
             _unitOfWork.Commit();

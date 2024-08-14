@@ -1,23 +1,31 @@
 using GameSaleProject_DataAccess.Contexts;
 using GameSaleProject_Service.Extensions;
+using GameSaleProject_Service.Initialization;
 using Microsoft.EntityFrameworkCore;
 namespace GameSaleProject_Mvc
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<GameSaleProjectDbContext>(
-        options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("ConnStr")
-    ));
+             options =>
+             options.UseSqlServer(builder.Configuration.GetConnectionString("ConnStr")
+              ));
 
             builder.Services.AddExtensions();
             var app = builder.Build();
+
+            // Role initialization
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleInitializer = scope.ServiceProvider.GetRequiredService<RoleInitializer>();
+                await roleInitializer.InitializeAsync();
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

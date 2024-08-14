@@ -1,0 +1,55 @@
+﻿@model GameCategoryPublisherViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
+        <div class="col-md-8">
+        @foreach (var game in Model.Games)
+        {
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    @if (game.Images != null && game.Images.Count > 0)
+                    {
+                        <img src="@game.Images.First().ImageUrl" class="card-img-top" alt="@game.GameName" />
+                    }
+                    else
+                    {
+                        <img src="/images/placeholder.png" class="card-img-top" alt="No Image Available" />
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@game.GameName</h5>
+                        <p class="card-text">@game.Description</p>
+                        <p class="card-text">Price: @game.Price.ToString("C")</p>
+                        <a href="@Url.Action("Details", "Games", new { id = game.Id })" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+        </div>
+    <div class="col-md-4">
+        <!-- Right side: category list -->
+        @await Html.PartialAsync("_Default.cshtml", Model.Categories)
+
+        <!-- Display publishers directly -->
+        <div class="publishers-list">
+            <h4>Publishers</h4>
+            <ul>
+                @foreach (var publisher in Model.Publishers)
+                {
+                    <li>@publisher.Name</li>
+                }
+            </ul>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+

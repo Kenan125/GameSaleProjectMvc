@@ -39,7 +39,7 @@ namespace GameSaleProject_Service.Mapping
             CreateMap<Image, ImageViewModel>().ReverseMap();
             CreateMap<Publisher, PublisherViewModel>().ReverseMap();
             CreateMap<GameSale, GameSaleViewModel>().ReverseMap();
-            CreateMap<GameSale, GameSaleDetailViewModel>().ReverseMap();
+            CreateMap<GameSaleDetail, GameSaleDetailViewModel>().ReverseMap();
             CreateMap<Review, ReviewViewModel>().ReverseMap();
             CreateMap<SystemRequirement, SystemRequirementViewModel>().ReverseMap();
             

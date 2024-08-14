@@ -12,7 +12,7 @@ namespace GameSaleProject_Entity.ViewModels
         public string GameName { get; set; }
 
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
 
         public int Discount { get; set; }
@@ -20,7 +20,7 @@ namespace GameSaleProject_Entity.ViewModels
 
         public decimal Price { get; set; }
 
-        public string Developer { get; set; }
+        public string? Developer { get; set; }
 
 
         public int PublisherId { get; set; }
@@ -28,11 +28,11 @@ namespace GameSaleProject_Entity.ViewModels
 
         public int CategoryId { get; set; }
 
-        public string Platform { get; set; }
+        public string? Platform { get; set; }
 
         //new prop
-        public ICollection<ImageViewModel> Images { get; set; }
-        public ICollection<ReviewViewModel> Reviews { get; set; }
+        public ICollection<ImageViewModel>? Images { get; set; }
+        public ICollection<ReviewViewModel>? Reviews { get; set; }
 
     }
 }

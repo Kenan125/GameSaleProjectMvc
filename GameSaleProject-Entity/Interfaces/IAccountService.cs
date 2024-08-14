@@ -6,6 +6,7 @@ namespace GameSaleProject_Entity.Interfaces
     public interface IAccountService 
     {
         Task<string> CreateUserAsync(RegisterViewModel model);
+        Task<bool> AssignRoleToUserAsync(string userId, string roleName);
         Task<string> FindByNameAsync(LoginViewModel model);
         Task<UserViewModel> FindByUserNameAsync(string name);
         Task<string> CreateRoleAsync(RoleViewModel model);

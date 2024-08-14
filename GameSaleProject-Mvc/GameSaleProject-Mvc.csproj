@@ -24,4 +24,8 @@
     <ProjectReference Include="..\GameSaleProject-Service\GameSaleProject-Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Shared\Components\Category\" />
+  </ItemGroup>
+
 </Project>

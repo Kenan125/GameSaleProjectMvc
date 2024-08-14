@@ -1,0 +1,15 @@
+﻿@model IEnumerable<GameSaleProject_Entity.ViewModels.CategoryViewModel>
+
+<div class="categories-list">
+    <h4>Categories</h4>
+    <ul>
+        @foreach (var category in Model)
+        {
+            <li>
+                <a asp-controller="Game" asp-action="FilterByCategory" asp-route-categoryId="@category.Id">
+                    @category.Name
+                </a>
+            </li>
+        }
+    </ul>
+</div>

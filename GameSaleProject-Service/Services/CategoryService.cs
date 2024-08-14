@@ -27,5 +27,11 @@ namespace GameSaleProject_Service.Services
             return _mapper.Map<IEnumerable<CategoryViewModel>>(list);
         }
 
+        public async Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync()
+        {
+            var categoryRepository = _unitOfWork.GetRepository<Category>();
+            var categories = await categoryRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<CategoryViewModel>>(categories);
+        }
     }
 }
