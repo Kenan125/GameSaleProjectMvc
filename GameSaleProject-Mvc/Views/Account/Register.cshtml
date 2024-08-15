@@ -12,7 +12,7 @@
         <div class="title">
             <p>Kullanıcı Kayıt</p>
         </div>
-        <form asp-action="Register" asp-controller="Account" method="post">
+        <form asp-action="Register" asp-controller="Account" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="user_details">
                 <div class="input_box">
@@ -52,9 +52,9 @@
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
                     <div class="input_box">
-                        <label asp-for="ProfilePicture" class="control-label">Profil Resmi (Optional)</label>
-                        <input asp-for="ProfilePicture" type="file" class="form-control" />
-                        <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                        <label asp-for="ProfilePictureUrl" class="control-label">Profil Resmi (Optional)</label>
+                        <input type="file" asp-for="ProfilePictureUrl" name="formFile" class="form-control" />
+                        <span asp-validation-for="ProfilePictureUrl" class="text-danger"></span>
                     </div>
             </div>
             <div class="reg_btn">

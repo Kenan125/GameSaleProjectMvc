@@ -58,46 +58,41 @@ namespace GameSaleProject_Mvc.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model) 
+        public async Task<IActionResult> Register(RegisterViewModel model, IFormFile formFile)
         {
             if (ModelState.IsValid)
             {
-                string profilePictureUrl = "/images/default-profile.png"; // Default picture
-
-                if (model.ProfilePicture != null)
+                if (formFile != null && formFile.Length > 0)
                 {
-                    var fileName = Path.GetFileNameWithoutExtension(model.ProfilePicture.FileName);
-                    var extension = Path.GetExtension(model.ProfilePicture.FileName);
-                    fileName = fileName + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + extension;
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                    var fileName = Path.GetFileNameWithoutExtension(formFile.FileName);
+                    var extension = Path.GetExtension(formFile.FileName);
+                    var newFileName = $"{fileName}_{DateTime.Now.Ticks}{extension}";
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", newFileName);
 
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
-                        await model.ProfilePicture.CopyToAsync(stream);
+                        await formFile.CopyToAsync(stream);
                     }
 
-                    profilePictureUrl = "/images/" + fileName;
+                    model.ProfilePictureUrl = "/images/" + newFileName;
                 }
-
-                model.ProfilePictureUrl = profilePictureUrl;
+                else
+                {
+                    model.ProfilePictureUrl = "/images/defaultPfp.png"; // Default picture
+                }
 
                 string msg = await _accountService.CreateUserAsync(model);
                 if (msg == "OK")
                 {
                     return RedirectToAction("Login");
                 }
-                else 
+                else
                 {
                     ModelState.AddModelError("", msg);
                 }
             }
 
             return View(model);
-        }
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
         }
     }
 }

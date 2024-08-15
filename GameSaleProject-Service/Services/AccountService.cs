@@ -5,6 +5,7 @@ using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,12 +34,12 @@ namespace GameSaleProject_Service.Services
         public async Task<string> CreateRoleAsync(RoleViewModel model)
         {
             string message = string.Empty;
-            var roleExists = await _roleManager.RoleExistsAsync(model.RoleName);
+            var roleExists = await _roleManager.RoleExistsAsync(model.Name);
             if (!roleExists)
             {
                 var role = new AppRole()
                 {
-                    Name = model.RoleName,
+                    Name = model.Name,
                     Description = model.Description // Assuming AppRole has a Description property
                 };
                 var result = await _roleManager.CreateAsync(role);
@@ -138,14 +139,14 @@ namespace GameSaleProject_Service.Services
 
         public async Task<List<RoleViewModel>> GetAllRoles()
         {
-            var roles = _roleManager.Roles.ToList();
+            var roles = await _roleManager.Roles.ToListAsync();
             var roleViewModels = _mapper.Map<List<RoleViewModel>>(roles);
             return roleViewModels;
         }
 
         public async Task<List<UserViewModel>> GetAllUsers()
         {
-            var users = _userManager.Users.ToList();
+            var users = await _userManager.Users.ToListAsync();
             var userViewModels = _mapper.Map<List<UserViewModel>>(users);
             return userViewModels;
         }

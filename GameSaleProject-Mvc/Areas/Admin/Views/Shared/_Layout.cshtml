@@ -38,7 +38,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             var user = await UserManager.GetUserAsync(User);
-                            var profilePictureUrl = Url.Content(user?.ProfilePictureUrl);
+                            var profilePictureUrl = Url.Content(user?.ProfilePictureUrl ?? "~/images/DefaultPfp.jpg");
 
 
                             <li class="nav-item dropdown">

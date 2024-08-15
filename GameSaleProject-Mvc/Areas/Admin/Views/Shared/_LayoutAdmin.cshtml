@@ -24,21 +24,24 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="~/Admin/Home/Index">
+                                Home
+                                <span class="sr-only">(current)</span>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Game" asp-action="Index">Tüm Oyunlar</a>
+                            <a class="nav-link" href="~/Admin/Role/Index">Users</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Game" asp-action="AddGame">Oyun Ekle</a>
+                            <a class="nav-link" href="~/Admin/Role/Index">Roles</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity.IsAuthenticated)
                         {
                             var user = await UserManager.GetUserAsync(User);
-                            var profilePictureUrl = Url.Content(user?.ProfilePictureUrl);
+                            var profilePictureUrl = Url.Content(user?.ProfilePictureUrl ?? "~/images/DefaultPfp.jpg");
 
 
                             <li class="nav-item dropdown">
