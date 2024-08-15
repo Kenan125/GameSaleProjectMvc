@@ -1,8 +1,6 @@
 ﻿using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
-using GameSaleProject_Service.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Drawing;
 
 namespace GameSaleProject_Mvc.Controllers
 {
@@ -23,8 +21,8 @@ namespace GameSaleProject_Mvc.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var games = await _gameService.GetAllGamesWithImagesAsync();
-            var categories = await _categoryService.GetAllCategoriesAsync(); // Assuming you have a category service
+            var games = await _gameService.GetAllGamesAsync();
+            var categories = await _categoryService.GetAllCategoriesAsync();
             var publishers = await _publisherService.GetAllPublishersAsync();
 
             var model = new GameCategoryPublisherViewModel
@@ -35,13 +33,14 @@ namespace GameSaleProject_Mvc.Controllers
             };
 
             return View(model);
-            //return View(games);
         }
+
         [HttpGet]
         public async Task<IActionResult> AddGame()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> AddGame(GameViewModel model, List<IFormFile> Images)
         {
@@ -53,19 +52,86 @@ namespace GameSaleProject_Mvc.Controllers
                 {
                     if (file.Length > 0)
                     {
+                        var fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                        var extension = Path.GetExtension(file.FileName);
+                        var newFileName = $"{fileName}_{DateTime.Now.Ticks}{extension}";
+
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", newFileName);
+
+                        if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")))
+                        {
+                            Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"));
+                        }
+
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+
+                        model.Images.Add(new ImageViewModel
+                        {
+                            Name = newFileName,
+                            ImageUrl = $"/images/{newFileName}",
+                        });
+                    }
+                }
+
+                var result = await _gameService.AddGameAsync(model);
+                TempData["Message"] = result;
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> FilterByCategory(int categoryId)
+        {
+            var games = await _gameService.GetGamesByCategoryAsync(categoryId);
+            return View("Index", games);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateGame(int id)
+        {
+            var game = await _gameService.GetGameByIdAsync(id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            var categories = await _categoryService.GetAllCategoriesAsync();
+            var publishers = await _publisherService.GetAllPublishersAsync();
+
+            ViewBag.Categories = categories;
+            ViewBag.Publishers = publishers;
+
+            return View(game);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateGame(GameViewModel model, List<IFormFile> Images)
+        {
+            if (ModelState.IsValid)
+            {
+                // Initialize model.Images if it's null
+                model.Images = new List<ImageViewModel>();
+
+                // Process image uploads
+                foreach (var file in Images)
+                {
+                    if (file.Length > 0)
+                    {
                         // Generate unique file name and save the file
                         var fileName = Path.GetFileNameWithoutExtension(file.FileName);
                         var extension = Path.GetExtension(file.FileName);
                         var newFileName = $"{fileName}_{DateTime.Now.Ticks}{extension}";
 
-                        // Correct the path to save the image in the correct directory
                         var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", newFileName);
 
                         // Ensure the directory exists
-                        var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
-                        if (!Directory.Exists(directoryPath))
+                        if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")))
                         {
-                            Directory.CreateDirectory(directoryPath);
+                            Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"));
                         }
 
                         using (var stream = new FileStream(path, FileMode.Create))
@@ -82,17 +148,26 @@ namespace GameSaleProject_Mvc.Controllers
                     }
                 }
 
-                var result = await _gameService.AddGameAsync(model);
+                var result = await _gameService.UpdateGameAsync(model);
+                if (result == "Category does not exist.")
+                {
+                    ModelState.AddModelError("CategoryId", "Selected category does not exist.");
+                    return View(model);
+                }
+                if (result == "Publisher does not exist.")
+                {
+                    ModelState.AddModelError("PublisherId", "Selected publisher does not exist.");
+                    return View(model);
+                }
+
                 TempData["Message"] = result;
                 return RedirectToAction("Index");
             }
 
+            // Repopulate categories and publishers in case of validation errors
+            ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
+            ViewBag.Publishers = await _publisherService.GetAllPublishersAsync();
             return View(model);
-        }
-        public async Task<IActionResult> FilterByCategory(int categoryId)
-        {
-            var games = await _gameService.GetGamesByCategoryAsync(categoryId);
-            return View("Index", games); // Assuming you are reusing the Index view to display filtered games
         }
 
     }

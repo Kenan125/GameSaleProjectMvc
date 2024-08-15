@@ -77,10 +77,18 @@ namespace GameSaleProject_DataAccess.Repositories
             }
             return await query.ToListAsync();
         }
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null, params Expression<Func<T, object>>[] includes)
         {
-            return await _dbSet.AsNoTracking().ToListAsync();  //AsNoTracking() -> EF Core verileri takip etmiyor (modified, deleted gibi). 
+            IQueryable<T> query = _dbSet;
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return await query.ToListAsync();
         }
+        
         public async Task<T> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);

@@ -38,6 +38,7 @@ namespace GameSaleProject_Service.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IPublisherService, PublisherService>();
+            services.AddScoped<IImageService, ImageService>();
             services.AddScoped(typeof(IAccountService), typeof(AccountService));
             services.AddAutoMapper(typeof(MappingProfile));
 

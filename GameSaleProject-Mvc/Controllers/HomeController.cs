@@ -18,7 +18,7 @@ namespace GameSaleProject_Mvc.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var gamesWithImages = await _gameService.GetAllGamesWithImagesAsync();
+            var gamesWithImages = await _gameService.GetAllGamesAsync();
             return View(gamesWithImages);
         }
 

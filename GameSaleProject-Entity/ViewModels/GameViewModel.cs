@@ -31,8 +31,8 @@ namespace GameSaleProject_Entity.ViewModels
         public string? Platform { get; set; }
 
         //new prop
-        public ICollection<ImageViewModel>? Images { get; set; }
-        public ICollection<ReviewViewModel>? Reviews { get; set; }
+        public ICollection<ImageViewModel>? Images { get; set; } = new List<ImageViewModel>();
+        public ICollection<ReviewViewModel>? Reviews { get; set; } = new List<ReviewViewModel>();
 
     }
 }

@@ -25,7 +25,7 @@
                         <h5 class="card-title">@game.GameName</h5>
                         <p class="card-text">@game.Description</p>
                         <p class="card-text">Price: @game.Price.ToString("C")</p>
-                        <a href="@Url.Action("Details", "Games", new { id = game.Id })" class="btn btn-primary">View Details</a>
+                        <a href="@Url.Action("UpdateGame", "Game", new { id = game.Id })" class="btn btn-primary">Update Game</a> <!-- Update Game button -->
                     </div>
                 </div>
             </div>
