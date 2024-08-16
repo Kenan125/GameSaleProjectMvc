@@ -28,5 +28,20 @@ namespace GameSaleProject_Service.Services
             var publishers = await publisherRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<PublisherViewModel>>(publishers);
         }
+
+        public async Task<PublisherViewModel> GetPublisherByIdAsync(int publisherId)
+        {
+            var publisher = await _unitOfWork.GetRepository<Publisher>().GetByIdAsync(publisherId);
+            if (publisher == null)
+            {
+                return null;
+            }
+
+            return new PublisherViewModel
+            {
+                Id = publisher.Id,
+                Name = publisher.Name
+            };
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
+using GameSaleProject_Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameSaleProject_Mvc.Controllers
@@ -10,13 +11,18 @@ namespace GameSaleProject_Mvc.Controllers
         private readonly IGameService _gameService;
         private readonly ICategoryService _categoryService;
         private readonly IPublisherService _publisherService;
+        private readonly IReviewService _reviewService;
+        private readonly ISystemRequirementService _systemRequirementService;
 
-        public GameController(ILogger<GameController> logger, IGameService gameService, ICategoryService categoryService, IPublisherService publisherService)
+
+        public GameController(ILogger<GameController> logger, IGameService gameService, ICategoryService categoryService, IPublisherService publisherService, IReviewService reviewService, ISystemRequirementService systemRequirementService)
         {
             _logger = logger;
             _gameService = gameService;
             _categoryService = categoryService;
             _publisherService = publisherService;
+            _reviewService = reviewService;
+            _systemRequirementService = systemRequirementService;
         }
 
         public async Task<IActionResult> Index()
@@ -36,6 +42,58 @@ namespace GameSaleProject_Mvc.Controllers
 
             return View(model);
         }
+
+
+        public async Task<IActionResult> Detail(int id)
+        {
+            // Retrieve the game data
+            var game = await _gameService.GetGameByIdAsync(id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            // Retrieve the publisher data
+            var publisher = await _publisherService.GetPublisherByIdAsync(game.PublisherId);
+
+            // Retrieve the reviews
+            var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
+
+            // Retrieve the system requirements
+            var systemRequirements = await _systemRequirementService.GetSystemRequirementsByGameIdAsync(id);
+
+            // Create the GameViewModel
+            var model = new GameViewModel
+            {
+                Id = game.Id,
+                GameName = game.GameName,
+                Description = game.Description,
+                Price = game.Price,
+                Discount = game.Discount,
+                Developer = game.Developer,
+                PublisherId = game.PublisherId,
+                Publisher = publisher != null ? new PublisherViewModel { Id = publisher.Id, Name = publisher.Name } : null,
+                Platform = game.Platform,
+                Images = game.Images, // Assuming this is already a collection of ImageViewModel
+                Reviews = reviews, // Assuming these are already ReviewViewModel objects
+                SystemRequirements = systemRequirements != null ? new SystemRequirementViewModel
+                {
+                    OS = systemRequirements.OS,
+                    SystemProcessor = systemRequirements.SystemProcessor,
+                    SystemMemory = systemRequirements.SystemMemory,
+                    Storage = systemRequirements.Storage,
+                    Graphics = systemRequirements.Graphics,
+                    IsMinimum = systemRequirements.IsMinimum
+                } : null
+            };
+
+            // Pass the model to the view
+            return View(model);
+        }
+
+
+
+
 
         [HttpGet]
         public async Task<IActionResult> AddGame()
@@ -212,6 +270,8 @@ namespace GameSaleProject_Mvc.Controllers
             TempData["Message"] = result;
             return RedirectToAction("Index");
         }
+
+
 
     }
 }

@@ -1,0 +1,131 @@
+﻿@model GameViewModel
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left Side: Image Carousel -->
+        <div class="col-md-8">
+            <div id="gameCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach (var image in Model.Images.Where(i => i.ImageType == "display").Select((value, index) => new { Value = value, Index = index }))
+                    {
+                        <div class="carousel-item @(image.Index == 0 ? "active" : "")">
+                            <img src="@Url.Content(image.Value.ImageUrl)" class="d-block w-100" alt="@Model.GameName">
+                        </div>
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#gameCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#gameCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+            <div class="mt-3">
+                @foreach (var image in Model.Images.Where(i => i.ImageType == "display"))
+                {
+                    <img src="@Url.Content(image.ImageUrl)" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" alt="@Model.GameName">
+                }
+            </div>
+            <p class="mt-3">@Model.Description</p>
+        </div>
+
+        <!-- Right Side: Game Info -->
+        <div class="col-md-4">
+            <div class="card">
+                <img src="@Url.Content(Model.Images.FirstOrDefault(i => i.ImageType == "card")?.ImageUrl ?? "/images/placeholder.png")" class="card-img-top" alt="@Model.GameName">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.GameName</h5>
+                    <p class="card-text">
+                        @if (Model.Discount > 0)
+                        {
+                            <span class="text-decoration-line-through">@Model.Price.ToString("C")</span>
+                            <span class="text-danger">@((Model.Price * (1 - Model.Discount / 100)).ToString("C"))</span>
+                        }
+                        else
+                        {
+                            <span>@Model.Price.ToString("C")</span>
+                        }
+                    </p>
+                    <a href="#" class="btn btn-success btn-block mb-2">Buy Now</a>
+                    <a href="#" class="btn btn-primary btn-block mb-2">Add to Cart</a>
+                    <ul class="list-group list-group-flush mt-3">
+                        <li class="list-group-item"><strong>Developer:</strong> @Model.Developer</li>
+                        <li class="list-group-item"><strong>Publisher:</strong> @Model.Publisher?.Name</li>
+                        <li class="list-group-item"><strong>Release Date:</strong> @Model.CreatedDate.ToString("MM/dd/yyyy")</li>
+                        <li class="list-group-item"><strong>Platform:</strong> @Model.Platform</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- System Requirements -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    System Requirements
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>OS:</strong> @Model.SystemRequirements?.OS</li>
+                        <li class="list-group-item"><strong>Processor:</strong> @Model.SystemRequirements?.SystemProcessor</li>
+                        <li class="list-group-item"><strong>Memory:</strong> @Model.SystemRequirements?.SystemMemory GB</li>
+                        <li class="list-group-item"><strong>Graphics:</strong> @Model.SystemRequirements?.Graphics</li>
+                        <li class="list-group-item"><strong>Storage:</strong> @Model.SystemRequirements?.Storage GB</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Reviews -->
+    <div class="mt-5">
+        <h4>User Reviews</h4>
+        @foreach (var review in Model.Reviews)
+        {
+            <div class="mb-3">
+                <div>
+                    @for (int i = 0; i < review.Rating; i++)
+                    {
+                        <span class="fa fa-star checked"></span>
+                    }
+                    @for (int i = review.Rating; i < 5; i++)
+                    {
+                        <span class="fa fa-star"></span>
+                    }
+                </div>
+                @if (!string.IsNullOrEmpty(review.CustomerReview))
+                {
+                    <p>@review.CustomerReview</p>
+                }
+            </div>
+        }
+
+        <!-- Add Review Form -->
+        <h5>Add Your Review</h5>
+        <form asp-action="AddReview" method="post">
+            <div class="form-group">
+                <label>Stars</label>
+                <select class="form-control" name="Rating">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <option value="@i">@i Star@(i > 1 ? "s" : "")</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group mt-2">
+                <label>Comment (optional)</label>
+                <textarea class="form-control" name="CustomerReview" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Submit Review</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- For star icons -->
+}

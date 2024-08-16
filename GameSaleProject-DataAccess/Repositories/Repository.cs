@@ -78,18 +78,38 @@ namespace GameSaleProject_DataAccess.Repositories
             }
             return await query.ToListAsync();
         }
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null, params Expression<Func<T, object>>[] includes)
+        public async Task<IEnumerable<T>> GetAllAsync(
+    Expression<Func<T, bool>> filter = null,
+    Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null,
+    params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _dbSet;
 
-            foreach (var include in includes)
+            // Apply filter if provided
+            if (filter != null)
             {
-                query = query.Include(include);
+                query = query.Where(filter);
+            }
+
+            // Apply includes for eager loading
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            // Apply orderby if provided
+            if (orderby != null)
+            {
+                query = orderby(query);
             }
 
             return await query.ToListAsync();
         }
-        
+
+
         public async Task<T> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);

@@ -29,11 +29,14 @@ namespace GameSaleProject_Entity.ViewModels
         public int CategoryId { get; set; }
 
         public string? Platform { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
         public bool IsDeleted { get; set; }
 
         //new prop
         public ICollection<ImageViewModel>? Images { get; set; } = new List<ImageViewModel>();
         public ICollection<ReviewViewModel>? Reviews { get; set; } = new List<ReviewViewModel>();
+        public SystemRequirementViewModel? SystemRequirements { get; set; }
+        public PublisherViewModel? Publisher { get; set; }
 
     }
 }

@@ -80,8 +80,18 @@ namespace GameSaleProject_Service.Services
             var repository = _unitOfWork.GetRepository<Game>();
             var game = await repository.GetAllAsync(
                 filter: g => g.Id == gameId,
-                includes: g => g.Images
+                includes: new Expression<Func<Game, object>>[]
+                {
+            g => g.Images,
+            g => g.Reviews,
+            g => g.Publisher
+                }
             );
+
+            if (game == null || !game.Any())
+            {
+                return null; // Handle this appropriately in your controller (e.g., return NotFound())
+            }
 
             var gameViewModel = _mapper.Map<GameViewModel>(game.FirstOrDefault());
 

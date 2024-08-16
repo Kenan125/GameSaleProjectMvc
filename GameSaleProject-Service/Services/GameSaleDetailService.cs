@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Services
 {
-    internal class GameSaleDetailService
+    public class GameSaleDetailService
     {
     }
 }

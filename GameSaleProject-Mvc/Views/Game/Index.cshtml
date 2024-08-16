@@ -24,7 +24,14 @@
                         <h5 class="card-title">@game.GameName</h5>
                         <p class="card-text">@game.Description</p>
                         <p class="card-text">Price: @game.Price.ToString("C")</p>
-                        <a href="@Url.Action("UpdateGame", "Game", new { id = game.Id })" class="btn btn-primary">Update Game</a> <!-- Update Game button -->
+
+                        <!-- Details Button -->
+                        <a href="@Url.Action("Detail", "Game", new { id = game.Id })" class="btn btn-info">Details</a>
+
+                        <!-- Update Game Button -->
+                        <a href="@Url.Action("UpdateGame", "Game", new { id = game.Id })" class="btn btn-primary">Update Game</a>
+
+                        <!-- Delete Game Button -->
                         <form action="@Url.Action("DeleteGame", "Game", new { id = game.Id })" method="post" style="display:inline;">
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this game?');">Delete Game</button>
                         </form>

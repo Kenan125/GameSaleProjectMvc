@@ -11,5 +11,6 @@ namespace GameSaleProject_Entity.Interfaces
     public interface IPublisherService 
     {
         Task<IEnumerable<PublisherViewModel>> GetAllPublishersAsync();
+        Task<PublisherViewModel> GetPublisherByIdAsync(int publisherId);
     }
 }
