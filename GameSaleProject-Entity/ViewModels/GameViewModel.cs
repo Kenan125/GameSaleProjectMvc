@@ -29,6 +29,7 @@ namespace GameSaleProject_Entity.ViewModels
         public int CategoryId { get; set; }
 
         public string? Platform { get; set; }
+        public bool IsDeleted { get; set; }
 
         //new prop
         public ICollection<ImageViewModel>? Images { get; set; } = new List<ImageViewModel>();

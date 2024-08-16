@@ -7,5 +7,6 @@ namespace GameSaleProject_DataAccess.Identity
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ProfilePictureUrl { get; set; }
+
     }
 }

@@ -25,6 +25,8 @@ namespace GameSaleProject_Mvc.Controllers
             var categories = await _categoryService.GetAllCategoriesAsync();
             var publishers = await _publisherService.GetAllPublishersAsync();
 
+            games = games.Where(g => !g.IsDeleted).ToList();
+
             var model = new GameCategoryPublisherViewModel
             {
                 Games = games,
@@ -168,6 +170,14 @@ namespace GameSaleProject_Mvc.Controllers
             ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.Publishers = await _publisherService.GetAllPublishersAsync();
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteGame(int id)
+        {
+            var result = await _gameService.DeleteGameAsync(id);
+            TempData["Message"] = result;
+            return RedirectToAction("Index");
         }
 
     }

@@ -39,9 +39,10 @@ namespace GameSaleProject_DataAccess.Repositories
         }
         public void Delete(T entity)
         {
-            if (entity.GetType().GetProperty("IsDeleted") != null)
+            var isDeletedProperty = entity.GetType().GetProperty("IsDeleted");
+            if (isDeletedProperty != null)
             {
-                entity.GetType().GetProperty("IsDeleted").SetValue(entity, true);  //tabloda ISDeleted kullanıyorsak
+                isDeletedProperty.SetValue(entity, true);  //tabloda ISDeleted kullanıyorsak
                 _dbSet.Update(entity);
             }
             else

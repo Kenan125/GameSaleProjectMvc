@@ -56,7 +56,7 @@ namespace GameSaleProject_Service.Services
             }
 
             repository.Delete(game);
-            _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
             return "Game deleted successfully.";
         }
 
