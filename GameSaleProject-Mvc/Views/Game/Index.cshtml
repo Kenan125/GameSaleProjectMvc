@@ -23,7 +23,21 @@
                     <div class="card-body">
                         <h5 class="card-title">@game.GameName</h5>
                         <p class="card-text">@game.Description</p>
-                        <p class="card-text">Price: @game.Price.ToString("C")</p>
+                        <p class="card-text">
+                            @if (game.Price == 0)
+                            {
+                                <span class="text-success">Free</span>
+                            }
+                            @if (game.Discount > 0)
+                            {
+                                <span class="text-decoration-line-through">@game.Price.ToString("C")</span>
+                                <span class="text-danger">@(((decimal)game.Price * (decimal)(1 - (decimal)game.Discount / 100)).ToString("C"))</span>
+                            }
+                            else if (game.Price != 0)
+                            {
+                                <span>@game.Price.ToString("C")</span>
+                            }
+                        </p>
 
                         <!-- Details Button -->
                         <a href="@Url.Action("Detail", "Game", new { id = game.Id })" class="btn btn-info">Details</a>

@@ -43,12 +43,16 @@
                 <div class="card-body">
                     <h5 class="card-title">@Model.GameName</h5>
                     <p class="card-text">
+                        @if (Model.Price == 0)
+                        {
+                            <span class="text-success">Free</span>
+                        }
                         @if (Model.Discount > 0)
                         {
                             <span class="text-decoration-line-through">@Model.Price.ToString("C")</span>
-                            <span class="text-danger">@((Model.Price * (1 - Model.Discount / 100)).ToString("C"))</span>
+                            <span class="text-danger">@(((decimal)Model.Price * (decimal)(1 - (decimal)Model.Discount / 100)).ToString("C"))</span>
                         }
-                        else
+                        else if(Model.Price!=0)
                         {
                             <span>@Model.Price.ToString("C")</span>
                         }

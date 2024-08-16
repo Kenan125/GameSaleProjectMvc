@@ -68,14 +68,17 @@
     </div>
 
     <div class="form-group">
-        <label>Current Image</label>
+        <label>Current Card Image</label>
         <div>
-            @if (Model.Images != null && Model.Images.Any())
+            @if (Model.Images != null && Model.Images.Any(i => i.ImageType == "card"))
             {
-                var activeImage = Model.Images.FirstOrDefault();
-                if (activeImage != null)
+                var cardImage = Model.Images.FirstOrDefault(i => i.ImageType == "card");
+                if (cardImage != null)
                 {
-                    <img src="@activeImage.ImageUrl" alt="@activeImage.Name" class="img-thumbnail" style="max-width: 150px; margin-right: 10px;" />
+                    <div style="display:inline-block; position:relative; margin-right: 10px;">
+                        <img src="@cardImage.ImageUrl" alt="@cardImage.Name" class="img-thumbnail" style="max-width: 150px; margin-right: 10px;" />
+                        <button type="submit" formaction="@Url.Action("DeleteImage", new { imageId = cardImage.Id, gameId = Model.Id })" formmethod="post" class="btn btn-danger btn-sm" style="position:absolute; top:0; right:0;">X</button>
+                    </div>
                 }
                 else
                 {
@@ -89,9 +92,36 @@
         </div>
     </div>
 
+    <!-- File input for new Card Image -->
     <div class="form-group">
-        <label asp-for="Images"></label>
-        <input type="file" name="Images" multiple class="form-control" />
+        <label>Upload New Card Image</label>
+        <input type="file" name="CardImage" class="form-control" />
+    </div>
+    <!-- Section for Display Images -->
+    <div class="form-group">
+        <label>Current Display Images</label>
+        <div>
+            @if (Model.Images != null && Model.Images.Any(i => i.ImageType == "display"))
+            {
+                foreach (var image in Model.Images.Where(i => i.ImageType == "display"))
+                {
+                    <div style="display:inline-block; position:relative; margin-right: 10px;">
+                        <img src="@image.ImageUrl" alt="@image.Name" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />
+                        <button type="submit" formaction="@Url.Action("DeleteImage", new { imageId = image.Id, gameId = Model.Id })" formmethod="post" class="btn btn-danger btn-sm" style="position:absolute; top:0; right:0;">X</button>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No display images available.</p>
+            }
+        </div>
+    </div>
+
+    <!-- File input for new Display Images -->
+    <div class="form-group">
+        <label>Upload New Display Images</label>
+        <input type="file" name="DisplayImages" multiple class="form-control" />
     </div>
 
     <button type="submit" class="btn btn-primary">Update Game</button>

@@ -201,46 +201,85 @@ namespace GameSaleProject_Mvc.Controllers
             return View(game);
         }
 
+        
         [HttpPost]
-        public async Task<IActionResult> UpdateGame(GameViewModel model, List<IFormFile> Images)
+        public async Task<IActionResult> UpdateGame(GameViewModel model, IFormFile CardImage, List<IFormFile> DisplayImages)
         {
+            ModelState.Remove("CardImage");
             if (ModelState.IsValid)
             {
                 // Initialize model.Images if it's null
-                model.Images = new List<ImageViewModel>();
+                model.Images = model.Images ?? new List<ImageViewModel>();
 
-                // Process image uploads
-                foreach (var file in Images)
+                // Process card image upload only if a new one is provided
+                if (CardImage != null && CardImage.Length > 0)
                 {
-                    if (file.Length > 0)
+                    var cardFileName = Path.GetFileNameWithoutExtension(CardImage.FileName);
+                    var cardExtension = Path.GetExtension(CardImage.FileName);
+                    var newCardFileName = $"{cardFileName}_{DateTime.Now.Ticks}{cardExtension}";
+
+                    var cardPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", newCardFileName);
+
+                    if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")))
                     {
-                        // Generate unique file name and save the file
-                        var fileName = Path.GetFileNameWithoutExtension(file.FileName);
-                        var extension = Path.GetExtension(file.FileName);
-                        var newFileName = $"{fileName}_{DateTime.Now.Ticks}{extension}";
+                        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"));
+                    }
 
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", newFileName);
+                    using (var stream = new FileStream(cardPath, FileMode.Create))
+                    {
+                        await CardImage.CopyToAsync(stream);
+                    }
 
-                        // Ensure the directory exists
-                        if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")))
+                    // Remove existing card images (if any)
+                    var existingCardImages = model.Images.Where(img => img.ImageType == "card").ToList();
+                    foreach (var img in existingCardImages)
+                    {
+                        model.Images.Remove(img);
+                    }
+
+                    // Add the new card image
+                    model.Images.Add(new ImageViewModel
+                    {
+                        Name = newCardFileName,
+                        ImageUrl = $"/images/{newCardFileName}",
+                        ImageType = "card"
+                    });
+                }
+
+                // Process display images upload
+                if (DisplayImages != null && DisplayImages.Count > 0)
+                {
+                    foreach (var file in DisplayImages)
+                    {
+                        if (file.Length > 0)
                         {
-                            Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"));
+                            var displayFileName = Path.GetFileNameWithoutExtension(file.FileName);
+                            var displayExtension = Path.GetExtension(file.FileName);
+                            var newDisplayFileName = $"{displayFileName}_{DateTime.Now.Ticks}{displayExtension}";
+                            var displayPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", newDisplayFileName);
+
+                            if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")))
+                            {
+                                Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"));
+                            }
+
+                            using (var stream = new FileStream(displayPath, FileMode.Create))
+                            {
+                                await file.CopyToAsync(stream);
+                            }
+
+                            // Add the new display image
+                            model.Images.Add(new ImageViewModel
+                            {
+                                Name = newDisplayFileName,
+                                ImageUrl = $"/images/{newDisplayFileName}",
+                                ImageType = "display"
+                            });
                         }
-
-                        using (var stream = new FileStream(path, FileMode.Create))
-                        {
-                            await file.CopyToAsync(stream);
-                        }
-
-                        // Add image details to the model
-                        model.Images.Add(new ImageViewModel
-                        {
-                            Name = newFileName,
-                            ImageUrl = $"/images/{newFileName}",
-                        });
                     }
                 }
 
+                // Save the updated game with the images
                 var result = await _gameService.UpdateGameAsync(model);
                 if (result == "Category does not exist.")
                 {
@@ -263,6 +302,9 @@ namespace GameSaleProject_Mvc.Controllers
             return View(model);
         }
 
+
+
+
         [HttpPost]
         public async Task<IActionResult> DeleteGame(int id)
         {
@@ -271,7 +313,45 @@ namespace GameSaleProject_Mvc.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteImage(int imageId, int gameId)
+        {
+            // Fetch the game associated with the image
+            var game = await _gameService.GetGameByIdAsync(gameId);
+            if (game == null)
+            {
+                return NotFound();
+            }
 
+            // Find the image to be deleted
+            var image = game.Images.FirstOrDefault(img => img.Id == imageId);
+            if (image == null)
+            {
+                return NotFound();
+            }
+
+            // Remove the image from the collection
+            game.Images.Remove(image);
+
+            // Update the game with the updated image list
+            var result = await _gameService.UpdateGameAsync(game);
+
+            if (result != "Game updated successfully.")
+            {
+                TempData["Message"] = "Failed to delete the image.";
+                return RedirectToAction("UpdateGame", new { id = gameId });
+            }
+
+            // Optionally, delete the image file from the server
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.ImageUrl.TrimStart('/'));
+            if (System.IO.File.Exists(imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
+
+            TempData["Message"] = "Image deleted successfully.";
+            return RedirectToAction("UpdateGame", new { id = gameId });
+        }
 
     }
 }
