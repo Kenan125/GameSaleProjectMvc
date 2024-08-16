@@ -4,6 +4,7 @@ using GameSaleProject_DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameSaleProject_DataAccess.Migrations
 {
     [DbContext(typeof(GameSaleProjectDbContext))]
-    partial class GameSaleProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240816150957_RemoveImageDefaultvalue")]
+    partial class RemoveImageDefaultvalue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

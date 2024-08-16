@@ -31,11 +31,7 @@ namespace GameSaleProject_DataAccess.Contexts
                       .HasMaxLength(200)
                       .HasDefaultValue("/images/DefaultPfp.jpg");
             });
-            modelBuilder.Entity<Image>(entity =>
-            {
-                entity.Property(e => e.ImageType).HasDefaultValue("default");
-            }
-            );
+            
             
 
             modelBuilder.Entity<Game>()

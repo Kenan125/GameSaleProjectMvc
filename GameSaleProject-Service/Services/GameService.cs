@@ -36,6 +36,7 @@ namespace GameSaleProject_Service.Services
                 {
                     Name = img.Name,
                     ImageUrl = img.ImageUrl,
+                    ImageType=img.ImageType,
                     CreatedDate = DateTime.Now
                 }).ToList();
             }
@@ -125,9 +126,7 @@ namespace GameSaleProject_Service.Services
 
             // Handle image updates
             if (model.Images != null && model.Images.Any())
-            {
-                // Debugging step: Check the number of images in the model
-                Console.WriteLine($"Number of images in the model: {model.Images.Count}");
+            {                
 
                 // Clear existing images
                 game.Images.Clear();
@@ -136,11 +135,12 @@ namespace GameSaleProject_Service.Services
                 game.Images = model.Images.Select(img => new Image
                 {
                     Name = img.Name,
-                    ImageUrl = img.ImageUrl
+                    ImageUrl = img.ImageUrl,
+                    ImageType=img.ImageType
+                    
                 }).ToList();
 
-                // Debugging step: Check the number of images in the game after update
-                Console.WriteLine($"Number of images in the game after update: {game.Images.Count}");
+                
             }
 
             // Save changes to the database
