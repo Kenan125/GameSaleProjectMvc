@@ -1,6 +1,6 @@
 ﻿using GameSaleProject_DataAccess.Contexts;
-using GameSaleProject_DataAccess.Identity;
 using GameSaleProject_DataAccess.UnitOfWorks;
+using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.UnitOfWorks;
 using GameSaleProject_Service.Initialization;
@@ -32,6 +32,7 @@ namespace GameSaleProject_Service.Extensions
                     opt.User.AllowedUserNameCharacters = "zxcvbnmasdfghjklqwertyuiop1234567890"; //kullanıcı adı girilirken bunlardan başka birkarakter girilmesine izin vermez.
                     opt.Lockout.MaxFailedAccessAttempts = 3;  //default 5
                     opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); //default 5
+                    
                 }).AddEntityFrameworkStores<GameSaleProjectDbContext>();
 
             services.AddScoped<IGameService, GameService>();
@@ -39,7 +40,7 @@ namespace GameSaleProject_Service.Extensions
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IPublisherService, PublisherService>();
             services.AddScoped<IImageService, ImageService>();
-            services.AddScoped(typeof(IAccountService), typeof(AccountService));
+            services.AddScoped<IAccountService, AccountService>();
             services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddScoped<RoleInitializer>();

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿
+using GameSaleProject_Entity.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameSaleProject_Entity.Entities
 {
@@ -15,6 +17,6 @@ namespace GameSaleProject_Entity.Entities
         public virtual List<GameSaleDetail> GameSaleDetails { get; set; }
 
         
-        public virtual User User { get; set; }
+        public virtual AppUser User { get; set; }
     }
 }

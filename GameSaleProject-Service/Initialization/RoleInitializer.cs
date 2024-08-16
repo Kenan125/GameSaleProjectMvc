@@ -1,4 +1,4 @@
-﻿using GameSaleProject_DataAccess.Identity;
+﻿using GameSaleProject_Entity.Identity;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

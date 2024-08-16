@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace GameSaleProject_DataAccess.Identity
+namespace GameSaleProject_Entity.Identity
 {
     public class AppRole : IdentityRole<int>
     {

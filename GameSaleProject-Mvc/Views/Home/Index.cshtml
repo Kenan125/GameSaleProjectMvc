@@ -1,24 +1,23 @@
 ﻿@model List<GameSaleProject_Entity.ViewModels.GameViewModel>
 @{
     ViewData["Title"] = "Home Page";
-    var causImages = Model.SelectMany(g => g.Images).Where(img => img.ImageUrl.Contains("Caus")).ToList();
+
+    // Filter images for the carousel
+    var carouselImages = Model.SelectMany(g => g.Images).Where(img => img.ImageType == "carousel").ToList();
 }
-
-
 
 <div id="carouselExampleIndicators" class="carousel slide custom-carousel mb-4" data-bs-ride="carousel">
     <div class="carousel-indicators">
-        @for (int i = 0; i < causImages.Count; i++)
+        @for (int i = 0; i < carouselImages.Count; i++)
         {
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i + 1)"></button>
         }
     </div>
     <div class="carousel-inner">
-        @foreach (var image in causImages.Select((value, index) => new { Value = value, Index = index }))
+        @foreach (var image in carouselImages.Select((value, index) => new { Value = value, Index = index }))
         {
             <div class="carousel-item @(image.Index == 0 ? "active" : "")">
                 <img src="@Url.Content(image.Value.ImageUrl)" class="d-block w-100 carousel-image" alt="Featured Game">
-                
             </div>
         }
     </div>
@@ -38,9 +37,10 @@
         {
             <div class="col-md-4">
                 <div class="card mb-4">
-                    @if (game.Images != null && game.Images.Count > 0)
+                    @if (game.Images != null && game.Images.Any(img => img.ImageType == "card"))
                     {
-                        <img src="@game.Images.First().ImageUrl" class="card-img-top" alt="@game.GameName" />
+                        var cardImage = game.Images.First(img => img.ImageType == "card");
+                        <img src="@cardImage.ImageUrl" class="card-img-top" alt="@game.GameName" />
                     }
                     else
                     {

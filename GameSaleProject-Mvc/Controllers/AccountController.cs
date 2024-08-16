@@ -1,4 +1,4 @@
-﻿using GameSaleProject_DataAccess.Identity;
+﻿using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -60,6 +60,10 @@ namespace GameSaleProject_Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model, IFormFile formFile)
         {
+            // Set the default profile picture URL before any validation
+            model.ProfilePictureUrl = "/images/DefaultPfp.png";
+            // Remove the formFile from ModelState validation
+            ModelState.Remove("formFile");
             if (ModelState.IsValid)
             {
                 if (formFile != null && formFile.Length > 0)
@@ -74,11 +78,8 @@ namespace GameSaleProject_Mvc.Controllers
                         await formFile.CopyToAsync(stream);
                     }
 
+                    // Override the default URL with the uploaded file's URL
                     model.ProfilePictureUrl = "/images/" + newFileName;
-                }
-                else
-                {
-                    model.ProfilePictureUrl = "/images/defaultPfp.png"; // Default picture
                 }
 
                 string msg = await _accountService.CreateUserAsync(model);

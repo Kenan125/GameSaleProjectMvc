@@ -33,9 +33,9 @@ namespace GameSaleProject_Entity.ViewModels
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Şifreler uyuşmuyor!")]
         public string ConfirmPassword { get; set; }
-        
-        
-       
-        public string? ProfilePictureUrl { get; set; }
+
+
+
+        public string? ProfilePictureUrl { get; set; } = "/images/DefaultPfp.png";
     }
 }

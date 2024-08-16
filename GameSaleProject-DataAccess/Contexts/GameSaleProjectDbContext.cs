@@ -1,6 +1,7 @@
 ﻿
-using GameSaleProject_DataAccess.Identity;
+
 using GameSaleProject_Entity.Entities;
+using GameSaleProject_Entity.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,8 +12,7 @@ namespace GameSaleProject_DataAccess.Contexts
         public GameSaleProjectDbContext(DbContextOptions<GameSaleProjectDbContext> options) : base(options) { }
 
         public DbSet<Game> Games { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Category> Categories { get; set; }       
         public DbSet<GameSale> GameSales { get; set; }
         public DbSet<GameSaleDetail> GameSaleDetails { get; set; }
         public DbSet<Review> Reviews { get; set; }
@@ -31,15 +31,12 @@ namespace GameSaleProject_DataAccess.Contexts
                       .HasMaxLength(200)
                       .HasDefaultValue("/images/DefaultPfp.jpg");
             });
-
-            // Additional configuration for your custom User entity
-            modelBuilder.Entity<User>(entity =>
+            modelBuilder.Entity<Image>(entity =>
             {
-                entity.Property(u => u.ProfilePictureUrl)
-                      .HasDefaultValue("/images/DefaultPfp.jpg");
-
-                // Add any other necessary configurations here
-            });
+                entity.Property(e => e.ImageType).HasDefaultValue("default");
+            }
+            );
+            
 
             modelBuilder.Entity<Game>()
             .Property(g => g.Price)
@@ -61,7 +58,7 @@ namespace GameSaleProject_DataAccess.Contexts
             .WithOne(i => i.Game)
             .HasForeignKey(i => i.GameId);
 
-            modelBuilder.Entity<User>().Property(m => m.ProfilePictureUrl).HasDefaultValue("/images/customerpic.jpg");
+            
 
             modelBuilder.Entity<Game>()
                 .HasOne(g => g.Publisher)

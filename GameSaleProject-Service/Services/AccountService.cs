@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using GameSaleProject_DataAccess.Contexts;
-using GameSaleProject_DataAccess.Identity;
 using GameSaleProject_Entity.Entities;
+using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -87,20 +87,7 @@ namespace GameSaleProject_Service.Services
 
             if (identityResult.Succeeded)
             {
-                // Synchronize data with the Users table
-                var customUser = new User
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    PhoneNumber = user.PhoneNumber,
-                    UserName = user.UserName,
-                    ProfilePictureUrl = user.ProfilePictureUrl,
-                    Password = user.PasswordHash // Store hashed password or manage it as per your requirements
-                };
-
-                _context.Users.Add(customUser);
-                await _context.SaveChangesAsync();
+               
 
                 message = "OK";
             }
