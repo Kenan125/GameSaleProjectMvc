@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameSaleProject_DataAccess.Migrations
 {
     [DbContext(typeof(GameSaleProjectDbContext))]
-    [Migration("20240813081959_ChangeAppUser")]
-    partial class ChangeAppUser
+    [Migration("20240820204854_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,128 +24,6 @@ namespace GameSaleProject_DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("GameSaleProject_DataAccess.Identity.AppRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
-
-            modelBuilder.Entity("GameSaleProject_DataAccess.Identity.AppUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ProfilePictureUrl")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasDefaultValue("/images/DefaultPfp.jpg");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-                });
 
             modelBuilder.Entity("GameSaleProject_Entity.Entities.Category", b =>
                 {
@@ -178,7 +56,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8186),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(2999),
                             Description = "Action games",
                             IsDeleted = false,
                             Name = "Action"
@@ -186,7 +64,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8198),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3014),
                             Description = "Adventure games",
                             IsDeleted = false,
                             Name = "Adventure"
@@ -194,7 +72,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8199),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3015),
                             Description = "Role-playing games",
                             IsDeleted = false,
                             Name = "RPG"
@@ -202,7 +80,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8200),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3017),
                             Description = "Strategy games",
                             IsDeleted = false,
                             Name = "Strategy"
@@ -210,7 +88,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8201),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3018),
                             Description = "Simulation games",
                             IsDeleted = false,
                             Name = "Simulation"
@@ -493,6 +371,9 @@ namespace GameSaleProject_DataAccess.Migrations
                     b.Property<int>("GameId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImageType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -514,7 +395,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8444),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3318),
                             GameId = 1,
                             ImageUrl = "/images/witcher3.jpg",
                             IsDeleted = false,
@@ -523,7 +404,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8446),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3322),
                             GameId = 2,
                             ImageUrl = "/images/gtav.jpg",
                             IsDeleted = false,
@@ -532,7 +413,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8447),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3323),
                             GameId = 3,
                             ImageUrl = "/images/cyberpunk2077.jpg",
                             IsDeleted = false,
@@ -541,7 +422,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8448),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3325),
                             GameId = 4,
                             ImageUrl = "/images/rdr2.jpg",
                             IsDeleted = false,
@@ -550,7 +431,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8449),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3326),
                             GameId = 5,
                             ImageUrl = "/images/civ6.jpg",
                             IsDeleted = false,
@@ -559,7 +440,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8450),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3327),
                             GameId = 6,
                             ImageUrl = "/images/sims4.jpg",
                             IsDeleted = false,
@@ -568,7 +449,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8451),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3329),
                             GameId = 7,
                             ImageUrl = "/images/darksouls3.jpg",
                             IsDeleted = false,
@@ -577,7 +458,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8452),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3330),
                             GameId = 8,
                             ImageUrl = "/images/minecraft.jpg",
                             IsDeleted = false,
@@ -586,7 +467,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 9,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8453),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3332),
                             GameId = 9,
                             ImageUrl = "/images/fortnite.jpg",
                             IsDeleted = false,
@@ -595,7 +476,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 10,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8454),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3333),
                             GameId = 10,
                             ImageUrl = "/images/stardewvalley.jpg",
                             IsDeleted = false,
@@ -604,7 +485,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 11,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8454),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3334),
                             GameId = 7,
                             ImageUrl = "/images/darksouls3Caus.jpg",
                             IsDeleted = false,
@@ -613,7 +494,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 12,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8455),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3336),
                             GameId = 4,
                             ImageUrl = "/images/rdr2Caus.jpg",
                             IsDeleted = false,
@@ -622,7 +503,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 13,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8456),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3337),
                             GameId = 9,
                             ImageUrl = "/images/fortniteCaus.jpg",
                             IsDeleted = false,
@@ -656,56 +537,56 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8416),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3282),
                             IsDeleted = false,
                             Name = "CD Projekt"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8418),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3284),
                             IsDeleted = false,
                             Name = "Rockstar Games"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8419),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3285),
                             IsDeleted = false,
                             Name = "2K Games"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8420),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3286),
                             IsDeleted = false,
                             Name = "Electronic Arts"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8420),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3287),
                             IsDeleted = false,
                             Name = "Bandai Namco Entertainment"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8421),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3288),
                             IsDeleted = false,
                             Name = "Mojang"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8422),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3290),
                             IsDeleted = false,
                             Name = "Epic Games"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2024, 8, 13, 11, 19, 58, 251, DateTimeKind.Local).AddTicks(8422),
+                            CreatedDate = new DateTime(2024, 8, 20, 23, 48, 52, 794, DateTimeKind.Local).AddTicks(3291),
                             IsDeleted = false,
                             Name = "ConcernedApe"
                         });
@@ -795,7 +676,7 @@ namespace GameSaleProject_DataAccess.Migrations
                     b.ToTable("SystemRequirements");
                 });
 
-            modelBuilder.Entity("GameSaleProject_Entity.Entities.User", b =>
+            modelBuilder.Entity("GameSaleProject_Entity.Identity.AppRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -803,45 +684,117 @@ namespace GameSaleProject_DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProfilePictureUrl")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("/images/customerpic.jpg");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("GameSaleProject_Entity.Identity.AppUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasDefaultValue("/images/DefaultPfp.jpg");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -968,7 +921,7 @@ namespace GameSaleProject_DataAccess.Migrations
 
             modelBuilder.Entity("GameSaleProject_Entity.Entities.GameSale", b =>
                 {
-                    b.HasOne("GameSaleProject_Entity.Entities.User", "User")
+                    b.HasOne("GameSaleProject_Entity.Identity.AppUser", "User")
                         .WithMany("GameSales")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1015,7 +968,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GameSaleProject_Entity.Entities.User", "User")
+                    b.HasOne("GameSaleProject_Entity.Identity.AppUser", "User")
                         .WithMany("Reviews")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1039,7 +992,7 @@ namespace GameSaleProject_DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("GameSaleProject_DataAccess.Identity.AppRole", null)
+                    b.HasOne("GameSaleProject_Entity.Identity.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1048,7 +1001,7 @@ namespace GameSaleProject_DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("GameSaleProject_DataAccess.Identity.AppUser", null)
+                    b.HasOne("GameSaleProject_Entity.Identity.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1057,7 +1010,7 @@ namespace GameSaleProject_DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("GameSaleProject_DataAccess.Identity.AppUser", null)
+                    b.HasOne("GameSaleProject_Entity.Identity.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1066,13 +1019,13 @@ namespace GameSaleProject_DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("GameSaleProject_DataAccess.Identity.AppRole", null)
+                    b.HasOne("GameSaleProject_Entity.Identity.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GameSaleProject_DataAccess.Identity.AppUser", null)
+                    b.HasOne("GameSaleProject_Entity.Identity.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1081,7 +1034,7 @@ namespace GameSaleProject_DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("GameSaleProject_DataAccess.Identity.AppUser", null)
+                    b.HasOne("GameSaleProject_Entity.Identity.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1110,7 +1063,7 @@ namespace GameSaleProject_DataAccess.Migrations
                     b.Navigation("Games");
                 });
 
-            modelBuilder.Entity("GameSaleProject_Entity.Entities.User", b =>
+            modelBuilder.Entity("GameSaleProject_Entity.Identity.AppUser", b =>
                 {
                     b.Navigation("GameSales");
 
