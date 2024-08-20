@@ -137,6 +137,7 @@ namespace GameSaleProject_Service.Services
             var userViewModels = _mapper.Map<List<UserViewModel>>(users);
             return userViewModels;
         }
+        
 
         public async Task SignOutAsync()
         {
