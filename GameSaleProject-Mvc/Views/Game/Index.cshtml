@@ -44,7 +44,12 @@
 
                         <!-- Update Game Button -->
                         <a href="@Url.Action("UpdateGame", "Game", new { id = game.Id })" class="btn btn-primary">Update Game</a>
-
+                        <!-- Add to Cart Button -->
+                        <form action="@Url.Action("AddToCart", "Cart")" method="post" style="display:inline;">
+                            <input type="hidden" name="gameId" value="@game.Id" />
+                            <input type="hidden" name="price" value="@(((decimal)game.Price * (decimal)(1 - (decimal)game.Discount / 100)))" />
+                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        </form>
                         <!-- Delete Game Button -->
                         <form action="@Url.Action("DeleteGame", "Game", new { id = game.Id })" method="post" style="display:inline;">
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this game?');">Delete Game</button>

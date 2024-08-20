@@ -18,7 +18,18 @@ namespace GameSaleProject_Mvc
               ));
 
             builder.Services.AddExtensions();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
+                options.Cookie.HttpOnly = true; // Make the session cookie accessible only via HTTP
+                options.Cookie.IsEssential = true; // Make the session cookie essential
+            });
+
+            builder.Services.AddHttpContextAccessor();
+
             var app = builder.Build();
+
 
             // Role initialization
             using (var scope = app.Services.CreateScope())
@@ -39,6 +50,7 @@ namespace GameSaleProject_Mvc
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 

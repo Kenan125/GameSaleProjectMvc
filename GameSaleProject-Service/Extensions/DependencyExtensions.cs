@@ -42,6 +42,7 @@ namespace GameSaleProject_Service.Extensions
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<ICartService, CartService>();
             services.AddScoped<ISystemRequirementService, SystemRequirementService>();
             services.AddAutoMapper(typeof(MappingProfile));
 

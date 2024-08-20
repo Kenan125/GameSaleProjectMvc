@@ -9,8 +9,6 @@ namespace GameSaleProject_Entity.Entities
     public class CartItem
     {
         public int GameId { get; set; }
-        public string GameName { get; set; }
-        public int GameQuantity { get; set; }
-        public decimal GamePrice { get; set; }
+        public decimal Price { get; set; }
     }
 }

@@ -46,7 +46,7 @@ namespace GameSaleProject_Mvc.Controllers
 
             await _cartService.AddToCartAsync(userName, gameId, price);
 
-            return RedirectToAction("ViewCart");
+            return RedirectToAction("Index");
         }
         // Implement this method to get the current user's ID
         

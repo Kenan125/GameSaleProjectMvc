@@ -23,19 +23,25 @@ namespace GameSaleProject_Service.Services
 
         public async Task AddToCartAsync(string userName, int gameId, decimal price)
         {
-            var cart = await GetCartAsync(userName);
+            var cart = await GetCartAsync(userName) ?? new Cart { UserName = userName };
 
-            if (cart == null)
+            var existingItem = cart.Items.FirstOrDefault(item => item.GameId == gameId);
+            if (existingItem == null)
             {
-                cart = new Cart
+                // Add new game to the cart
+                cart.Items.Add(new CartItem
                 {
-                    UserName = userName,
                     GameId = gameId,
                     Price = price
-                };
-                await SaveCartAsync(cart);
+                });
             }
-            // No need to update the cart since it's a digital game, and only one copy can be purchased.
+            else
+            {
+                // Optionally update the existing item's price or other details
+                existingItem.Price = price; // This is optional and depends on your business logic
+            }
+
+            await SaveCartAsync(cart);
         }
 
         public async Task<Cart> GetCartAsync(string userName)
@@ -57,12 +63,7 @@ namespace GameSaleProject_Service.Services
 
         public async Task<CartViewModel> GetCartViewModelAsync(string userName)
         {
-            var cart = await GetCartAsync(userName);
-
-            if (cart == null)
-            {
-                return new CartViewModel { UserName = userName, Items = new List<CartItemViewModel>() };
-            }
+            var cart = await GetCartAsync(userName) ?? new Cart { UserName = userName };
 
             var cartViewModel = new CartViewModel
             {
@@ -70,15 +71,18 @@ namespace GameSaleProject_Service.Services
                 Items = new List<CartItemViewModel>()
             };
 
-            var game = await _gameService.GetGameByIdAsync(cart.GameId);
-            if (game != null) // Check if the game exists
+            foreach (var cartItem in cart.Items)
             {
-                cartViewModel.Items.Add(new CartItemViewModel
+                var game = await _gameService.GetGameByIdAsync(cartItem.GameId);
+                if (game != null)
                 {
-                    GameId = game.Id,
-                    GameName = game.GameName,
-                    Price = cart.Price
-                });
+                    cartViewModel.Items.Add(new CartItemViewModel
+                    {
+                        GameId = game.Id,
+                        GameName = game.GameName,
+                        Price = cartItem.Price
+                    });
+                }
             }
 
             return cartViewModel;
