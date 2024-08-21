@@ -36,6 +36,8 @@ namespace GameSaleProject_Service.Extensions
                 }).AddEntityFrameworkStores<GameSaleProjectDbContext>();
 
             services.AddScoped<IGameService, GameService>();
+            services.AddScoped<IGameSaleService, GameSaleService>();
+            services.AddScoped<IGameSaleDetailService, GameSaleDetailService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IPublisherService, PublisherService>();

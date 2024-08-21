@@ -2,7 +2,9 @@
 
 namespace GameSaleProject_Entity.Interfaces
 {
-    public interface IGameSaleService 
+    public interface IGameSaleService
     {
+        Task CreateGameSaleAsync(GameSale gameSale);
+        GameSale GetGameSaleById(int gameSaleId);
     }
 }
