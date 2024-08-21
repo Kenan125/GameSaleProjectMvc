@@ -13,9 +13,9 @@ namespace GameSaleProject_Mvc.Controllers
         private readonly IPublisherService _publisherService;
         private readonly IReviewService _reviewService;
         private readonly ISystemRequirementService _systemRequirementService;
+        private readonly IGameSaleService _gameSaleService;
 
-
-        public GameController(ILogger<GameController> logger, IGameService gameService, ICategoryService categoryService, IPublisherService publisherService, IReviewService reviewService, ISystemRequirementService systemRequirementService)
+        public GameController(ILogger<GameController> logger, IGameService gameService, ICategoryService categoryService, IPublisherService publisherService, IReviewService reviewService, ISystemRequirementService systemRequirementService, IGameSaleService gameSaleService)
         {
             _logger = logger;
             _gameService = gameService;
@@ -23,19 +23,48 @@ namespace GameSaleProject_Mvc.Controllers
             _publisherService = publisherService;
             _reviewService = reviewService;
             _systemRequirementService = systemRequirementService;
+            _gameSaleService = gameSaleService;
         }
 
         public async Task<IActionResult> Index()
         {
+            var userName = User.Identity.Name;
+
+            // Retrieve all games, categories, and publishers
             var games = await _gameService.GetAllGamesAsync();
             var categories = await _categoryService.GetAllCategoriesAsync();
             var publishers = await _publisherService.GetAllPublishersAsync();
 
             games = games.Where(g => !g.IsDeleted).ToList();
 
+            // Retrieve user's purchase history
+            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName); // This should be implemented in your service
+            var purchasedGameIds = userPurchases.SelectMany(purchase => purchase.GameSaleDetails)
+                                                .Select(detail => detail.GameId)
+                                                .ToHashSet();
+
+            // Map games to view model and mark if they are in the user's library
+            var gameViewModels = games.Select(game => new GameViewModel
+            {
+                Id = game.Id,
+                GameName = game.GameName,
+                Price = game.Price,
+                Discount = game.Discount,
+                IsInLibrary = purchasedGameIds.Contains(game.Id),
+                Images = game.Images.Select(img => new ImageViewModel
+                {
+                    Id = img.Id,
+                    Name = img.Name,
+                    ImageUrl = img.ImageUrl,
+                    ImageType = img.ImageType
+                }).ToList(),
+                // Add other properties as needed
+            }).ToList();
+
+            // Prepare the model for the view
             var model = new GameCategoryPublisherViewModel
             {
-                Games = games,
+                Games = gameViewModels,
                 Categories = categories,
                 Publishers = publishers
             };

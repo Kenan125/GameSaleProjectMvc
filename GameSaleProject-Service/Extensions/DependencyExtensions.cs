@@ -46,6 +46,8 @@ namespace GameSaleProject_Service.Extensions
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<ISystemRequirementService, SystemRequirementService>();
+            services.AddScoped<IUserProfileService, UserProfileService>();
+            services.AddScoped<IPublisherProfileService, PublisherProfileService>();
             services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddScoped<RoleInitializer>();

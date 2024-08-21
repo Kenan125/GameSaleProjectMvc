@@ -31,5 +31,13 @@ namespace GameSaleProject_Service.Services
                                       .ThenInclude(gsd => gsd.Game)
                                       .FirstOrDefault(gs => gs.Id == gameSaleId);
         }
+
+        public async Task<List<GameSale>> GetUserPurchasesAsync(string userName)
+        {
+            return await _context.GameSales
+        .Include(gs => gs.GameSaleDetails)
+        .Where(gs => gs.User.UserName == userName)
+        .ToListAsync();
+        }
     }
 }

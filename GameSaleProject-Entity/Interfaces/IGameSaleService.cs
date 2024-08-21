@@ -6,5 +6,6 @@ namespace GameSaleProject_Entity.Interfaces
     {
         Task CreateGameSaleAsync(GameSale gameSale);
         GameSale GetGameSaleById(int gameSaleId);
+        Task<List<GameSale>> GetUserPurchasesAsync(string userName);
     }
 }

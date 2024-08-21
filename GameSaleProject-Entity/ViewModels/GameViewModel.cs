@@ -30,6 +30,7 @@ namespace GameSaleProject_Entity.ViewModels
 
         public string? Platform { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public bool IsInLibrary { get; set; }
         public bool IsDeleted { get; set; }
 
         //new prop

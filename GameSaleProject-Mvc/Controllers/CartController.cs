@@ -53,7 +53,7 @@ namespace GameSaleProject_Mvc.Controllers
 
             return RedirectToAction("Index");
         }
-        // Implement this method to get the current user's ID
+        
         [HttpPost]
         public async Task<IActionResult> Checkout()
         {
@@ -70,6 +70,17 @@ namespace GameSaleProject_Mvc.Controllers
                 return RedirectToAction("Index", "Cart");
             }
 
+            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
+            var alreadyPurchasedGames = cart.Items.Where(item =>
+                userPurchases.Any(purchase => purchase.GameSaleDetails.Any(detail => detail.GameId == item.GameId))).ToList();
+
+            if (alreadyPurchasedGames.Any())
+            {
+                // Handle the case where some games in the cart have already been purchased
+                // You could remove these games from the cart, show a message, or prevent checkout entirely
+                return RedirectToAction("Index", "Cart"); // Optionally, show an error message
+            }
+
             var user = await _accountService.FindByUserNameAsync(userName);
 
             var gameSale = new GameSale
@@ -82,7 +93,7 @@ namespace GameSaleProject_Mvc.Controllers
                 {
                     GameId = item.GameId,
                     UnitPrice = item.Price,
-                    IsRefundable = true // Assuming all games are refundable; this could be dynamic
+                    IsRefunded = false // Assuming all games are refundable; this could be dynamic
                 }).ToList()
             };
 
@@ -97,6 +108,21 @@ namespace GameSaleProject_Mvc.Controllers
             // Display order confirmation with details from the sale
             var sale = _gameSaleService.GetGameSaleById(gameSaleId);
             return View(sale);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCart(int gameId)
+        {
+            var userName = User.Identity.Name;
+
+            if (string.IsNullOrEmpty(userName))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            await _cartService.RemoveFromCartAsync(userName, gameId);
+
+            return RedirectToAction("Index");
         }
     }
 }

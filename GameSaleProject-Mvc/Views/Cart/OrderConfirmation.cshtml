@@ -13,7 +13,7 @@
         <tr>
             <th>Game</th>
             <th>Price</th>
-            <th>Refundable</th>
+            <th>Refunded</th>
         </tr>
     </thead>
     <tbody>
@@ -22,7 +22,7 @@
             <tr>
                 <td>@detail.Game.GameName</td>
                 <td>@detail.UnitPrice.ToString("C")</td>
-                <td>@(detail.IsRefundable ? "Yes" : "No")</td>
+                <td>@(detail.IsRefunded ? "Yes" : "No")</td>
             </tr>
         }
     </tbody>

@@ -15,14 +15,24 @@ namespace GameSaleProject_Service.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IGameService _gameService;
-        public CartService(IHttpContextAccessor httpContextAccessor, IGameService gameService)
+        private readonly IGameSaleService _gameSaleService;
+        public CartService(IHttpContextAccessor httpContextAccessor, IGameService gameService, IGameSaleService gameSaleService)
         {
             _httpContextAccessor = httpContextAccessor;
             _gameService = gameService;
+            _gameSaleService = gameSaleService;
         }
 
         public async Task AddToCartAsync(string userName, int gameId, decimal price)
         {
+            // Check if the user has already purchased the game
+            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
+            if (userPurchases.Any(purchase => purchase.GameSaleDetails.Any(detail => detail.GameId == gameId)))
+            {
+                // The user has already purchased this game; do not add to cart
+                return; // Optionally, you could throw an exception or return a message here
+            }
+
             var cart = await GetCartAsync(userName) ?? new Cart { UserName = userName };
 
             var existingItem = cart.Items.FirstOrDefault(item => item.GameId == gameId);
@@ -43,7 +53,6 @@ namespace GameSaleProject_Service.Services
 
             await SaveCartAsync(cart);
         }
-
         public async Task<Cart> GetCartAsync(string userName)
         {
             var session = _httpContextAccessor.HttpContext.Session;
@@ -88,6 +97,21 @@ namespace GameSaleProject_Service.Services
             }
             await SaveCartAsync(cart);
             return cartViewModel;
+        }
+
+        public async Task RemoveFromCartAsync(string userName, int gameId)
+        {
+            var cart = await GetCartAsync(userName);
+
+            if (cart != null)
+            {
+                var itemToRemove = cart.Items.FirstOrDefault(i => i.GameId == gameId);
+                if (itemToRemove != null)
+                {
+                    cart.Items.Remove(itemToRemove);
+                    await SaveCartAsync(cart);
+                }
+            }
         }
     }
 }

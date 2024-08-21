@@ -6,7 +6,7 @@
         public int GameSaleId { get; set; }
         public int GameId { get; set; }
         public decimal UnitPrice { get; set; }
-        public bool IsRefundable { get; set; }
+        public bool IsRefunded { get; set; } = false;
 
         
 
