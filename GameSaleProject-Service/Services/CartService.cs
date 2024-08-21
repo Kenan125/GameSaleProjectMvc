@@ -76,15 +76,17 @@ namespace GameSaleProject_Service.Services
                 var game = await _gameService.GetGameByIdAsync(cartItem.GameId);
                 if (game != null)
                 {
+                    var discountedPrice = game.Price * (1 - (decimal)game.Discount / 100);
                     cartViewModel.Items.Add(new CartItemViewModel
                     {
                         GameId = game.Id,
                         GameName = game.GameName,
-                        Price = cartItem.Price
+                        Price = discountedPrice
                     });
+                    cartItem.Price = discountedPrice;
                 }
             }
-
+            await SaveCartAsync(cart);
             return cartViewModel;
         }
     }
