@@ -12,7 +12,7 @@ namespace GameSaleProject_Entity.Interfaces
         Task<string> CreateRoleAsync(RoleViewModel model);
         Task<List<UserViewModel>> GetAllUsers();
         Task<List<RoleViewModel>> GetAllRoles();
-
+        
         Task SignOutAsync();
     }
 }

@@ -2,6 +2,7 @@
 using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
+using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -72,6 +73,57 @@ namespace GameSaleProject_Service.Services
             }
 
             return false;
+        }
+
+        public async Task<bool> UpdateUserProfileAsync(int userId, UserViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+            {
+                return false; // User not found
+            }
+
+            // Update profile picture URL if provided
+            if (!string.IsNullOrEmpty(model.ProfilePictureUrl))
+            {
+                user.ProfilePictureUrl = model.ProfilePictureUrl;
+            }
+
+            // Update first name and last name
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+
+            // Update username if provided and it's different from the current one
+            if (!string.IsNullOrEmpty(model.UserName) && model.UserName != user.UserName)
+            {
+                var usernameExists = await _userManager.FindByNameAsync(model.UserName);
+                if (usernameExists == null)
+                {
+                    user.UserName = model.UserName;
+                }
+                else
+                {
+                    return false; // Username already exists
+                }
+            }
+
+            // Update phone number
+            user.PhoneNumber = model.PhoneNumber;
+
+            // Update password if both current and new passwords are provided
+            if (!string.IsNullOrEmpty(model.CurrentPassword) && !string.IsNullOrEmpty(model.NewPassword))
+            {
+                var passwordChangeResult = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                if (!passwordChangeResult.Succeeded)
+                {
+                    return false; // Password change failed
+                }
+            }
+
+            // Update the user in the database
+            var result = await _userManager.UpdateAsync(user);
+
+            return result.Succeeded;
         }
     }
 }

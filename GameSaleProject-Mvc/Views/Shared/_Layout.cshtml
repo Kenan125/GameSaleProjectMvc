@@ -46,7 +46,9 @@
                                     <img src="@profilePictureUrl" alt="Profile Picture" class="rounded-circle" width="30" height="30" />
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" asp-action="MyProfile" asp-controller="Account">My Profile</a></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="User" asp-controller="UserProfile" asp-action="Index">My Profile</a>
+                                    </li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a></li>
                                 </ul>

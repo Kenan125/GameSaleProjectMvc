@@ -33,7 +33,6 @@
     <Folder Include="Areas\Publisher\Views\" />
     <Folder Include="Areas\User\Data\" />
     <Folder Include="Areas\User\Models\" />
-    <Folder Include="Areas\User\Views\" />
     <Folder Include="Views\Shared\Components\Category\" />
   </ItemGroup>
 
