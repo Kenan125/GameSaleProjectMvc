@@ -5,7 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<form asp-action="AddGame" method="post" enctype="multipart/form-data">
+<form asp-action="AddGame" method="post" enctype="multipart/form-data" style="margin: 0 auto;
+      width: 500px;
+      padding: 1em;
+      border: 1px solid #ccc;
+      border-radius: 1em;">
     <div class="form-group">
         <label asp-for="GameName"></label>
         <input asp-for="GameName" class="form-control" />
