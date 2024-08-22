@@ -123,7 +123,11 @@ namespace GameSaleProject_Service.Services
             var user = await _userManager.FindByNameAsync(username);
             return _mapper.Map<UserViewModel>(user);
         }
-        
+        public async Task<UserViewModel> FindByIdAsync(int userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            return _mapper.Map<UserViewModel>(user);
+        }
         public async Task<List<RoleViewModel>> GetAllRoles()
         {
             var roles = await _roleManager.Roles.ToListAsync();

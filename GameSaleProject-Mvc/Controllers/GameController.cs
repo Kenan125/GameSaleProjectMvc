@@ -14,8 +14,9 @@ namespace GameSaleProject_Mvc.Controllers
         private readonly IReviewService _reviewService;
         private readonly ISystemRequirementService _systemRequirementService;
         private readonly IGameSaleService _gameSaleService;
+        private readonly IImageService _imageService;
 
-        public GameController(ILogger<GameController> logger, IGameService gameService, ICategoryService categoryService, IPublisherService publisherService, IReviewService reviewService, ISystemRequirementService systemRequirementService, IGameSaleService gameSaleService)
+        public GameController(ILogger<GameController> logger, IGameService gameService, ICategoryService categoryService, IPublisherService publisherService, IReviewService reviewService, ISystemRequirementService systemRequirementService, IGameSaleService gameSaleService, IImageService imageService)
         {
             _logger = logger;
             _gameService = gameService;
@@ -24,6 +25,7 @@ namespace GameSaleProject_Mvc.Controllers
             _reviewService = reviewService;
             _systemRequirementService = systemRequirementService;
             _gameSaleService = gameSaleService;
+            _imageService = imageService;
         }
 
         public async Task<IActionResult> Index()
@@ -82,16 +84,13 @@ namespace GameSaleProject_Mvc.Controllers
                 return NotFound();
             }
 
-            // Retrieve the publisher data
+            
             var publisher = await _publisherService.GetPublisherByIdAsync(game.PublisherId);
-
-            // Retrieve the reviews
+         
             var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
-
-            // Retrieve the system requirements
+            
             var systemRequirements = await _systemRequirementService.GetSystemRequirementsByGameIdAsync(id);
-
-            // Create the GameViewModel
+           
             var model = new GameViewModel
             {
                 Id = game.Id,
@@ -103,8 +102,8 @@ namespace GameSaleProject_Mvc.Controllers
                 PublisherId = game.PublisherId,
                 Publisher = publisher != null ? new PublisherViewModel { Id = publisher.Id, Name = publisher.Name } : null,
                 Platform = game.Platform,
-                Images = game.Images, // Assuming this is already a collection of ImageViewModel
-                Reviews = reviews, // Assuming these are already ReviewViewModel objects
+                Images = game.Images, 
+                Reviews = reviews, 
                 SystemRequirements = systemRequirements != null ? new SystemRequirementViewModel
                 {
                     OS = systemRequirements.OS,
@@ -116,12 +115,9 @@ namespace GameSaleProject_Mvc.Controllers
                 } : null
             };
 
-            // Pass the model to the view
+            
             return View(model);
         }
-
-
-
 
 
         [HttpGet]
@@ -135,68 +131,33 @@ namespace GameSaleProject_Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Initialize the Images list
                 model.Images = new List<ImageViewModel>();
 
-                // Handle the card image upload
-                if (CardImage != null && CardImage.Length > 0)
+                if (CardImage != null)
                 {
-                    var cardFileName = Path.GetFileNameWithoutExtension(CardImage.FileName);
-                    var cardExtension = Path.GetExtension(CardImage.FileName);
-                    var newCardFileName = $"{cardFileName}_{DateTime.Now.Ticks}{cardExtension}";
-                    var cardPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", newCardFileName);
-
-                    if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")))
-                    {
-                        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"));
-                    }
-
-                    using (var stream = new FileStream(cardPath, FileMode.Create))
-                    {
-                        await CardImage.CopyToAsync(stream);
-                    }
-
+                    var cardImageUrl = await _imageService.UploadImageAsync(CardImage, "card");
                     model.Images.Add(new ImageViewModel
                     {
-                        Name = newCardFileName,
-                        ImageUrl = $"/images/{newCardFileName}",
-                        ImageType = "card" // Set ImageType to "card"
+                        Name = Path.GetFileName(cardImageUrl),
+                        ImageUrl = cardImageUrl,
+                        ImageType = "card"
                     });
                 }
 
-                // Handle the display images upload
-                if (DisplayImages != null && DisplayImages.Count > 0)
+                foreach (var displayImage in DisplayImages)
                 {
-                    foreach (var file in DisplayImages)
+                    if (displayImage.Length > 0)
                     {
-                        if (file.Length > 0)
+                        var displayImageUrl = await _imageService.UploadImageAsync(displayImage, "display");
+                        model.Images.Add(new ImageViewModel
                         {
-                            var displayFileName = Path.GetFileNameWithoutExtension(file.FileName);
-                            var displayExtension = Path.GetExtension(file.FileName);
-                            var newDisplayFileName = $"{displayFileName}_{DateTime.Now.Ticks}{displayExtension}";
-                            var displayPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", newDisplayFileName);
-
-                            if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")))
-                            {
-                                Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"));
-                            }
-
-                            using (var stream = new FileStream(displayPath, FileMode.Create))
-                            {
-                                await file.CopyToAsync(stream);
-                            }
-
-                            model.Images.Add(new ImageViewModel
-                            {
-                                Name = newDisplayFileName,
-                                ImageUrl = $"/images/{newDisplayFileName}",
-                                ImageType = "display" // Set ImageType to "display"
-                            });
-                        }
+                            Name = Path.GetFileName(displayImageUrl),
+                            ImageUrl = displayImageUrl,
+                            ImageType = "display"
+                        });
                     }
                 }
 
-                // Save the game with the images
                 var result = await _gameService.AddGameAsync(model);
                 TempData["Message"] = result;
                 return RedirectToAction("Index");
@@ -230,85 +191,48 @@ namespace GameSaleProject_Mvc.Controllers
             return View(game);
         }
 
-        
+
         [HttpPost]
         public async Task<IActionResult> UpdateGame(GameViewModel model, IFormFile CardImage, List<IFormFile> DisplayImages)
         {
             ModelState.Remove("CardImage");
             if (ModelState.IsValid)
             {
-                // Initialize model.Images if it's null
+                
                 model.Images = model.Images ?? new List<ImageViewModel>();
 
-                // Process card image upload only if a new one is provided
+                
                 if (CardImage != null && CardImage.Length > 0)
                 {
-                    var cardFileName = Path.GetFileNameWithoutExtension(CardImage.FileName);
-                    var cardExtension = Path.GetExtension(CardImage.FileName);
-                    var newCardFileName = $"{cardFileName}_{DateTime.Now.Ticks}{cardExtension}";
+                    
+                    model.Images = model.Images.Where(img => img.ImageType != "card").ToList();
 
-                    var cardPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", newCardFileName);
-
-                    if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")))
-                    {
-                        Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"));
-                    }
-
-                    using (var stream = new FileStream(cardPath, FileMode.Create))
-                    {
-                        await CardImage.CopyToAsync(stream);
-                    }
-
-                    // Remove existing card images (if any)
-                    var existingCardImages = model.Images.Where(img => img.ImageType == "card").ToList();
-                    foreach (var img in existingCardImages)
-                    {
-                        model.Images.Remove(img);
-                    }
-
-                    // Add the new card image
+                    
+                    var cardImageUrl = await _imageService.UploadImageAsync(CardImage, "card");
                     model.Images.Add(new ImageViewModel
                     {
-                        Name = newCardFileName,
-                        ImageUrl = $"/images/{newCardFileName}",
+                        Name = Path.GetFileName(cardImageUrl),
+                        ImageUrl = cardImageUrl,
                         ImageType = "card"
                     });
                 }
 
-                // Process display images upload
-                if (DisplayImages != null && DisplayImages.Count > 0)
+                
+                foreach (var displayImage in DisplayImages)
                 {
-                    foreach (var file in DisplayImages)
+                    if (displayImage.Length > 0)
                     {
-                        if (file.Length > 0)
+                        var displayImageUrl = await _imageService.UploadImageAsync(displayImage, "display");
+                        model.Images.Add(new ImageViewModel
                         {
-                            var displayFileName = Path.GetFileNameWithoutExtension(file.FileName);
-                            var displayExtension = Path.GetExtension(file.FileName);
-                            var newDisplayFileName = $"{displayFileName}_{DateTime.Now.Ticks}{displayExtension}";
-                            var displayPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", newDisplayFileName);
-
-                            if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")))
-                            {
-                                Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"));
-                            }
-
-                            using (var stream = new FileStream(displayPath, FileMode.Create))
-                            {
-                                await file.CopyToAsync(stream);
-                            }
-
-                            // Add the new display image
-                            model.Images.Add(new ImageViewModel
-                            {
-                                Name = newDisplayFileName,
-                                ImageUrl = $"/images/{newDisplayFileName}",
-                                ImageType = "display"
-                            });
-                        }
+                            Name = Path.GetFileName(displayImageUrl),
+                            ImageUrl = displayImageUrl,
+                            ImageType = "display"
+                        });
                     }
                 }
 
-                // Save the updated game with the images
+               
                 var result = await _gameService.UpdateGameAsync(model);
                 if (result == "Category does not exist.")
                 {
@@ -325,13 +249,11 @@ namespace GameSaleProject_Mvc.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Repopulate categories and publishers in case of validation errors
+            
             ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.Publishers = await _publisherService.GetAllPublishersAsync();
             return View(model);
         }
-
-
 
 
         [HttpPost]

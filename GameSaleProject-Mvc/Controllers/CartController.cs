@@ -105,7 +105,7 @@ namespace GameSaleProject_Mvc.Controllers
         public IActionResult OrderConfirmation(int gameSaleId)
         {
             // Display order confirmation with details from the sale
-            var sale = _gameSaleService.GetGameSaleById(gameSaleId);
+            var sale = _gameSaleService.GetGameSaleByIdAsync(gameSaleId);
             return View(sale);
         }
 

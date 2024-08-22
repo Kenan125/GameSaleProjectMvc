@@ -18,6 +18,7 @@ namespace GameSaleProject_Entity.Interfaces
 
         Task<List<GameViewModel>> SearchGamesAsync(string searchTerm);
        
-        Task<List<GameViewModel>> GetGamesByCategoryAsync(int categoryId);       
+        Task<List<GameViewModel>> GetGamesByCategoryAsync(int categoryId);
+        Task<List<GameViewModel>> GetGamesByPublisherAsync(int publisherId);
     }
 }

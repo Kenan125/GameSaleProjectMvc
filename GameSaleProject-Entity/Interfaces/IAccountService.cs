@@ -9,6 +9,7 @@ namespace GameSaleProject_Entity.Interfaces
         Task<bool> AssignRoleToUserAsync(string userId, string roleName);
         Task<string> FindByNameAsync(LoginViewModel model);
         Task<UserViewModel> FindByUserNameAsync(string name);
+        Task<UserViewModel> FindByIdAsync(int userId);
         Task<string> CreateRoleAsync(RoleViewModel model);
         Task<List<UserViewModel>> GetAllUsers();
         Task<List<RoleViewModel>> GetAllRoles();

@@ -25,20 +25,19 @@ namespace GameSaleProject_Service.Services
 
         public async Task AddToCartAsync(string userName, int gameId, decimal price)
         {
-            // Check if the user has already purchased the game
+            
             var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
             if (userPurchases.Any(purchase => purchase.GameSaleDetails.Any(detail => detail.GameId == gameId)))
             {
-                // The user has already purchased this game; do not add to cart
-                return; // Optionally, you could throw an exception or return a message here
+               
+                return; 
             }
 
             var cart = await GetCartAsync(userName) ?? new Cart { UserName = userName };
-
             var existingItem = cart.Items.FirstOrDefault(item => item.GameId == gameId);
             if (existingItem == null)
             {
-                // Add new game to the cart
+                
                 cart.Items.Add(new CartItem
                 {
                     GameId = gameId,
@@ -47,8 +46,8 @@ namespace GameSaleProject_Service.Services
             }
             else
             {
-                // Optionally update the existing item's price or other details
-                existingItem.Price = price; // This is optional and depends on your business logic
+                
+                existingItem.Price = price; 
             }
 
             await SaveCartAsync(cart);

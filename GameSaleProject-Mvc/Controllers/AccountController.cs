@@ -60,9 +60,9 @@ namespace GameSaleProject_Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model, IFormFile formFile)
         {
-            // Set the default profile picture URL before any validation
+            
             model.ProfilePictureUrl = "/images/DefaultPfp.png";
-            // Remove the formFile from ModelState validation
+            
             ModelState.Remove("formFile");
             if (ModelState.IsValid)
             {

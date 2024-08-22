@@ -25,11 +25,12 @@ namespace GameSaleProject_Service.Services
             await _context.SaveChangesAsync();
         }
 
-        public GameSale GetGameSaleById(int gameSaleId)
+        public async Task<GameSale> GetGameSaleByIdAsync(int gameSaleId)
         {
-            return _context.GameSales.Include(gs => gs.GameSaleDetails)
-                                      .ThenInclude(gsd => gsd.Game)
-                                      .FirstOrDefault(gs => gs.Id == gameSaleId);
+            return await _context.GameSales
+                .Include(gs => gs.GameSaleDetails)
+                .ThenInclude(gsd => gsd.Game)
+                .FirstOrDefaultAsync(gs => gs.Id == gameSaleId);
         }
 
         public async Task<List<GameSale>> GetUserPurchasesAsync(string userName)
@@ -41,6 +42,31 @@ namespace GameSaleProject_Service.Services
                 .Where(gs => gs.User.UserName == userName) // Now this should work
                 .ToListAsync();
         }
+        public async Task RefundGameSaleAsync(int gameSaleId, int? gameSaleDetailId = null)
+        {
+            var gameSale = await GetGameSaleByIdAsync(gameSaleId);
+            if (gameSale == null) return;
 
+            if (gameSaleDetailId.HasValue)
+            {
+                // Handle individual game refund
+                var gameSaleDetail = gameSale.GameSaleDetails.FirstOrDefault(gsd => gsd.Id == gameSaleDetailId.Value);
+                if (gameSaleDetail != null && !gameSaleDetail.IsRefunded)
+                {
+                    gameSaleDetail.IsRefunded = true;
+                }
+            }
+            else
+            {
+                // Handle full refund
+                foreach (var detail in gameSale.GameSaleDetails)
+                {
+                    detail.IsRefunded = true;
+                }
+                gameSale.IsFullyRefunded = true;
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -4,6 +4,7 @@ using GameSaleProject_DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameSaleProject_DataAccess.Migrations
 {
     [DbContext(typeof(GameSaleProjectDbContext))]
-    partial class GameSaleProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240822145607_isrefundgamesale")]
+    partial class isrefundgamesale
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,7 +56,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8420),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7557),
                             Description = "Action games",
                             IsDeleted = false,
                             Name = "Action"
@@ -61,7 +64,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8433),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7569),
                             Description = "Adventure games",
                             IsDeleted = false,
                             Name = "Adventure"
@@ -69,7 +72,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8434),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7570),
                             Description = "Role-playing games",
                             IsDeleted = false,
                             Name = "RPG"
@@ -77,7 +80,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8435),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7571),
                             Description = "Strategy games",
                             IsDeleted = false,
                             Name = "Strategy"
@@ -85,7 +88,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8436),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7572),
                             Description = "Simulation games",
                             IsDeleted = false,
                             Name = "Simulation"
@@ -398,7 +401,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8658),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7845),
                             GameId = 1,
                             ImageUrl = "/images/witcher3.jpg",
                             IsDeleted = false,
@@ -407,7 +410,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8660),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7848),
                             GameId = 2,
                             ImageUrl = "/images/gtav.jpg",
                             IsDeleted = false,
@@ -416,7 +419,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8661),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7849),
                             GameId = 3,
                             ImageUrl = "/images/cyberpunk2077.jpg",
                             IsDeleted = false,
@@ -425,7 +428,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8662),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7850),
                             GameId = 4,
                             ImageUrl = "/images/rdr2.jpg",
                             IsDeleted = false,
@@ -434,7 +437,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8662),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7851),
                             GameId = 5,
                             ImageUrl = "/images/civ6.jpg",
                             IsDeleted = false,
@@ -443,7 +446,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8663),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7852),
                             GameId = 6,
                             ImageUrl = "/images/sims4.jpg",
                             IsDeleted = false,
@@ -452,7 +455,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8665),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7853),
                             GameId = 7,
                             ImageUrl = "/images/darksouls3.jpg",
                             IsDeleted = false,
@@ -461,7 +464,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8665),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7855),
                             GameId = 8,
                             ImageUrl = "/images/minecraft.jpg",
                             IsDeleted = false,
@@ -470,7 +473,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 9,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8667),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7856),
                             GameId = 9,
                             ImageUrl = "/images/fortnite.jpg",
                             IsDeleted = false,
@@ -479,7 +482,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 10,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8667),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7857),
                             GameId = 10,
                             ImageUrl = "/images/stardewvalley.jpg",
                             IsDeleted = false,
@@ -488,7 +491,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 11,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8668),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7858),
                             GameId = 7,
                             ImageUrl = "/images/darksouls3Caus.jpg",
                             IsDeleted = false,
@@ -497,7 +500,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 12,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8669),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7859),
                             GameId = 4,
                             ImageUrl = "/images/rdr2Caus.jpg",
                             IsDeleted = false,
@@ -506,7 +509,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 13,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8670),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7860),
                             GameId = 9,
                             ImageUrl = "/images/fortniteCaus.jpg",
                             IsDeleted = false,
@@ -532,12 +535,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Publishers");
 
@@ -545,56 +543,56 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8626),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7815),
                             IsDeleted = false,
                             Name = "CD Projekt"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8629),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7817),
                             IsDeleted = false,
                             Name = "Rockstar Games"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8630),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7817),
                             IsDeleted = false,
                             Name = "2K Games"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8631),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7818),
                             IsDeleted = false,
                             Name = "Electronic Arts"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8632),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7819),
                             IsDeleted = false,
                             Name = "Bandai Namco Entertainment"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8632),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7820),
                             IsDeleted = false,
                             Name = "Mojang"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8633),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7821),
                             IsDeleted = false,
                             Name = "Epic Games"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2024, 8, 22, 19, 21, 3, 241, DateTimeKind.Local).AddTicks(8634),
+                            CreatedDate = new DateTime(2024, 8, 22, 17, 56, 6, 582, DateTimeKind.Local).AddTicks(7821),
                             IsDeleted = false,
                             Name = "ConcernedApe"
                         });
@@ -916,7 +914,7 @@ namespace GameSaleProject_DataAccess.Migrations
                     b.HasOne("GameSaleProject_Entity.Entities.Publisher", "Publisher")
                         .WithMany("Games")
                         .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
@@ -963,16 +961,6 @@ namespace GameSaleProject_DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Game");
-                });
-
-            modelBuilder.Entity("GameSaleProject_Entity.Entities.Publisher", b =>
-                {
-                    b.HasOne("GameSaleProject_Entity.Identity.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GameSaleProject_Entity.Entities.Review", b =>
