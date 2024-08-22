@@ -58,7 +58,20 @@
                         }
                     </p>
                     <a href="#" class="btn btn-success btn-block mb-2">Buy Now</a>
-                    <a href="#" class="btn btn-primary btn-block mb-2">Add to Cart</a>
+                    <!-- Conditionally display "In Library" or "Add to Cart" -->
+                    @if (Model.IsInLibrary)
+                    {
+                        <button class="btn btn-success" disabled>In Library</button>
+                    }
+                    else
+                    {
+                        <!-- Add to Cart Button -->
+                        <form action="@Url.Action("AddToCart", "Cart")" method="post" style="display:inline;">
+                            <input type="hidden" name="gameId" value="@Model.Id" />
+                            <input type="hidden" name="price" value="@(((decimal)Model.Price * (decimal)(1 - (decimal)Model.Discount / 100)))" />
+                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        </form>
+                    }
                     <ul class="list-group list-group-flush mt-3">
                         <li class="list-group-item"><strong>Developer:</strong> @Model.Developer</li>
                         <li class="list-group-item"><strong>Publisher:</strong> @Model.Publisher?.Name</li>

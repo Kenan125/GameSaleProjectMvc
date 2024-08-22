@@ -8,7 +8,7 @@ namespace GameSaleProject_Entity.Entities
         
         
         
-        public bool IsMinimum { get; set; }
+        
         
         public string SystemProcessor { get; set; }
         

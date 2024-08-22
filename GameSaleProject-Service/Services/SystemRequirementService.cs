@@ -38,7 +38,7 @@ namespace GameSaleProject_Service.Services
                 SystemMemory = requirement.SystemMemory,
                 Storage = requirement.Storage,
                 Graphics = requirement.Graphics,
-                IsMinimum = requirement.IsMinimum
+                
             };
         }
     }

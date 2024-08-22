@@ -1,0 +1,30 @@
+﻿@model List<GameSaleProject_Entity.Entities.Game>
+
+@{
+    ViewData["Title"] = "Owned Games";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Your Owned Games</h2>
+
+@if (Model != null && Model.Any())
+{
+    <ul class="list-group">
+        @foreach (var game in Model)
+        {
+            <li class="list-group-item">
+                <h4>@(game?.GameName ?? "Unknown Game")</h4> <!-- Handle null GameName -->
+                <p>@(game?.Description ?? "No description available.")</p> <!-- Handle null Description -->
+                <p>Price: @(game?.Price.ToString("C") ?? "Unknown Price")</p> <!-- Handle null Price -->
+                @if (game?.Discount > 0)
+                {
+                    <p>Discount: @game.Discount%</p>
+                }
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>You have not purchased any games yet.</p>
+}

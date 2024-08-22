@@ -1,0 +1,83 @@
+﻿@model List<GameSaleProject_Entity.ViewModels.PurchaseHistoryViewModel>
+@{
+    ViewData["Title"] = "PurchaseHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Purchase History</h2>
+
+@if (Model != null && Model.Any())
+{
+    <div class="table-responsive text-white">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Purchase Date</th>
+                    <th>Total Amount</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var purchase in Model)
+                {
+                    <tr class=" text-white">
+                        <td>@purchase.OrderId</td>
+                        <td>@purchase.PurchaseDate.ToString("dd MMM yyyy HH:mm")</td>
+                        <td>@purchase.TotalAmount.ToString("C")</td>
+                        <td>
+                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#details-@purchase.OrderId" aria-expanded="false" aria-controls="details-@purchase.OrderId">
+                                View Details
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-white">
+                            <div class="collapse" id="details-@purchase.OrderId">
+                                <div class="card card-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Game Name</th>
+                                                <th>Price</th>
+                                                <th>Discount</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var game in purchase.PurchasedGames)
+                                            {
+                                                <tr>
+                                                    <td>@game.GameName</td>
+                                                    <td>@game.Price.ToString("C")</td>
+                                                    <td>
+                                                        @if (game.Discount.HasValue && game.Discount.Value > 0)
+                                                        {
+                                                            @($"{game.Discount.Value}%")
+                                                        }
+                                                        else
+                                                        {
+                                                            @("No Discount")
+                                                        }
+                                                    </td>
+                                                    
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        @ViewBag.Message
+    </div>
+}
+

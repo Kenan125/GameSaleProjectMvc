@@ -19,14 +19,23 @@
                         <tr>
                             <td>@item.GameName</td>
                             <td>@item.Price.ToString("C")</td> <!-- Format price as currency -->
+                            <td>
+                        <!-- Remove Button -->
+                        <form action="@Url.Action("RemoveFromCart", "Cart")" method="post" style="display:inline;">
+                            <input type="hidden" name="gameId" value="@item.GameId" />
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                            </td>
                         </tr>
             }
             </tbody>
         </table>
 
         <h3>Total Price: @Model.TotalPrice.ToString("C")</h3> <!-- Display total price -->
-
-        <a href="@Url.Action("Checkout", "Order")" class="btn btn-primary">Checkout</a> <!-- Example checkout button -->
+    <!-- Checkout Form -->
+    <form asp-action="Checkout" method="post">
+        <button type="submit" class="btn btn-primary">Checkout</button>
+    </form>
 }
 else
 {

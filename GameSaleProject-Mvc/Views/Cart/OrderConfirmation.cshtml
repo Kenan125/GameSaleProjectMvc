@@ -1,0 +1,33 @@
+﻿@model GameSaleProject_Entity.Entities.GameSale
+@{
+    ViewData["Title"] = "OrderConfirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>OrderConfirmation</h1>
+
+<p>Thank you for your purchase! Here are the details of your order:</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Game</th>
+            <th>Price</th>
+            <th>Refunded</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var detail in Model.GameSaleDetails)
+        {
+            <tr>
+                <td>@detail.Game.GameName</td>
+                <td>@detail.UnitPrice.ToString("C")</td>
+                <td>@(detail.IsRefunded ? "Yes" : "No")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Total Price: @Model.TotalPrice.ToString("C")</h3>
+
+<a href="@Url.Action("Index", "Home")" class="btn btn-primary">Return to Home</a>

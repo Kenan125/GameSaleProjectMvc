@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Checkout</h1>
+
+@if (Model.Items.Any())
+{
+    <h3>Order Summary</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.GameName</td>
+                    <td>@item.Price.ToString("C")</td> <!-- Format price as currency -->
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h3>Total Price: @Model.TotalPrice.ToString("C")</h3> <!-- Display total price -->
+
+    <form asp-action="Checkout" method="post">
+        <button type="submit" class="btn btn-primary">Confirm Purchase</button>
+    </form>
+}
+else
+{
+    <p>Your cart is empty. Please add items to your cart before proceeding to checkout.</p>
+    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Continue Shopping</a> <!-- Link to continue shopping -->
+}

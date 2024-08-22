@@ -14,5 +14,6 @@ namespace GameSaleProject_Entity.Interfaces
         Task<Cart> GetCartAsync(string userName);
         Task<CartViewModel> GetCartViewModelAsync(string userName);
         Task ClearCartAsync(string userName);
+        Task RemoveFromCartAsync(string userName, int gameId);
     }
 }

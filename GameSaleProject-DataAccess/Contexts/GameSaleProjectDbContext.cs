@@ -31,8 +31,20 @@ namespace GameSaleProject_DataAccess.Contexts
                       .HasMaxLength(200)
                       .HasDefaultValue("/images/DefaultPfp.jpg");
             });
-            
-            
+
+            // Cascade delete from User to Publisher
+            modelBuilder.Entity<Publisher>()
+                .HasOne(p => p.User)
+                .WithMany()
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);  // When User is deleted, Publisher is deleted
+
+            // Cascade delete from Publisher to Games
+            modelBuilder.Entity<Game>()
+                .HasOne(g => g.Publisher)
+                .WithMany(p => p.Games)
+                .HasForeignKey(g => g.PublisherId)
+                .OnDelete(DeleteBehavior.Cascade);  // When Publisher is deleted, Games are deleted
 
             modelBuilder.Entity<Game>()
             .Property(g => g.Price)
@@ -54,7 +66,11 @@ namespace GameSaleProject_DataAccess.Contexts
             .WithOne(i => i.Game)
             .HasForeignKey(i => i.GameId);
 
-            
+            modelBuilder.Entity<Game>()
+    .HasOne(g => g.Publisher)
+    .WithMany()
+    .HasForeignKey(g => g.PublisherId)
+    .OnDelete(DeleteBehavior.Restrict);  // Use Restrict to avoid cascade path conflicts
 
             modelBuilder.Entity<Game>()
                 .HasOne(g => g.Publisher)

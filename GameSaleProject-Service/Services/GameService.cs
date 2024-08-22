@@ -29,21 +29,19 @@ namespace GameSaleProject_Service.Services
         {
             var game = _mapper.Map<Game>(model);
 
-            // Ensure that the Images collection in Game is initialized
-            if (model.Images != null && model.Images.Any())
+            if (model.Images?.Any() == true)
             {
                 game.Images = model.Images.Select(img => new Image
                 {
                     Name = img.Name,
                     ImageUrl = img.ImageUrl,
-                    ImageType=img.ImageType,
+                    ImageType = img.ImageType,
                     CreatedDate = DateTime.Now
                 }).ToList();
             }
 
-            var repository = _unitOfWork.GetRepository<Game>();
-            await repository.Add(game);
-            _unitOfWork.Commit();
+            await _unitOfWork.GetRepository<Game>().Add(game);
+            await _unitOfWork.CommitAsync();
             return "Game added successfully.";
         }
 
@@ -63,12 +61,11 @@ namespace GameSaleProject_Service.Services
 
         public async Task<List<GameViewModel>> GetAllGamesAsync()
         {
-            var repository = _unitOfWork.GetRepository<Game>();
-            var games = await repository.GetAllAsync(
+            var games = await _unitOfWork.GetRepository<Game>().GetAllAsync(
                 includes: new Expression<Func<Game, object>>[]
                 {
-                   g => g.Images,
-                   g => g.Reviews
+                    g => g.Images,
+                    g => g.Reviews
                 }
             );
 
@@ -90,7 +87,7 @@ namespace GameSaleProject_Service.Services
 
             if (game == null || !game.Any())
             {
-                return null; // Handle this appropriately in your controller (e.g., return NotFound())
+                return null;
             }
 
             var gameViewModel = _mapper.Map<GameViewModel>(game.FirstOrDefault());
@@ -100,19 +97,19 @@ namespace GameSaleProject_Service.Services
 
         public async Task<List<GameViewModel>> GetGamesByCategoryAsync(int categoryId)
         {
-            var repository = _unitOfWork.GetRepository<Game>();
-            var games = await repository.GetAll(
+            var games = await _unitOfWork.GetRepository<Game>().GetAllAsync(
                 filter: g => g.CategoryId == categoryId
             );
+
             return _mapper.Map<List<GameViewModel>>(games);
         }
 
         public async Task<List<GameViewModel>> SearchGamesAsync(string searchTerm)
         {
-            var repository = _unitOfWork.GetRepository<Game>();
-            var games = await repository.GetAll(
+            var games = await _unitOfWork.GetRepository<Game>().GetAllAsync(
                 filter: g => g.GameName.Contains(searchTerm) || g.Description.Contains(searchTerm)
             );
+
             return _mapper.Map<List<GameViewModel>>(games);
         }
 
@@ -120,45 +117,30 @@ namespace GameSaleProject_Service.Services
         {
             var repository = _unitOfWork.GetRepository<Game>();
             var game = await repository.GetByIdAsync(model.Id);
-            if (game == null)
-            {
-                return "Game not found.";
-            }
 
-            // Map other game properties
+            if (game == null)
+                return "Game not found.";
+
             _mapper.Map(model, game);
 
-            // Initialize game.Images if it's null
-            if (game.Images == null)
+            if (model.Images != null)
             {
-                game.Images = new List<Image>();
+                game.Images = _mapper.Map<List<Image>>(model.Images);
             }
 
-            // Handle image updates
-            if (model.Images != null && model.Images.Any())
-            {                
-
-                // Clear existing images
-                game.Images.Clear();
-
-                // Add new images from the model
-                game.Images = model.Images.Select(img => new Image
-                {
-                    Name = img.Name,
-                    ImageUrl = img.ImageUrl,
-                    ImageType=img.ImageType
-                    
-                }).ToList();
-
-                
-            }
-
-            // Save changes to the database
             repository.Update(game);
             await _unitOfWork.CommitAsync();
 
             return "Game updated successfully.";
         }
+        public async Task<List<GameViewModel>> GetGamesByPublisherAsync(int publisherId)
+        {
+            var games = await _unitOfWork.GetRepository<Game>().GetAllAsync(
+                filter: g => g.PublisherId == publisherId,
+                includes: g => g.Images
+            );
 
+            return _mapper.Map<List<GameViewModel>>(games);
+        }
     }
 }

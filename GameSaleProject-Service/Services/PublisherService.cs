@@ -43,5 +43,30 @@ namespace GameSaleProject_Service.Services
                 Name = publisher.Name
             };
         }
+        public async Task CreatePublisherAsync(PublisherViewModel model, int userId)
+        {
+            var publisher = new Publisher
+            {
+                Name = model.Name,
+                UserId = userId,
+                // Add any other properties here
+            };
+
+            await _unitOfWork.GetRepository<Publisher>().Add(publisher);
+            await _unitOfWork.CommitAsync();
+        }
+        public async Task<PublisherViewModel> GetPublisherByUserIdAsync(int userId)
+        {
+            var publisher = await _unitOfWork.GetRepository<Publisher>().GetAllAsync(
+                filter: p => p.UserId == userId
+            );
+
+            if (publisher == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<PublisherViewModel>(publisher);
+        }
     }
 }

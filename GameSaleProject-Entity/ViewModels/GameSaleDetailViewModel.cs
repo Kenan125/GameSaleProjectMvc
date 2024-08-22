@@ -12,8 +12,10 @@ namespace GameSaleProject_Entity.ViewModels
 		public int GameSaleId { get; set; }
 		public int GameId { get; set; }
 		public decimal UnitPrice { get; set; }
-		public int Quantity { get; set; }
+        public bool IsRefunded { get; set; }
 
-		
-	}
+
+
+
+    }
 }
