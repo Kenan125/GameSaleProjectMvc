@@ -32,6 +32,7 @@ body {
     /*line-height: 5px;*/
     min-height: 100vh;
     margin-bottom: 60px;
+    padding-top: 60px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -74,7 +75,7 @@ a {
 }
 
 .card-body {
-    padding:1rem;
+    padding: 1rem;
     color: #ffffff; /* Ensure card text is readable */
 }
 
@@ -94,6 +95,7 @@ h2 {
     background-color: rgba(255, 255, 255, 0.2); /* Lighter overlay */
     color: #000000; /* Dark text color for overlay */
 }
+
     .card-img-overlay:hover {
         opacity: 1;
     }
@@ -108,17 +110,15 @@ h2 {
         height: auto;
         border-radius: 10px;
     }
+
 .card-body {
     color: #ffffff; /* Ensure card text is readable */
 }
 
 .navbar {
     background-color: #1f1f1f; /* Dark background for the navbar */
-    padding:1rem;
-    border-bottom:1px solid #343a40;
-    
-
-
+    padding: 1rem;
+    border-bottom: none;
 }
 
     .navbar .navbar-nav .nav-link {
@@ -184,7 +184,7 @@ a {
     .table tbody tr {
         background-color: #1f1f1f; /* Dark background for table rows */
         color: #ffffff; /* Light text color for table rows */
-        padding:5px;
+        padding: 5px;
     }
 
         .table tbody tr:hover {
@@ -195,5 +195,5 @@ a {
         display: block;
         width: 100px;
         height: auto; /* Maintain aspect ratio */
-        border-radius:8px;
+        border-radius: 8px;
     }
