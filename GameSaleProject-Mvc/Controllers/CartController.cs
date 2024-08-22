@@ -75,10 +75,8 @@ namespace GameSaleProject_Mvc.Controllers
                 userPurchases.Any(purchase => purchase.GameSaleDetails.Any(detail => detail.GameId == item.GameId))).ToList();
 
             if (alreadyPurchasedGames.Any())
-            {
-                // Handle the case where some games in the cart have already been purchased
-                // You could remove these games from the cart, show a message, or prevent checkout entirely
-                return RedirectToAction("Index", "Cart"); // Optionally, show an error message
+            {              
+                return RedirectToAction("Index", "Cart"); 
             }
 
             var user = await _accountService.FindByUserNameAsync(userName);
@@ -88,12 +86,13 @@ namespace GameSaleProject_Mvc.Controllers
                 UserId = user.Id,
                 TotalPrice = cart.Items.Sum(item => item.Price),
                 TotalQuantity = cart.Items.Count,
-                IsDiscountApplied = cart.Items.Any(item => item.Price < _gameService.GetGameByIdAsync(item.GameId).Result.Price), // Check if any item has a discount
+                IsDiscountApplied = cart.Items.Any(item => item.Price < _gameService.GetGameByIdAsync(item.GameId).Result.Price),
                 GameSaleDetails = cart.Items.Select(item => new GameSaleDetail
                 {
                     GameId = item.GameId,
                     UnitPrice = item.Price,
-                    IsRefunded = false // Assuming all games are refundable; this could be dynamic
+                    Discount = _gameService.GetGameByIdAsync(item.GameId).Result.Discount,
+                    IsRefunded = false
                 }).ToList()
             };
 

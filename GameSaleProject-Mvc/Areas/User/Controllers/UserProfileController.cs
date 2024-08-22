@@ -1,21 +1,22 @@
-﻿using GameSaleProject_Entity.Identity;
+﻿using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
-using GameSaleProject_Service.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameSaleProject_Mvc.Areas.User.Controllers
 {
+    [Area("User")]
     public class UserProfileController : Controller
     {
         private readonly IUserProfileService _userProfileService;
         private readonly IAccountService _accountService;
+        private readonly IGameSaleService _gameSaleService;
 
-        public UserProfileController(IUserProfileService userProfileService, IAccountService accountService)
+        public UserProfileController(IUserProfileService userProfileService, IAccountService accountService, IGameSaleService gameSaleService)
         {
             _userProfileService = userProfileService;
             _accountService = accountService;
+            _gameSaleService = gameSaleService;
         }
 
         [HttpGet]
@@ -37,8 +38,8 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
 
             return View(user); // Pass the UserViewModel to the view
         }
-        [HttpPost]
-        public async Task<IActionResult> UpdateProfile(UserViewModel model)
+        [HttpGet]
+        public async Task<IActionResult> OwnedGames()
         {
             var userName = User.Identity.Name;
 
@@ -47,28 +48,60 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            // Get the user information using the existing method
-            var user = await _accountService.FindByUserNameAsync(userName);
+            // Get the user's purchases
+            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
 
-            if (user == null)
-            {
-                return NotFound("User not found");
-            }
+            // Log the count of purchases and details for debugging
+            var totalGames = userPurchases.SelectMany(purchase => purchase.GameSaleDetails).Count();
+            Console.WriteLine($"User '{userName}' has {userPurchases.Count} purchases with a total of {totalGames} games.");
 
-            var userId = user.Id; // Retrieve the user ID from the UserViewModel
+            var ownedGames = userPurchases
+                .SelectMany(purchase => purchase.GameSaleDetails)
+                .Select(detail => detail.Game)
+                .Where(game => game != null)
+                .ToList();
 
-            if (ModelState.IsValid)
-            {
-                var success = await _userProfileService.UpdateUserProfileAsync(userId, model);
-                if (success)
-                {
-                    TempData["Message"] = "Profile updated successfully.";
-                    return RedirectToAction("Profile");
-                }
-                ModelState.AddModelError("", "Failed to update profile. Please try again.");
-            }
+            Console.WriteLine($"Owned Games Count: {ownedGames.Count}");
 
-            return View(model);
+            return View(ownedGames ?? new List<Game>());
         }
+
+        [HttpGet]
+        public async Task<IActionResult> PurchaseHistory()
+        {
+            var userName = User.Identity.Name;
+
+            if (string.IsNullOrEmpty(userName))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
+
+            if (userPurchases == null || !userPurchases.Any())
+            {
+                ViewBag.Message = "You have not made any purchases yet.";
+                return View(new List<PurchaseHistoryViewModel>());
+            }
+
+            var purchaseHistory = userPurchases.Select(purchase => new PurchaseHistoryViewModel
+            {
+                OrderId = purchase.Id,
+                PurchaseDate = purchase.CreatedDate,
+                TotalAmount = purchase.TotalPrice,
+                PurchasedGames = purchase.GameSaleDetails?
+        .Where(detail => detail.Game != null)
+        .Select(detail => new PurchasedGameViewModel
+        {
+            GameName = detail.Game?.GameName,
+            Price = detail.UnitPrice,
+            Discount = detail.Discount, // Use the discount from GameSaleDetail
+            CoverImageUrl = detail.Game?.Images?.FirstOrDefault()?.ImageUrl
+        }).ToList() ?? new List<PurchasedGameViewModel>()
+            }).ToList();
+
+            return View(purchaseHistory);
+        }
+
     }
 }

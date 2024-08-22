@@ -35,9 +35,12 @@ namespace GameSaleProject_Service.Services
         public async Task<List<GameSale>> GetUserPurchasesAsync(string userName)
         {
             return await _context.GameSales
-        .Include(gs => gs.GameSaleDetails)
-        .Where(gs => gs.User.UserName == userName)
-        .ToListAsync();
+                .Include(gs => gs.User) // Include the User to ensure it's loaded
+                .Include(gs => gs.GameSaleDetails)
+                    .ThenInclude(gsd => gsd.Game) // Ensure Game is loaded as well
+                .Where(gs => gs.User.UserName == userName) // Now this should work
+                .ToListAsync();
         }
+
     }
 }
