@@ -6,41 +6,133 @@
 
 @if (Model.Items.Any())
 {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Game</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
             @foreach (var item in Model.Items)
             {
-                        <tr>
-                            <td>@item.GameName</td>
-                            <td>@item.Price.ToString("C")</td> <!-- Format price as currency -->
-                            <td>
+                <tr>
+                    <td>@item.GameName</td>
+                    <td>
+                        @if (item.Price == 0)
+                        {
+                            <span class="text-success">Free</span>
+                        }
+                        else
+                        {
+                            @item.Price.ToString("C")
+                        }
+                        
+                        </td>
+                    <td>
                         <!-- Remove Button -->
                         <form action="@Url.Action("RemoveFromCart", "Cart")" method="post" style="display:inline;">
                             <input type="hidden" name="gameId" value="@item.GameId" />
                             <button type="submit" class="btn btn-danger">Remove</button>
                         </form>
-                            </td>
-                        </tr>
+                    </td>
+                </tr>
             }
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-        <h3>Total Price: @Model.TotalPrice.ToString("C")</h3> <!-- Display total price -->
-    <!-- Checkout Form -->
-    <form asp-action="Checkout" method="post">
-        <button type="submit" class="btn btn-primary">Checkout</button>
-    </form>
+    <h3>
+        @if (Model.TotalPrice==0)
+        {
+            <span class="text-success">Free</span>
+        }
+        else
+        {
+            <span>Total Price: @Model.TotalPrice.ToString("C")</span>
+
+        }
+    </h3>
+
+    @if (Model.TotalPrice > 0)
+    {
+        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="collapse" data-bs-target="#paymentFormSection" aria-expanded="false" aria-controls="paymentFormSection">
+            Checkout
+        </button>
+
+        <!-- Collapsible Payment Form Section -->
+        <div class="collapse" id="paymentFormSection">
+            <div class="card card-body">
+                <form id="paymentForm" asp-action="Payment" method="post">
+                    <div class="mb-3">
+                        <label for="CardNumber" class="form-label">Card Number</label>
+                        <input type="text" class="form-control" id="CardNumber" name="CardNumber" maxlength="19" required style="max-width: 300px;" placeholder="xxxx xxxx xxxx xxxx">
+                    </div>
+                    <div class="mb-3">
+                        <label for="CardHolderName" class="form-label">Card Holder Name</label>
+                        <input type="text" class="form-control" id="CardHolderName" name="CardHolderName" required style="max-width: 300px;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ExpiryDate" class="form-label">Expiry Date</label>
+                        <input type="text" class="form-control" id="ExpiryDate" name="ExpiryDate" placeholder="MM/YY" required style="max-width: 100px;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="CVV" class="form-label">CVV</label>
+                        <input type="text" class="form-control" id="CVV" name="CVV" maxlength="3" required style="max-width: 100px;">
+                    </div>
+                    <input type="hidden" id="Amount" name="Amount" value="@Model.TotalPrice" />
+                    <button type="submit" class="btn btn-primary">Confirm Purchase</button>
+                </form>
+            </div>
+        </div>
+    }
+    else
+    {
+        <form asp-action="Checkout" method="post">
+            <button type="submit" class="btn btn-primary">Checkout</button>
+        </form>
+    }
 }
 else
 {
-        <p>Your cart is empty.</p>
+    <p>Your cart is empty.</p>
 }
 
-<a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Continue Shopping</a> <!-- Link to continue shopping -->
+<a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Continue Shopping</a>
 
+@section Scripts {
+    <script>
+        // Format card number input
+        document.getElementById('CardNumber').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '').substring(0, 16); // Remove non-digits and limit to 16 digits
+            e.target.value = value !== '' ? value.match(/.{1,4}/g).join(' ') : ''; // Add space every 4 digits
+        });
+
+        // Validate expiry date input
+        document.getElementById('ExpiryDate').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            if (value.length > 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4); // Add slash after month
+            }
+            e.target.value = value.substring(0, 5); // Limit to 5 characters (MM/YY)
+        });
+
+        document.getElementById('paymentForm').addEventListener('submit', function (e) {
+            const expiryDateInput = document.getElementById('ExpiryDate').value;
+            const [month, year] = expiryDateInput.split('/');
+
+            if (!isValidExpiryDate(month, year)) {
+                e.preventDefault();
+                alert('Please enter a valid expiration date.');
+            }
+        });
+
+        function isValidExpiryDate(month, year) {
+            if (month === undefined || year === undefined || month.length !== 2 || year.length !== 2) return false;
+
+            const inputDate = new Date(`20${year}-${month}-01`);
+            const currentDate = new Date();
+            return inputDate >= new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        }
+    </script>
+}

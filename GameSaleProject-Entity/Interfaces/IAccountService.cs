@@ -1,5 +1,6 @@
 ﻿using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace GameSaleProject_Entity.Interfaces
 {
@@ -13,7 +14,7 @@ namespace GameSaleProject_Entity.Interfaces
         Task<string> CreateRoleAsync(RoleViewModel model);
         Task<List<UserViewModel>> GetAllUsers();
         Task<List<RoleViewModel>> GetAllRoles();
-        
+        Task<string> SaveProfilePictureAsync(IFormFile formFile);
         Task SignOutAsync();
     }
 }

@@ -4,6 +4,7 @@ using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.UnitOfWorks;
 using GameSaleProject_Entity.ViewModels;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -141,6 +142,37 @@ namespace GameSaleProject_Service.Services
             );
 
             return _mapper.Map<List<GameViewModel>>(games);
+        }
+        public async Task<List<ImageViewModel>> HandleImageUploads(IFormFile cardImage, List<IFormFile> displayImages)
+        {
+            var images = new List<ImageViewModel>();
+
+            if (cardImage != null)
+            {
+                var cardImageUrl = await _imageService.UploadImageAsync(cardImage, "card");
+                images.Add(new ImageViewModel
+                {
+                    Name = Path.GetFileName(cardImageUrl),
+                    ImageUrl = cardImageUrl,
+                    ImageType = "card"
+                });
+            }
+
+            foreach (var displayImage in displayImages)
+            {
+                if (displayImage.Length > 0)
+                {
+                    var displayImageUrl = await _imageService.UploadImageAsync(displayImage, "display");
+                    images.Add(new ImageViewModel
+                    {
+                        Name = Path.GetFileName(displayImageUrl),
+                        ImageUrl = displayImageUrl,
+                        ImageType = "display"
+                    });
+                }
+            }
+
+            return images;
         }
     }
 }

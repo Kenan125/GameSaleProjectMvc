@@ -23,33 +23,32 @@ namespace GameSaleProject_DataAccess.Repositories
         public async Task Add(T entity)
         {
             await _dbSet.AddAsync(entity);
-            //_context.SaveChanges();       //UnitofWork tarafından yapılacak.
-            //_context.SaveChangesAsync();
+            
         }
         public void Update(T entity)
         {
             _dbSet.Update(entity);
-            //_context.SaveChanges();
+            
         }
         public void Delete(int id)
         {
             var entity = _dbSet.Find(id);
             _dbSet.Remove(entity);
-            //_context.SaveChanges();
+            
         }
         public void Delete(T entity)
         {
             var isDeletedProperty = entity.GetType().GetProperty("IsDeleted");
             if (isDeletedProperty != null)
             {
-                isDeletedProperty.SetValue(entity, true);  //tabloda ISDeleted kullanıyorsak
+                isDeletedProperty.SetValue(entity, true);  
                 _dbSet.Update(entity);
             }
             else
             {
                 _dbSet.Remove(entity);
             }
-            //_context.SaveChanges();
+            
         }
         public async Task<T> Get(Expression<Func<T, bool>> filter)
         {

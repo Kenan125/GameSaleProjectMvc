@@ -2,6 +2,7 @@
 using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
+using GameSaleProject_Entity.UnitOfWorks;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,15 +14,17 @@ using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Services
 {
-    public class UserProfileService: IUserProfileService
+    public class UserProfileService : IUserProfileService
     {
         private readonly GameSaleProjectDbContext _context;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UserProfileService(GameSaleProjectDbContext context, UserManager<AppUser> userManager)
+        public UserProfileService(GameSaleProjectDbContext context, UserManager<AppUser> userManager, IUnitOfWork unitOfWork)
         {
             _context = context;
             _userManager = userManager;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<List<Game>> GetOwnedGamesAsync(int userId)
@@ -80,20 +83,20 @@ namespace GameSaleProject_Service.Services
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
             {
-                return false; // User not found
+                return false;
             }
 
-            // Update profile picture URL if provided
+
             if (!string.IsNullOrEmpty(model.ProfilePictureUrl))
             {
                 user.ProfilePictureUrl = model.ProfilePictureUrl;
             }
 
-            // Update first name and last name
+
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
 
-            // Update username if provided and it's different from the current one
+
             if (!string.IsNullOrEmpty(model.UserName) && model.UserName != user.UserName)
             {
                 var usernameExists = await _userManager.FindByNameAsync(model.UserName);
@@ -103,14 +106,14 @@ namespace GameSaleProject_Service.Services
                 }
                 else
                 {
-                    return false; // Username already exists
+                    return false;
                 }
             }
 
-            // Update phone number
+
             user.PhoneNumber = model.PhoneNumber;
 
-            // Update password if both current and new passwords are provided
+
             if (!string.IsNullOrEmpty(model.CurrentPassword) && !string.IsNullOrEmpty(model.NewPassword))
             {
                 var passwordChangeResult = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
@@ -120,10 +123,40 @@ namespace GameSaleProject_Service.Services
                 }
             }
 
-            // Update the user in the database
+
             var result = await _userManager.UpdateAsync(user);
 
             return result.Succeeded;
         }
+
+        public async Task DeleteUserAndRelatedDataAsync(int userId)
+        {
+            var publisher = await _unitOfWork.GetRepository<Publisher>()
+                                             .Get(p => p.UserId == userId);
+
+            if (publisher != null)
+            {
+                
+                var games = await _unitOfWork.GetRepository<Game>()
+                                             .GetAllAsync(g => g.PublisherId == publisher.Id);
+                foreach (var game in games)
+                {
+                    _unitOfWork.GetRepository<Game>().Delete(game);
+                }
+
+                
+                _unitOfWork.GetRepository<Publisher>().Delete(publisher);
+            }
+
+            
+            var user = await _unitOfWork.GetRepository<AppUser>().GetByIdAsync(userId);
+            if (user != null)
+            {
+                _unitOfWork.GetRepository<AppUser>().Delete(user);
+            }
+
+            await _unitOfWork.CommitAsync();
+        }
+
     }
 }

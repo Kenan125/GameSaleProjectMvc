@@ -4,6 +4,7 @@ using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -143,10 +144,24 @@ namespace GameSaleProject_Service.Services
         }
         
 
+        
+        public async Task<string> SaveProfilePictureAsync(IFormFile formFile)
+        {
+            var fileName = Path.GetFileNameWithoutExtension(formFile.FileName);
+            var extension = Path.GetExtension(formFile.FileName);
+            var newFileName = $"{fileName}_{DateTime.Now.Ticks}{extension}";
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", newFileName);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await formFile.CopyToAsync(stream);
+            }
+
+            return "/images/" + newFileName;
+        }
         public async Task SignOutAsync()
         {
             await _signInManager.SignOutAsync();
         }
-
     }
 }
