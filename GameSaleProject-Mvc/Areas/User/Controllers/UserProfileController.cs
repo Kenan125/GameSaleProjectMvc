@@ -1,8 +1,9 @@
-﻿using GameSaleProject_Entity.Entities;
+﻿using AutoMapper;
+using GameSaleProject_Entity.Entities;
+using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace GameSaleProject_Mvc.Areas.User.Controllers
 {
@@ -12,81 +13,86 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
         private readonly IUserProfileService _userProfileService;
         private readonly IAccountService _accountService;
         private readonly IGameSaleService _gameSaleService;
+        private readonly IMapper _mapper;
 
-        public UserProfileController(IUserProfileService userProfileService, IAccountService accountService, IGameSaleService gameSaleService)
+        public UserProfileController(IUserProfileService userProfileService, IAccountService accountService, IGameSaleService gameSaleService, IMapper mapper)
         {
             _userProfileService = userProfileService;
             _accountService = accountService;
             _gameSaleService = gameSaleService;
+            _mapper = mapper;
+        }
+
+        private async Task<UserViewModel?> GetAuthenticatedUserAsync()
+        {
+            var userName = User.Identity.Name;
+
+            if (string.IsNullOrEmpty(userName))
+            {
+                return null;
+            }
+
+            return await _accountService.FindByUserNameAsync(userName);
+        }
+
+        private void SetActivePage(string pageName)
+        {
+            ViewBag.ActivePage = pageName;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            ViewBag.ActivePage = "UserDetails"; // Set the active page for the sidebar
+            SetActivePage("UserDetails");
 
-            var userName = User.Identity.Name;
+            var user = await GetAuthenticatedUserAsync();
 
-            if (string.IsNullOrEmpty(userName))
+            if (user == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            var user = await _accountService.FindByUserNameAsync(userName);
-
-            if (user == null)
-            {
-                return NotFound("User not found");
-            }
-
-            return View(user); // Pass the UserViewModel to the view
+            return View(user);
         }
 
         [HttpGet]
         public async Task<IActionResult> OwnedGames()
         {
-            ViewBag.ActivePage = "OwnedGames"; // Set the active page for the sidebar
+            SetActivePage("OwnedGames");
 
-            var userName = User.Identity.Name;
+            var user = await GetAuthenticatedUserAsync();
 
-            if (string.IsNullOrEmpty(userName))
+            if (user == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            // Get the user's purchases
-            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
-
-            // Log the count of purchases and details for debugging
-            var totalGames = userPurchases.SelectMany(purchase => purchase.GameSaleDetails).Count();
-            Console.WriteLine($"User '{userName}' has {userPurchases.Count} purchases with a total of {totalGames} games.");
+            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(user.UserName);
 
             var ownedGames = userPurchases
                 .SelectMany(purchase => purchase.GameSaleDetails)
-                .Select(detail => detail.Game)
-                .Where(game => game != null)
+                .Where(detail => detail.Game != null)
+                .Select(detail => _mapper.Map<GameViewModel>(detail.Game))
                 .ToList();
 
-            Console.WriteLine($"Owned Games Count: {ownedGames.Count}");
-
-            return View(ownedGames ?? new List<Game>());
+            return View(ownedGames);
         }
 
         [HttpGet]
         public async Task<IActionResult> PurchaseHistory()
         {
-            ViewBag.ActivePage = "PurchaseHistory"; 
+            SetActivePage("PurchaseHistory");
 
-            var userName = User.Identity.Name;
+            var user = await GetAuthenticatedUserAsync();
 
-            if (string.IsNullOrEmpty(userName))
+            if (user == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
+            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(user.UserName);
 
-            if (userPurchases == null || !userPurchases.Any())
+            if (!userPurchases.Any())
             {
                 ViewBag.Message = "You have not made any purchases yet.";
                 return View(new List<PurchaseHistoryViewModel>());
@@ -103,7 +109,7 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
                     {
                         GameName = detail.Game?.GameName,
                         Price = detail.UnitPrice,
-                        Discount = detail.Discount, // Use the discount from GameSaleDetail
+                        Discount = detail.Discount,
                         CoverImageUrl = detail.Game?.Images?.FirstOrDefault()?.ImageUrl
                     }).ToList() ?? new List<PurchasedGameViewModel>()
             }).ToList();
