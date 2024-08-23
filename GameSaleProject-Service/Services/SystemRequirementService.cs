@@ -41,5 +41,39 @@ namespace GameSaleProject_Service.Services
                 
             };
         }
+        public async Task SaveSystemRequirementsAsync(SystemRequirementViewModel model)
+        {
+            var repository = _unitOfWork.GetRepository<SystemRequirement>();
+
+            var existingRequirement = await repository.Get(r => r.GameId == model.GameId);
+            if (existingRequirement != null)
+            {
+               
+                existingRequirement.OS = model.OS;
+                existingRequirement.SystemProcessor = model.SystemProcessor;
+                existingRequirement.SystemMemory = model.SystemMemory;
+                existingRequirement.Storage = model.Storage;
+                existingRequirement.Graphics = model.Graphics;
+
+                repository.Update(existingRequirement);
+            }
+            else
+            {
+                
+                var systemRequirement = new SystemRequirement
+                {
+                    GameId = model.GameId,
+                    OS = model.OS,
+                    SystemProcessor = model.SystemProcessor,
+                    SystemMemory = model.SystemMemory,
+                    Storage = model.Storage,
+                    Graphics = model.Graphics,
+                };
+
+                await repository.Add(systemRequirement);
+            }
+
+            await _unitOfWork.CommitAsync();
+        }
     }
 }

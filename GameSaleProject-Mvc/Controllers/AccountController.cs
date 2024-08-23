@@ -26,7 +26,7 @@ namespace GameSaleProject_Mvc.Controllers
         {
             LoginViewModel model = new LoginViewModel()
             {
-                ReturnUrl = ReturnUrl ?? Url.Content("~/") // Default to home page if null
+                ReturnUrl = ReturnUrl ?? Url.Content("~/") 
             };
             TempData["message"] = null;
             return View(model);
@@ -40,9 +40,9 @@ namespace GameSaleProject_Mvc.Controllers
 
                 if (result == "OK")
                 {
-                    
-                    
-                        return RedirectToAction("Index", "Home");
+
+
+                    return LocalRedirect(model.ReturnUrl ?? Url.Content("~/")); ;
                     
                 }
                 else
@@ -50,7 +50,7 @@ namespace GameSaleProject_Mvc.Controllers
                     ModelState.AddModelError("", result);
                 }
             }
-
+            model.ReturnUrl = model.ReturnUrl ?? Url.Content("~/");
             return View(model);
         }
         public IActionResult Register() 
@@ -60,26 +60,14 @@ namespace GameSaleProject_Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model, IFormFile formFile)
         {
-            
             model.ProfilePictureUrl = "/images/DefaultPfp.png";
-            
             ModelState.Remove("formFile");
+
             if (ModelState.IsValid)
             {
                 if (formFile != null && formFile.Length > 0)
                 {
-                    var fileName = Path.GetFileNameWithoutExtension(formFile.FileName);
-                    var extension = Path.GetExtension(formFile.FileName);
-                    var newFileName = $"{fileName}_{DateTime.Now.Ticks}{extension}";
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", newFileName);
-
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await formFile.CopyToAsync(stream);
-                    }
-
-                    // Override the default URL with the uploaded file's URL
-                    model.ProfilePictureUrl = "/images/" + newFileName;
+                    model.ProfilePictureUrl = await _accountService.SaveProfilePictureAsync(formFile);
                 }
 
                 string msg = await _accountService.CreateUserAsync(model);

@@ -15,6 +15,6 @@ namespace GameSaleProject_Entity.ViewModels
 		public byte SystemMemory { get; set; }
 		public int Storage { get; set; }
 		public string Graphics { get; set; }
-		public string GameId { get; set; }
+		public int GameId { get; set; }
 	}
 }

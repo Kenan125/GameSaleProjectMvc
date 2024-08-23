@@ -1,5 +1,6 @@
 ﻿using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace GameSaleProject_Entity.Interfaces
 {
@@ -20,5 +21,6 @@ namespace GameSaleProject_Entity.Interfaces
        
         Task<List<GameViewModel>> GetGamesByCategoryAsync(int categoryId);
         Task<List<GameViewModel>> GetGamesByPublisherAsync(int publisherId);
+        Task<List<ImageViewModel>> HandleImageUploads(IFormFile cardImage, List<IFormFile> displayImages);
     }
 }

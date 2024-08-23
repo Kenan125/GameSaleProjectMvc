@@ -16,11 +16,13 @@ namespace GameSaleProject_Service.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IGameService _gameService;
         private readonly IGameSaleService _gameSaleService;
-        public CartService(IHttpContextAccessor httpContextAccessor, IGameService gameService, IGameSaleService gameSaleService)
+        private readonly IAccountService _accountService;
+        public CartService(IHttpContextAccessor httpContextAccessor, IGameService gameService, IGameSaleService gameSaleService, IAccountService accountService)
         {
             _httpContextAccessor = httpContextAccessor;
             _gameService = gameService;
             _gameSaleService = gameSaleService;
+            _accountService = accountService;
         }
 
         public async Task AddToCartAsync(string userName, int gameId, decimal price)
@@ -97,6 +99,74 @@ namespace GameSaleProject_Service.Services
             await SaveCartAsync(cart);
             return cartViewModel;
         }
+
+        public async Task<GameSale?> CheckoutAsync(string userName)
+        {
+            var cart = await GetCartAsync(userName);
+            if (cart == null || !cart.Items.Any())
+            {
+                return null;
+            }
+
+            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
+            var alreadyPurchasedGames = new List<CartItem>();
+
+            foreach (var item in cart.Items)
+            {
+                var isPurchased = userPurchases.Any(purchase =>
+                    purchase.GameSaleDetails.Any(detail => detail.GameId == item.GameId));
+
+                if (isPurchased)
+                {
+                    alreadyPurchasedGames.Add(item);
+                }
+            }
+
+            if (alreadyPurchasedGames.Any())
+            {
+                return null; // Indicate that checkout cannot proceed due to already purchased games
+            }
+
+            var user = await _accountService.FindByUserNameAsync(userName);
+
+            var gameSaleDetails = new List<GameSaleDetail>();
+            bool isDiscountApplied = false;
+
+            foreach (var item in cart.Items)
+            {
+                var game = await _gameService.GetGameByIdAsync(item.GameId);
+                var detail = new GameSaleDetail
+                {
+                    GameId = item.GameId,
+                    UnitPrice = item.Price,
+                    Discount = game.Discount,
+                    IsRefunded = false
+                };
+
+                gameSaleDetails.Add(detail);
+
+                if (detail.UnitPrice < game.Price)
+                {
+                    isDiscountApplied = true;
+                }
+            }
+
+            var gameSale = new GameSale
+            {
+                UserId = user.Id,
+                TotalPrice = cart.Items.Sum(item => item.Price),
+                TotalQuantity = cart.Items.Count,
+                IsDiscountApplied = isDiscountApplied,
+                GameSaleDetails = gameSaleDetails
+            };
+
+            await _gameSaleService.CreateGameSaleAsync(gameSale);
+            await ClearCartAsync(userName);
+
+            return gameSale;
+        }
+
+
 
         public async Task RemoveFromCartAsync(string userName, int gameId)
         {

@@ -4,6 +4,7 @@ using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -87,19 +88,27 @@ namespace GameSaleProject_Service.Services
 
             if (identityResult.Succeeded)
             {
-               
+                // Assign the default role, e.g., "User"
+                var roleResult = await _userManager.AddToRoleAsync(user, "User");
 
-                message = "OK";
+                if (roleResult.Succeeded)
+                {
+                    message = "OK";
+                }
+                else
+                {
+                    // If assigning the role fails, delete the user to avoid having a user without a role
+                    await _userManager.DeleteAsync(user);
+                    message = string.Join(", ", roleResult.Errors.Select(e => e.Description));
+                }
             }
             else
             {
-                foreach (var error in identityResult.Errors)
-                {
-                    message = error.Description;
-                }
+                message = string.Join(", ", identityResult.Errors.Select(e => e.Description));
             }
             return message;
         }
+
 
 
         public async Task<string> FindByNameAsync(LoginViewModel model)
@@ -143,10 +152,24 @@ namespace GameSaleProject_Service.Services
         }
         
 
+        
+        public async Task<string> SaveProfilePictureAsync(IFormFile formFile)
+        {
+            var fileName = Path.GetFileNameWithoutExtension(formFile.FileName);
+            var extension = Path.GetExtension(formFile.FileName);
+            var newFileName = $"{fileName}_{DateTime.Now.Ticks}{extension}";
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", newFileName);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await formFile.CopyToAsync(stream);
+            }
+
+            return "/images/" + newFileName;
+        }
         public async Task SignOutAsync()
         {
             await _signInManager.SignOutAsync();
         }
-
     }
 }
