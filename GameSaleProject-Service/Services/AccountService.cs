@@ -88,19 +88,27 @@ namespace GameSaleProject_Service.Services
 
             if (identityResult.Succeeded)
             {
-               
+                // Assign the default role, e.g., "User"
+                var roleResult = await _userManager.AddToRoleAsync(user, "User");
 
-                message = "OK";
+                if (roleResult.Succeeded)
+                {
+                    message = "OK";
+                }
+                else
+                {
+                    // If assigning the role fails, delete the user to avoid having a user without a role
+                    await _userManager.DeleteAsync(user);
+                    message = string.Join(", ", roleResult.Errors.Select(e => e.Description));
+                }
             }
             else
             {
-                foreach (var error in identityResult.Errors)
-                {
-                    message = error.Description;
-                }
+                message = string.Join(", ", identityResult.Errors.Select(e => e.Description));
             }
             return message;
         }
+
 
 
         public async Task<string> FindByNameAsync(LoginViewModel model)

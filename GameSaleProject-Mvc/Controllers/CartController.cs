@@ -36,6 +36,7 @@ namespace GameSaleProject_Mvc.Controllers
 
             return View(cartViewModel);
         }
+
         [HttpPost]
         public async Task<IActionResult> AddToCart(int gameId, decimal price)
         {
@@ -110,8 +111,7 @@ namespace GameSaleProject_Mvc.Controllers
         public async Task<IActionResult> Payment(PaymentViewModel model)
         {
             if (ModelState.IsValid)
-            {
-                // Since this is symbolic, no actual payment processing occurs
+            {               
                 var userName = User.Identity.Name;
                 var gameSale = await _cartService.CheckoutAsync(userName);
 

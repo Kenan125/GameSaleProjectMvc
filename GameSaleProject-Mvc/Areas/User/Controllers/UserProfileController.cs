@@ -2,6 +2,7 @@
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace GameSaleProject_Mvc.Areas.User.Controllers
 {
@@ -22,6 +23,8 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            ViewBag.ActivePage = "UserDetails"; // Set the active page for the sidebar
+
             var userName = User.Identity.Name;
 
             if (string.IsNullOrEmpty(userName))
@@ -38,9 +41,12 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
 
             return View(user); // Pass the UserViewModel to the view
         }
+
         [HttpGet]
         public async Task<IActionResult> OwnedGames()
         {
+            ViewBag.ActivePage = "OwnedGames"; // Set the active page for the sidebar
+
             var userName = User.Identity.Name;
 
             if (string.IsNullOrEmpty(userName))
@@ -69,6 +75,8 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
         [HttpGet]
         public async Task<IActionResult> PurchaseHistory()
         {
+            ViewBag.ActivePage = "PurchaseHistory"; 
+
             var userName = User.Identity.Name;
 
             if (string.IsNullOrEmpty(userName))
@@ -90,18 +98,17 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
                 PurchaseDate = purchase.CreatedDate,
                 TotalAmount = purchase.TotalPrice,
                 PurchasedGames = purchase.GameSaleDetails?
-        .Where(detail => detail.Game != null)
-        .Select(detail => new PurchasedGameViewModel
-        {
-            GameName = detail.Game?.GameName,
-            Price = detail.UnitPrice,
-            Discount = detail.Discount, // Use the discount from GameSaleDetail
-            CoverImageUrl = detail.Game?.Images?.FirstOrDefault()?.ImageUrl
-        }).ToList() ?? new List<PurchasedGameViewModel>()
+                    .Where(detail => detail.Game != null)
+                    .Select(detail => new PurchasedGameViewModel
+                    {
+                        GameName = detail.Game?.GameName,
+                        Price = detail.UnitPrice,
+                        Discount = detail.Discount, // Use the discount from GameSaleDetail
+                        CoverImageUrl = detail.Game?.Images?.FirstOrDefault()?.ImageUrl
+                    }).ToList() ?? new List<PurchasedGameViewModel>()
             }).ToList();
 
             return View(purchaseHistory);
         }
-
     }
 }
