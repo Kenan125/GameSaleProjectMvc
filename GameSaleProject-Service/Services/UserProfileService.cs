@@ -1,4 +1,5 @@
-﻿using GameSaleProject_DataAccess.Contexts;
+﻿using AutoMapper;
+using GameSaleProject_DataAccess.Contexts;
 using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
@@ -19,15 +20,17 @@ namespace GameSaleProject_Service.Services
         private readonly GameSaleProjectDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public UserProfileService(GameSaleProjectDbContext context, UserManager<AppUser> userManager, IUnitOfWork unitOfWork)
+        public UserProfileService(GameSaleProjectDbContext context, UserManager<AppUser> userManager, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _context = context;
             _userManager = userManager;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<List<Game>> GetOwnedGamesAsync(int userId)
+        public async Task<List<GameViewModel>> GetOwnedGamesAsync(int userId)
         {
             var gameSales = await _context.GameSales
                 .Include(gs => gs.GameSaleDetails)
@@ -39,7 +42,7 @@ namespace GameSaleProject_Service.Services
                                       .Distinct()
                                       .ToList();
 
-            return ownedGames;
+            return _mapper.Map<List<GameViewModel>>(ownedGames);
         }
         public async Task<List<GameSale>> GetPurchaseHistoryAsync(int userId)
         {

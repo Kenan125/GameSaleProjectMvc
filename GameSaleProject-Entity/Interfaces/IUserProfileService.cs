@@ -11,7 +11,7 @@ namespace GameSaleProject_Entity.Interfaces
 {
     public interface IUserProfileService
     {
-        Task<List<Game>> GetOwnedGamesAsync(int userId);
+        Task<List<GameViewModel>> GetOwnedGamesAsync(int userId);
         Task<List<GameSale>> GetPurchaseHistoryAsync(int userId);
         Task<AppUser> GetUserProfileAsync(int userId);
         Task<bool> RefundGameAsync(int userId, int gameId);
