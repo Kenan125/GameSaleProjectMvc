@@ -95,26 +95,11 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
             if (!userPurchases.Any())
             {
                 ViewBag.Message = "You have not made any purchases yet.";
-                return View(new List<PurchaseHistoryViewModel>());
+                return View(new List<GameSaleViewModel>());
             }
 
-            var purchaseHistory = userPurchases.Select(purchase => new PurchaseHistoryViewModel
-            {
-                OrderId = purchase.Id,
-                PurchaseDate = purchase.CreatedDate,
-                TotalAmount = purchase.TotalPrice,
-                PurchasedGames = purchase.GameSaleDetails?
-                    .Where(detail => detail.Game != null)
-                    .Select(detail => new PurchasedGameViewModel
-                    {
-                        GameName = detail.Game?.GameName,
-                        Price = detail.UnitPrice,
-                        Discount = detail.Discount,
-                        CoverImageUrl = detail.Game?.Images?.FirstOrDefault()?.ImageUrl
-                    }).ToList() ?? new List<PurchasedGameViewModel>()
-            }).ToList();
-
-            return View(purchaseHistory);
+            // Directly return the list of GameSaleViewModel for the view to consume
+            return View(userPurchases);
         }
     }
 }

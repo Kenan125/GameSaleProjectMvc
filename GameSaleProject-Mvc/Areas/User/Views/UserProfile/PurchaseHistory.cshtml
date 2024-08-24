@@ -1,4 +1,4 @@
-﻿@model List<GameSaleProject_Entity.ViewModels.PurchaseHistoryViewModel>
+﻿@model List<GameSaleProject_Entity.ViewModels.GameSaleViewModel>
 @{
     ViewData["Title"] = "PurchaseHistory";
     Layout = "~/Areas/User/Views/Shared/_LayoutUser.cshtml";
@@ -21,19 +21,19 @@
             <tbody>
                 @foreach (var purchase in Model)
                 {
-                    <tr class=" text-white">
-                        <td>@purchase.OrderId</td>
-                        <td>@purchase.PurchaseDate.ToString("dd MMM yyyy HH:mm")</td>
-                        <td>@purchase.TotalAmount.ToString("C")</td>
+                    <tr class="text-white">
+                        <td>@purchase.Id</td>
+                        <td>@purchase.CreatedDate.ToString("dd MMM yyyy HH:mm")</td>
+                        <td>@purchase.TotalPrice.ToString("C")</td>
                         <td>
-                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#details-@purchase.OrderId" aria-expanded="false" aria-controls="details-@purchase.OrderId">
+                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#details-@purchase.Id" aria-expanded="false" aria-controls="details-@purchase.Id">
                                 View Details
                             </button>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="4" class="text-white">
-                            <div class="collapse" id="details-@purchase.OrderId">
+                            <div class="collapse" id="details-@purchase.Id">
                                 <div class="card card-body">
                                     <table class="table">
                                         <thead>
@@ -41,26 +41,24 @@
                                                 <th>Game Name</th>
                                                 <th>Price</th>
                                                 <th>Discount</th>
-                                                
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var game in purchase.PurchasedGames)
+                                            @foreach (var game in purchase.GameSaleDetails)
                                             {
                                                 <tr>
-                                                    <td>@game.GameName</td>
-                                                    <td>@game.Price.ToString("C")</td>
+                                                    <td>@game.Game.GameName</td>
+                                                    <td>@game.UnitPrice.ToString("C")</td>
                                                     <td>
-                                                        @if (game.Discount.HasValue && game.Discount.Value > 0)
+                                                        @if (game.Discount > 0)
                                                         {
-                                                            @($"{game.Discount.Value}%")
+                                                            @($"{game.Discount}%")
                                                         }
                                                         else
                                                         {
                                                             @("No Discount")
                                                         }
                                                     </td>
-                                                    
                                                 </tr>
                                             }
                                         </tbody>
@@ -80,4 +78,3 @@ else
         @ViewBag.Message
     </div>
 }
-

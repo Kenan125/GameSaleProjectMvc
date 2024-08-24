@@ -44,7 +44,7 @@ namespace GameSaleProject_Service.Services
 
             return _mapper.Map<List<GameViewModel>>(ownedGames);
         }
-        public async Task<List<GameSale>> GetPurchaseHistoryAsync(int userId)
+        public async Task<List<GameSaleViewModel>> GetPurchaseHistoryAsync(int userId)
         {
             var purchaseHistory = await _context.GameSales
                 .Include(gs => gs.GameSaleDetails)
@@ -53,15 +53,15 @@ namespace GameSaleProject_Service.Services
                 .OrderByDescending(gs => gs.CreatedDate)
                 .ToListAsync();
 
-            return purchaseHistory;
+            return _mapper.Map<List<GameSaleViewModel>>(purchaseHistory);
         }
-        public async Task<AppUser> GetUserProfileAsync(int userId)
+        public async Task<UserViewModel> GetUserProfileAsync(int userId)
         {
             var user = await _userManager.Users
                 .Where(u => u.Id == userId)
                 .FirstOrDefaultAsync();
 
-            return user;
+            return _mapper.Map<UserViewModel>(user);
         }
 
         public async Task<bool> RefundGameAsync(int userId, int gameId)
