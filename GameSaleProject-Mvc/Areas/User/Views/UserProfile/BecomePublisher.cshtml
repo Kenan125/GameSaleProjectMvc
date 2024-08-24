@@ -1,0 +1,26 @@
+﻿@model GameSaleProject_Entity.ViewModels.PublisherViewModel
+
+@{
+    ViewData["Title"] = "Become Publisher";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Become a Publisher</h2>
+
+<form asp-action="BecomePublisher" method="post">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" placeholder="Enter Publisher Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register as Publisher</button>
+</form>
+
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

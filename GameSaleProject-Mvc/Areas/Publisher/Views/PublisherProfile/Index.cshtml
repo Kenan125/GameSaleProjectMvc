@@ -1,0 +1,101 @@
+﻿@model GameSaleProject_Entity.ViewModels.PublisherViewModel
+
+@{
+    ViewData["Title"] = "Publisher Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Name's Profile</h2>
+
+<div class="form-group">
+    <label>First Name:</label>
+    <p>@Model.User.FirstName</p>
+</div>
+<div class="form-group">
+    <label>Last Name:</label>
+    <p>@Model.User.LastName</p>
+</div>
+<div class="form-group">
+    <label>User Name:</label>
+    <p>@Model.User.UserName</p>
+</div>
+<div class="form-group">
+    <label>Email:</label>
+    <p>@Model.User.Email</p>
+</div>
+<div class="form-group">
+    <label>Phone Number:</label>
+    <p>@Model.User.PhoneNumber</p>
+</div>
+
+<h3>Games Published</h3>
+@if (Model.Games != null && Model.Games.Any())
+{
+    <div class="col-md-8">
+        @foreach (var game in Model.Games)
+        {
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    @if (game.Images != null && game.Images.Any(img => img.ImageType == "card"))
+                    {
+                        var cardImage = game.Images.First(img => img.ImageType == "card");
+                        <img src="@cardImage.ImageUrl" class="card-img-top" alt="@game.GameName" />
+                    }
+                    else
+                    {
+                        <img src="/images/placeholder.png" class="card-img-top" alt="No Image Available" />
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@game.GameName</h5>
+                        <p class="card-text">@game.Description</p>
+                        <p class="card-text">
+                            @if (game.Price == 0)
+                            {
+                                <span class="text-success">Free</span>
+                            }
+                            @if (game.Discount > 0)
+                            {
+                                <span class="text-decoration-line-through">@game.Price.ToString("C")</span>
+                                <span class="text-danger">@(((decimal)game.Price * (decimal)(1 - (decimal)game.Discount / 100)).ToString("C"))</span>
+                            }
+                            else if (game.Price != 0)
+                            {
+                                <span>@game.Price.ToString("C")</span>
+                            }
+                        </p>
+
+                        <!-- Details Button -->
+                        <a href="@Url.Action("Detail", "Game", new { id = game.Id })" class="btn btn-info">Details</a>
+
+                        <!-- Update Game Button -->
+                        <a href="@Url.Action("UpdateGame", "Game", new { id = game.Id })" class="btn btn-primary">Update Game</a>
+
+                        <!-- Conditionally display "In Library" or "Add to Cart" -->
+                        @if (game.IsInLibrary)
+                        {
+                            <button class="btn btn-success" disabled>In Library</button>
+                        }
+                        else
+                        {
+                            <!-- Add to Cart Button -->
+                            <form action="@Url.Action("AddToCart", "Cart")" method="post" style="display:inline;">
+                                <input type="hidden" name="gameId" value="@game.Id" />
+                                <input type="hidden" name="price" value="@(((decimal)game.Price * (decimal)(1 - (decimal)game.Discount / 100)))" />
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </form>
+                        }
+
+                        <!-- Delete Game Button -->
+                        <form action="@Url.Action("DeleteGame", "Game", new { id = game.Id })" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this game?');">Delete Game</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No games published yet.</p>
+}

@@ -132,6 +132,7 @@
 
     @if (isPublisher)
     {
+        <!-- Add Game Button for Publishers -->
         <div class="sidebar-item become-publisher @(ViewBag.ActivePage == "AddGame" ? "sidebar-item__active" : "")">
             <a class="sidebar-item__icon" asp-area="Publisher" asp-controller="PublisherProfile" asp-action="AddGame">
                 <i class="bi bi-plus-circle"></i>
@@ -141,6 +142,7 @@
     }
     else
     {
+        <!-- Become Publisher Button for Users -->
         <div class="sidebar-item become-publisher @(ViewBag.ActivePage == "BecomePublisher" ? "sidebar-item__active" : "")">
             <a class="sidebar-item__icon" asp-area="User" asp-controller="UserProfile" asp-action="BecomePublisher">
                 <i class="bi bi-joystick"></i>

@@ -196,15 +196,19 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> BecomePublisher(PublisherViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
+            // Ensure the user is authenticated
             var user = await GetAuthenticatedUserAsync();
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
+            }
+
+            // Set the UserId in the model
+            //model.UserId = user.Id;
+            ModelState.Remove("User");
+            if (!ModelState.IsValid)
+            {
+                return View(model);
             }
 
             // Delegate the registration of the publisher to the PublisherService
@@ -220,6 +224,8 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
 
             return RedirectToAction("Index", new { Message = "You have successfully registered as a publisher." });
         }
+
+
 
 
 

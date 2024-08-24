@@ -66,8 +66,10 @@ namespace GameSaleProject_Service.Services
         }
         public async Task<PublisherViewModel> GetPublisherByUserIdAsync(int userId)
         {
-            var publisher = await _unitOfWork.GetRepository<Publisher>().Get(
-                filter: p => p.UserId == userId
+            var publisher = await _unitOfWork.GetRepository<Publisher>().GetAll(
+                filter: p => p.UserId == userId,
+                includes: p=>p.Games
+
             );
 
             if (publisher == null)
@@ -75,7 +77,7 @@ namespace GameSaleProject_Service.Services
                 return null;
             }
 
-            return _mapper.Map<PublisherViewModel>(publisher);
+            return _mapper.Map<PublisherViewModel>(publisher.FirstOrDefault());
         }
     }
 }

@@ -1,16 +1,7 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using GameSaleProject_Entity.Identity
-@inject UserManager<AppUser> UserManager
-@inject SignInManager<AppUser> SignInManager
-
-@{
+﻿@{
     Layout = null;
     ViewBag.IsCollapsed = ViewBag.IsCollapsed ?? false;  // Ensure IsCollapsed is always a boolean
     ViewBag.ToggleIcon = ViewBag.IsCollapsed ? "<i class='bi bi-chevron-right'></i>" : "<i class='bi bi-chevron-left'></i>";
-    var user = await UserManager.GetUserAsync(User);
-    var roles = await UserManager.GetRolesAsync(user);
-    var isPublisher = roles.Contains("Publisher");
-    
 }
 
 <style>
@@ -129,25 +120,13 @@
         </a>
         <a class="sidebar-item__title" asp-area="User" asp-controller="UserProfile" asp-action="EditProfile">Edit Profile</a>
     </div>
-
-    @if (isPublisher)
-    {
-        <div class="sidebar-item become-publisher @(ViewBag.ActivePage == "AddGame" ? "sidebar-item__active" : "")">
-            <a class="sidebar-item__icon" asp-area="Publisher" asp-controller="PublisherProfile" asp-action="AddGame">
-                <i class="bi bi-plus-circle"></i>
-            </a>
-            <a class="sidebar-item__title" asp-area="Publisher" asp-controller="PublisherProfile" asp-action="AddGame">Add Game</a>
-        </div>
-    }
-    else
-    {
-        <div class="sidebar-item become-publisher @(ViewBag.ActivePage == "BecomePublisher" ? "sidebar-item__active" : "")">
-            <a class="sidebar-item__icon" asp-area="User" asp-controller="UserProfile" asp-action="BecomePublisher">
-                <i class="bi bi-joystick"></i>
-            </a>
-            <a class="sidebar-item__title" asp-area="User" asp-controller="UserProfile" asp-action="BecomePublisher">Become Publisher</a>
-        </div>
-    }
+    <div class="sidebar-item @(ViewBag.ActivePage == "AddGame" ? "sidebar-item__active" : "")">
+        <a class="sidebar-item__icon" asp-area="Publisher" asp-controller="PublisherProfile" asp-action="AddGame">
+            <i class="bi bi-pencil-square"></i>
+        </a>
+        <a class="sidebar-item__title" asp-area="Publisher" asp-controller="PublisherProfile" asp-action="AddGame">Add Game</a>
+    </div>
+        
 </div>
 
 <script>

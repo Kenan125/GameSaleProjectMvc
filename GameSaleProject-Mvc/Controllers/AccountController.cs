@@ -10,17 +10,20 @@ namespace GameSaleProject_Mvc.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public AccountController(IAccountService accountService, SignInManager<AppUser> signInManager)
+        public AccountController(IAccountService accountService, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
         {
             _accountService = accountService;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
         {
             return View();
         }
+
         [HttpGet]
         public IActionResult Login(string? ReturnUrl)
         {
@@ -31,6 +34,7 @@ namespace GameSaleProject_Mvc.Controllers
             TempData["message"] = null;
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -40,10 +44,22 @@ namespace GameSaleProject_Mvc.Controllers
 
                 if (result == "OK")
                 {
+                    var user = await _userManager.FindByNameAsync(model.UserName);
+                    var roles = await _userManager.GetRolesAsync(user);
 
-
-                    return LocalRedirect(model.ReturnUrl ?? Url.Content("~/")); ;
-
+                    // Redirect based on role
+                    if (roles.Contains("Admin"))
+                    {
+                        return RedirectToAction("Index", "Home", new { area = "Admin" });
+                    }
+                    else if (roles.Contains("Publisher"))
+                    {
+                        return RedirectToAction("Index", "PublisherProfile", new { area = "Publisher" });
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "UserProfile", new { area = "User" });
+                    }
                 }
                 else
                 {
@@ -53,10 +69,12 @@ namespace GameSaleProject_Mvc.Controllers
             model.ReturnUrl = model.ReturnUrl ?? Url.Content("~/");
             return View(model);
         }
+
         public IActionResult Register()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model, IFormFile formFile)
         {
@@ -89,6 +107,5 @@ namespace GameSaleProject_Mvc.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-
     }
 }

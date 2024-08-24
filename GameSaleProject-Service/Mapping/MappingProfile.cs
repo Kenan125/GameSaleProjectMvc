@@ -23,7 +23,9 @@ namespace GameSaleProject_Service.Mapping
 
             CreateMap<Category, CategoryViewModel>().ReverseMap();
             CreateMap<Image, ImageViewModel>().ReverseMap();
-            CreateMap<Publisher, PublisherViewModel>().ReverseMap();
+            CreateMap<Publisher, PublisherViewModel>()
+            .ForMember(dest => dest.Games, opt => opt.MapFrom(src => src.Games))
+            .ReverseMap();
             CreateMap<GameSale, GameSaleViewModel>().ReverseMap();
             CreateMap<GameSaleDetail, GameSaleDetailViewModel>().ReverseMap();
             CreateMap<AppRole, RoleViewModel>().ReverseMap();

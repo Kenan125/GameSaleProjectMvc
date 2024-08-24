@@ -30,7 +30,6 @@
     <Folder Include="Areas\Publisher\Controllers\" />
     <Folder Include="Areas\Publisher\Data\" />
     <Folder Include="Areas\Publisher\Models\" />
-    <Folder Include="Areas\Publisher\Views\" />
     <Folder Include="Areas\User\Data\" />
     <Folder Include="Areas\User\Models\" />
     <Folder Include="Views\Shared\Components\Category\" />
