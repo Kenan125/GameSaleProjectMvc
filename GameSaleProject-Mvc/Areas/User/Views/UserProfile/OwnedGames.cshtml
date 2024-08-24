@@ -13,8 +13,7 @@
         @foreach (var game in Model)
         {
             <div class="col">
-                <div class="card h-100 text-light bg-dark">
-                    <!-- Display game image or a placeholder if no image is available -->
+                <div class="card h-100 text-light bg-dark">                   
                     @if (game.Images != null && game.Images.Any(img => img.ImageType == "card"))
                     {
                         var cardImage = game.Images.First(img => img.ImageType == "card");

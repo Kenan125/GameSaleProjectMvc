@@ -89,16 +89,14 @@ namespace GameSaleProject_Service.Services
                 return false;
             }
 
-
             if (!string.IsNullOrEmpty(model.ProfilePictureUrl))
             {
                 user.ProfilePictureUrl = model.ProfilePictureUrl;
             }
 
-
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-
+            user.Email = model.Email;
 
             if (!string.IsNullOrEmpty(model.UserName) && model.UserName != user.UserName)
             {
@@ -113,9 +111,7 @@ namespace GameSaleProject_Service.Services
                 }
             }
 
-
             user.PhoneNumber = model.PhoneNumber;
-
 
             if (!string.IsNullOrEmpty(model.CurrentPassword) && !string.IsNullOrEmpty(model.NewPassword))
             {
@@ -126,11 +122,10 @@ namespace GameSaleProject_Service.Services
                 }
             }
 
-
             var result = await _userManager.UpdateAsync(user);
-
             return result.Succeeded;
         }
+
 
         public async Task DeleteUserAndRelatedDataAsync(int userId)
         {

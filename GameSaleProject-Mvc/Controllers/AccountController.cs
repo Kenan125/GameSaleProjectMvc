@@ -26,7 +26,7 @@ namespace GameSaleProject_Mvc.Controllers
         {
             LoginViewModel model = new LoginViewModel()
             {
-                ReturnUrl = ReturnUrl ?? Url.Content("~/") 
+                ReturnUrl = ReturnUrl ?? Url.Content("~/")
             };
             TempData["message"] = null;
             return View(model);
@@ -43,7 +43,7 @@ namespace GameSaleProject_Mvc.Controllers
 
 
                     return LocalRedirect(model.ReturnUrl ?? Url.Content("~/")); ;
-                    
+
                 }
                 else
                 {
@@ -53,7 +53,7 @@ namespace GameSaleProject_Mvc.Controllers
             model.ReturnUrl = model.ReturnUrl ?? Url.Content("~/");
             return View(model);
         }
-        public IActionResult Register() 
+        public IActionResult Register()
         {
             return View();
         }

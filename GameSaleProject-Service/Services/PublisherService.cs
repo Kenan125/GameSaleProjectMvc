@@ -43,17 +43,26 @@ namespace GameSaleProject_Service.Services
                 Name = publisher.Name
             };
         }
-        public async Task CreatePublisherAsync(PublisherViewModel model, int userId)
+        public async Task<bool> CreatePublisherAsync(PublisherViewModel model, int userId)
         {
-            var publisher = new Publisher
+            try
             {
-                Name = model.Name,
-                UserId = userId,
-                
-            };
+                var publisher = new Publisher
+                {
+                    Name = model.Name,
+                    UserId = userId,
+                };
 
-            await _unitOfWork.GetRepository<Publisher>().Add(publisher);
-            await _unitOfWork.CommitAsync();
+                await _unitOfWork.GetRepository<Publisher>().Add(publisher);
+                await _unitOfWork.CommitAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                // Handle exceptions, log them if necessary
+                return false;
+            }
         }
         public async Task<PublisherViewModel> GetPublisherByUserIdAsync(int userId)
         {

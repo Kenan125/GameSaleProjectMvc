@@ -14,7 +14,7 @@
         padding: 24px 16px;
         transition: width 0.4s ease;
         color: #f1f1f1; /* Light text color */
-        height:100%;
+        height: 100%;
     }
 
         .sidebar.collapsed {
@@ -49,11 +49,12 @@
         font-weight: 500;
         color: #f1f1f1; /* Light text color */
         transition: all 0.4s ease;
+        border-radius: 12px; /* Rounded corners for all items */
     }
 
     .sidebar-item__active {
         background-color: #333; /* Slightly lighter dark color */
-        border-radius: 8px;
+        border-radius: 12px;
     }
 
     .sidebar-item__icon {
@@ -78,6 +79,17 @@
         .sidebar-item a:hover {
             color: #ddd; /* Slightly lighter on hover */
         }
+
+    /* New style for the red Become Publisher button */
+    .sidebar-item.become-publisher {
+        background-color: #ff4d4d; /* Red background */
+        color: #fff; /* White text color */
+        border-radius: 12px; /* Rounded corners */
+    }
+
+        .sidebar-item.become-publisher:hover {
+            background-color: #ff6666; /* Lighter red on hover */
+        }
 </style>
 
 <div class="sidebar @(ViewBag.IsCollapsed ? "collapsed" : "")" id="sidebar">
@@ -85,22 +97,36 @@
         <span id="toggleIcon">@Html.Raw(ViewBag.ToggleIcon)</span>
     </button>
     <div class="sidebar-item @(ViewBag.ActivePage == "UserDetails" ? "sidebar-item__active" : "")">
-        <div class="sidebar-item__icon">
+        <a class="sidebar-item__icon" asp-area="User" asp-controller="UserProfile" asp-action="Index">
             <i class="bi bi-person"></i>
-        </div>
+        </a>
         <a class="sidebar-item__title" asp-area="User" asp-controller="UserProfile" asp-action="Index">User Details</a>
     </div>
     <div class="sidebar-item @(ViewBag.ActivePage == "OwnedGames" ? "sidebar-item__active" : "")">
-        <div class="sidebar-item__icon">
+        <a class="sidebar-item__icon" asp-area="User" asp-controller="UserProfile" asp-action="OwnedGames">
             <i class="bi bi-collection"></i>
-        </div>
-        <a class="sidebar-item__title" asp-area="User" asp-controller="UserProfile" asp-action="OwnedGames">Owned Games</a>
+        </a>
+        <a class="sidebar-item__title" asp-area="User" asp-controller="UserProfile" asp-action="OwnedGames">Library</a>
     </div>
     <div class="sidebar-item @(ViewBag.ActivePage == "PurchaseHistory" ? "sidebar-item__active" : "")">
-        <div class="sidebar-item__icon">
+        <a class="sidebar-item__icon" asp-area="User" asp-controller="UserProfile" asp-action="PurchaseHistory">
             <i class="bi bi-clock-history"></i>
-        </div>
+        </a>
         <a class="sidebar-item__title" asp-area="User" asp-controller="UserProfile" asp-action="PurchaseHistory">Purchase History</a>
+    </div>
+    <div class="sidebar-item @(ViewBag.ActivePage == "EditProfile" ? "sidebar-item__active" : "")">
+        <a class="sidebar-item__icon" asp-area="User" asp-controller="UserProfile" asp-action="EditProfile">
+            <i class="bi bi-pencil-square"></i>
+        </a>
+        <a class="sidebar-item__title" asp-area="User" asp-controller="UserProfile" asp-action="EditProfile">Edit Profile</a>
+    </div>
+
+    <!-- Become Publisher Button -->
+    <div class="sidebar-item become-publisher @(ViewBag.ActivePage == "BecomePublisher" ? "sidebar-item__active" : "")">
+        <a class="sidebar-item__icon" asp-area="User" asp-controller="UserProfile" asp-action="BecomePublisher">
+            <i class="bi bi-joystick"></i>
+        </a>
+        <a class="sidebar-item__title" asp-area="User" asp-controller="UserProfile" asp-action="BecomePublisher">Become Publisher</a>
     </div>
 </div>
 
@@ -113,7 +139,7 @@
         if (sidebar.classList.contains("collapsed")) {
             toggleIcon.innerHTML = "<i class='bi bi-chevron-right'></i>";
         } else {
-            toggleIcon.innerHTML = "<i class='bi bi-chevron-left'></i>";
+            toggleIcon.innerHTML = "<i class='bi-chevron-left'></i>";
         }
     }
 </script>
