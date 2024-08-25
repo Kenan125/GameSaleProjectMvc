@@ -30,44 +30,28 @@ namespace GameSaleProject_Mvc.Controllers
             _accountService = accountService;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(string searchTerm)
         {
-            var userName = User.Identity.Name;
+            List<GameViewModel> games;
 
-            // Retrieve all games, categories, and publishers
-            var games = await _gameService.GetAllGamesAsync();
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                // Perform search if a search term is provided
+                games = await _gameService.SearchGamesAsync(searchTerm);
+            }
+            else
+            {
+                // Otherwise, retrieve all games
+                games = await _gameService.GetAllGamesAsync();
+            }
+
             var categories = await _categoryService.GetAllCategoriesAsync();
             var publishers = await _publisherService.GetAllPublishersAsync();
 
-            games = games.Where(g => !g.IsDeleted).ToList();
-
-            // Retrieve user's purchase history
-            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
-            var purchasedGameIds = userPurchases.SelectMany(purchase => purchase.GameSaleDetails)
-                                                .Select(detail => detail.GameId)
-                                                .ToHashSet();
-
-
-            var gameViewModels = games.Select(game => new GameViewModel
-            {
-                Id = game.Id,
-                GameName = game.GameName,
-                Price = game.Price,
-                Discount = game.Discount,
-                IsInLibrary = purchasedGameIds.Contains(game.Id),
-                Images = game.Images.Select(img => new ImageViewModel
-                {
-                    Id = img.Id,
-                    Name = img.Name,
-                    ImageUrl = img.ImageUrl,
-                    ImageType = img.ImageType
-                }).ToList(),
-            }).ToList();
-
-            // Prepare the model for the view
             var model = new GameCategoryPublisherViewModel
             {
-                Games = gameViewModels,
+                Games = games,
                 Categories = categories,
                 Publishers = publishers
             };
@@ -75,17 +59,14 @@ namespace GameSaleProject_Mvc.Controllers
             return View(model);
         }
 
-
         public async Task<IActionResult> Detail(int id)
         {
-            // Retrieve the game data
+            
             var game = await _gameService.GetGameByIdAsync(id);
             if (game == null)
             {
                 return NotFound();
             }
-
-
             var publisher = await _publisherService.GetPublisherByIdAsync(game.PublisherId);
 
             var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
@@ -120,7 +101,6 @@ namespace GameSaleProject_Mvc.Controllers
             return View(model);
         }
 
-
         [HttpGet]
         [Authorize(Roles = "Publisher, Admin")]
         public async Task<IActionResult> AddGame()
@@ -140,7 +120,6 @@ namespace GameSaleProject_Mvc.Controllers
             }
             return View(model);
         }
-
 
         public async Task<IActionResult> FilterByCategory(int categoryId)
         {
@@ -170,9 +149,6 @@ namespace GameSaleProject_Mvc.Controllers
 
             return View(game);
         }
-
-
-
 
         [HttpPost]
         public async Task<IActionResult> UpdateGame(GameViewModel model, IFormFile cardImage, List<IFormFile> DisplayImages)
@@ -237,9 +213,6 @@ namespace GameSaleProject_Mvc.Controllers
             return View(model);
         }
 
-
-
-
         [HttpPost]
         [Authorize(Roles = "Publisher, Admin")]
         public async Task<IActionResult> DeleteGame(int id)
@@ -252,25 +225,21 @@ namespace GameSaleProject_Mvc.Controllers
         [HttpPost]
         [Authorize(Roles = "Publisher, Admin")]
         public async Task<IActionResult> DeleteImage(int imageId, int gameId)
-        {
-            // Fetch the game associated with the image
+        {            
             var game = await _gameService.GetGameByIdAsync(gameId);
             if (game == null)
             {
                 return NotFound();
             }
-
-            // Find the image to be deleted
+          
             var image = game.Images.FirstOrDefault(img => img.Id == imageId);
             if (image == null)
             {
                 return NotFound();
             }
-
-            // Remove the image from the collection
+          
             game.Images.Remove(image);
-
-            // Update the game with the updated image list
+       
             var result = await _gameService.UpdateGameAsync(game);
 
             if (result != "Game updated successfully.")
@@ -278,8 +247,7 @@ namespace GameSaleProject_Mvc.Controllers
                 TempData["Message"] = "Failed to delete the image.";
                 return RedirectToAction("UpdateGame", new { id = gameId });
             }
-
-            // Optionally, delete the image file from the server
+         
             var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.ImageUrl.TrimStart('/'));
             if (System.IO.File.Exists(imagePath))
             {

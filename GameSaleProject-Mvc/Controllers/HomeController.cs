@@ -21,7 +21,7 @@ namespace GameSaleProject_Mvc.Controllers
             var gamesWithImages = await _gameService.GetAllGamesAsync();
             return View(gamesWithImages);
         }
-        public IActionResult Privacy()
+        public IActionResult About()
         {
             return View();
         }

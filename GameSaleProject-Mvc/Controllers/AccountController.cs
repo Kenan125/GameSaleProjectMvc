@@ -1,6 +1,7 @@
 ﻿using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,18 +48,28 @@ namespace GameSaleProject_Mvc.Controllers
                     var user = await _userManager.FindByNameAsync(model.UserName);
                     var roles = await _userManager.GetRolesAsync(user);
 
-                    // Redirect based on role
-                    if (roles.Contains("Admin"))
+                    // Sign in the user with the Remember Me option
+                    var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+                    if (signInResult.Succeeded)
                     {
-                        return RedirectToAction("Index", "Home", new { area = "Admin" });
-                    }
-                    else if (roles.Contains("Publisher"))
-                    {
-                        return RedirectToAction("Index", "PublisherProfile", new { area = "Publisher" });
+                        // Redirect based on role
+                        if (roles.Contains("Admin"))
+                        {
+                            return RedirectToAction("Index", "Home", new { area = "Admin" });
+                        }
+                        else if (roles.Contains("Publisher"))
+                        {
+                            return RedirectToAction("Index", "PublisherProfile", new { area = "Publisher" });
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "UserProfile", new { area = "User" });
+                        }
                     }
                     else
                     {
-                        return RedirectToAction("Index", "UserProfile", new { area = "User" });
+                        ModelState.AddModelError("", "Invalid login attempt.");
                     }
                 }
                 else
@@ -66,9 +77,11 @@ namespace GameSaleProject_Mvc.Controllers
                     ModelState.AddModelError("", result);
                 }
             }
+
             model.ReturnUrl = model.ReturnUrl ?? Url.Content("~/");
             return View(model);
         }
+
 
         public IActionResult Register()
         {
@@ -101,7 +114,7 @@ namespace GameSaleProject_Mvc.Controllers
 
             return View(model);
         }
-
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

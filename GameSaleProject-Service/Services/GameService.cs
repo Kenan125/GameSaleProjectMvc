@@ -102,12 +102,22 @@ namespace GameSaleProject_Service.Services
 
         public async Task<List<GameViewModel>> SearchGamesAsync(string searchTerm)
         {
+            searchTerm = searchTerm.ToLower();
+
             var games = await _unitOfWork.GetRepository<Game>().GetAllAsync(
-                filter: g => g.GameName.Contains(searchTerm) || g.Description.Contains(searchTerm)
+                filter: g => g.GameName.ToLower().Contains(searchTerm) ||
+                             g.Description.ToLower().Contains(searchTerm),
+                includes: new Expression<Func<Game, object>>[]
+                {
+            g => g.Images,
+            g => g.Reviews,
+            g => g.Publisher
+                }
             );
 
             return _mapper.Map<List<GameViewModel>>(games);
         }
+
 
         public async Task<string> UpdateGameAsync(GameViewModel model)
         {
