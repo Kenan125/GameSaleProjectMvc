@@ -32,20 +32,21 @@ namespace GameSaleProject_DataAccess.Contexts
                       .HasDefaultValue("/images/DefaultPfp.jpg");
             });
 
-            // Cascade delete from User to Publisher
+            
             modelBuilder.Entity<Publisher>()
                 .HasOne(p => p.User)
                 .WithMany()
-                .HasForeignKey(p => p.UserId)
-                .OnDelete(DeleteBehavior.Cascade);  // When User is deleted, Publisher is deleted
+                .HasForeignKey(p => p.UserId);
+            
 
-            // Cascade delete from Publisher to Games
+            
             modelBuilder.Entity<Game>()
                 .HasOne(g => g.Publisher)
                 .WithMany(p => p.Games)
-                .HasForeignKey(g => g.PublisherId)
-                .OnDelete(DeleteBehavior.Cascade);  // When Publisher is deleted, Games are deleted
+                .HasForeignKey(g => g.PublisherId);
 
+            
+      
             modelBuilder.Entity<Game>()
             .Property(g => g.Price)
             .HasColumnType("decimal(18, 2)");
@@ -66,11 +67,7 @@ namespace GameSaleProject_DataAccess.Contexts
             .WithOne(i => i.Game)
             .HasForeignKey(i => i.GameId);
 
-            modelBuilder.Entity<Game>()
-    .HasOne(g => g.Publisher)
-    .WithMany()
-    .HasForeignKey(g => g.PublisherId)
-    .OnDelete(DeleteBehavior.Restrict);  // Use Restrict to avoid cascade path conflicts
+           
 
             modelBuilder.Entity<Game>()
                 .HasOne(g => g.Publisher)
@@ -136,19 +133,19 @@ namespace GameSaleProject_DataAccess.Contexts
 
             // Seed data for Image
             modelBuilder.Entity<Image>().HasData(
-                new Image { Id = 1, GameId = 1, ImageUrl = "/images/witcher3.jpg", Name = "witcher3" },
-                new Image { Id = 2, GameId = 2, ImageUrl = "/images/gtav.jpg", Name = "gtav" },
+                new Image { Id = 1, GameId = 1, ImageUrl = "/images/witcher3.jpg", Name = "witcher3",ImageType="card" },
+                new Image { Id = 2, GameId = 2, ImageUrl = "/images/gtav.jpg", Name = "gtav" , ImageType = "card" },
                 new Image { Id = 3, GameId = 3, ImageUrl = "/images/cyberpunk2077.jpg", Name = "cyberpunk2077" },
-                new Image { Id = 4, GameId = 4, ImageUrl = "/images/rdr2.jpg", Name = "rdr2" },
-                new Image { Id = 5, GameId = 5, ImageUrl = "/images/civ6.jpg", Name = "civ6" },
-                new Image { Id = 6, GameId = 6, ImageUrl = "/images/sims4.jpg", Name = "sims4" },
-                new Image { Id = 7, GameId = 7, ImageUrl = "/images/darksouls3.jpg", Name = "darksouls3" },
-                new Image { Id = 8, GameId = 8, ImageUrl = "/images/minecraft.jpg", Name = "minecraft" },
-                new Image { Id = 9, GameId = 9, ImageUrl = "/images/fortnite.jpg", Name = "fortnite" },
-                new Image { Id = 10, GameId = 10, ImageUrl = "/images/stardewvalley.jpg", Name = "stardewvalley" },
-                new Image { Id = 11, GameId = 7, ImageUrl = "/images/darksouls3Caus.jpg", Name = "darksouls3Caus" },
-                new Image { Id = 12, GameId = 4, ImageUrl = "/images/rdr2Caus.jpg", Name = "rdr2Caus" },
-                new Image { Id = 13, GameId = 9, ImageUrl = "/images/fortniteCaus.jpg", Name = "fortniteCaus" }
+                new Image { Id = 4, GameId = 4, ImageUrl = "/images/rdr2.jpg", Name = "rdr2", ImageType = "card" },
+                new Image { Id = 5, GameId = 5, ImageUrl = "/images/civ6.jpg", Name = "civ6", ImageType = "card" },
+                new Image { Id = 6, GameId = 6, ImageUrl = "/images/sims4.jpg", Name = "sims4", ImageType = "card" },
+                new Image { Id = 7, GameId = 7, ImageUrl = "/images/darksouls3.jpg", Name = "darksouls3", ImageType = "card" },
+                new Image { Id = 8, GameId = 8, ImageUrl = "/images/minecraft.jpg", Name = "minecraft", ImageType = "card" },
+                new Image { Id = 9, GameId = 9, ImageUrl = "/images/fortnite.jpg", Name = "fortnite", ImageType = "card" },
+                new Image { Id = 10, GameId = 10, ImageUrl = "/images/stardewvalley.jpg", Name = "stardewvalley", ImageType = "card" },
+                new Image { Id = 11, GameId = 7, ImageUrl = "/images/darksouls3Caus.jpg", Name = "darksouls3Caus", ImageType = "carousel" },
+                new Image { Id = 12, GameId = 4, ImageUrl = "/images/rdr2Caus.jpg", Name = "rdr2Caus", ImageType = "carousel" },
+                new Image { Id = 13, GameId = 9, ImageUrl = "/images/fortniteCaus.jpg", Name = "fortniteCaus", ImageType = "carousel" }
             );
 
             base.OnModelCreating(modelBuilder);

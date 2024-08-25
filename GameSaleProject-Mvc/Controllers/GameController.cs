@@ -40,12 +40,12 @@ namespace GameSaleProject_Mvc.Controllers
             games = games.Where(g => !g.IsDeleted).ToList();
 
             // Retrieve user's purchase history
-            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName); // This should be implemented in your service
+            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
             var purchasedGameIds = userPurchases.SelectMany(purchase => purchase.GameSaleDetails)
                                                 .Select(detail => detail.GameId)
                                                 .ToHashSet();
 
-            // Map games to view model and mark if they are in the user's library
+            
             var gameViewModels = games.Select(game => new GameViewModel
             {
                 Id = game.Id,
@@ -59,8 +59,7 @@ namespace GameSaleProject_Mvc.Controllers
                     Name = img.Name,
                     ImageUrl = img.ImageUrl,
                     ImageType = img.ImageType
-                }).ToList(),
-                // Add other properties as needed
+                }).ToList(),               
             }).ToList();
 
             // Prepare the model for the view
@@ -166,17 +165,55 @@ namespace GameSaleProject_Mvc.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> UpdateGame(GameViewModel model, IFormFile CardImage, List<IFormFile> DisplayImages)
+        public async Task<IActionResult> UpdateGame(GameViewModel model, IFormFile cardImage, List<IFormFile> DisplayImages)
         {
+            ModelState.Remove("cardImage");
             if (ModelState.IsValid)
             {
-                model.Images = await _gameService.HandleImageUploads(CardImage, DisplayImages);
-                var result = await _gameService.UpdateGameAsync(model);
-                if (result == "Category does not exist." || result == "Publisher does not exist.")
+
+                model.Images = model.Images ?? new List<ImageViewModel>();
+
+
+                if (cardImage != null && cardImage.Length > 0)
                 {
-                    ModelState.AddModelError("", result);
-                    ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
-                    ViewBag.Publishers = await _publisherService.GetAllPublishersAsync();
+
+                    model.Images = model.Images.Where(img => img.ImageType != "card").ToList();
+
+
+                    var cardImageUrl = await _imageService.UploadImageAsync(cardImage, "card");
+                    model.Images.Add(new ImageViewModel
+                    {
+                        Name = Path.GetFileName(cardImageUrl),
+                        ImageUrl = cardImageUrl,
+                        ImageType = "card"
+                    });
+                }
+
+
+                foreach (var displayImage in DisplayImages)
+                {
+                    if (displayImage.Length > 0)
+                    {
+                        var displayImageUrl = await _imageService.UploadImageAsync(displayImage, "display");
+                        model.Images.Add(new ImageViewModel
+                        {
+                            Name = Path.GetFileName(displayImageUrl),
+                            ImageUrl = displayImageUrl,
+                            ImageType = "display"
+                        });
+                    }
+                }
+
+
+                var result = await _gameService.UpdateGameAsync(model);
+                if (result == "Category does not exist.")
+                {
+                    ModelState.AddModelError("CategoryId", "Selected category does not exist.");
+                    return View(model);
+                }
+                if (result == "Publisher does not exist.")
+                {
+                    ModelState.AddModelError("PublisherId", "Selected publisher does not exist.");
                     return View(model);
                 }
 
@@ -184,10 +221,13 @@ namespace GameSaleProject_Mvc.Controllers
                 return RedirectToAction("Index");
             }
 
+
             ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.Publishers = await _publisherService.GetAllPublishersAsync();
             return View(model);
         }
+
+
 
 
         [HttpPost]

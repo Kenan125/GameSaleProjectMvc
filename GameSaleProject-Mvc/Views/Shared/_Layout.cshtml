@@ -35,36 +35,39 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             var user = await UserManager.GetUserAsync(User);
-                            var roles = await UserManager.GetRolesAsync(user);
-                            var profilePictureUrl = Url.Content(user?.ProfilePictureUrl);
+                            if (user != null)
+                            {
+                                var roles = await UserManager.GetRolesAsync(user);
+                                var profilePictureUrl = Url.Content(user?.ProfilePictureUrl ?? "/images/DefaultPfp.jpg");
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="@profilePictureUrl" alt="Profile Picture" class="rounded-circle" width="30" height="30" />
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    @if (roles.Contains("Admin"))
-                                    {
-                                        <li>
-                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">My Profile</a>
-                                        </li>
-                                    }
-                                    else if (roles.Contains("Publisher"))
-                                    {
-                                        <li>
-                                            <a class="dropdown-item" asp-area="Publisher" asp-controller="PublisherProfile" asp-action="Index">My Profile</a>
-                                        </li>
-                                    }
-                                    else
-                                    {
-                                        <li>
-                                            <a class="dropdown-item" asp-area="User" asp-controller="UserProfile" asp-action="Index">My Profile</a>
-                                        </li>
-                                    }
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a></li>
-                                </ul>
-                            </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="@profilePictureUrl" alt="Profile Picture" class="rounded-circle" width="30" height="30" />
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        @if (roles.Contains("Admin"))
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">My Profile</a>
+                                            </li>
+                                        }
+                                        else if (roles.Contains("Publisher"))
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" asp-area="Publisher" asp-controller="PublisherProfile" asp-action="Index">My Profile</a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" asp-area="User" asp-controller="UserProfile" asp-action="Index">My Profile</a>
+                                            </li>
+                                        }
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a></li>
+                                    </ul>
+                                </li>
+                            }
                         }
                         else
                         {
