@@ -2,11 +2,6 @@
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.UnitOfWorks;
 using GameSaleProject_Entity.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Services
 {
@@ -38,7 +33,7 @@ namespace GameSaleProject_Service.Services
                 SystemMemory = requirement.SystemMemory,
                 Storage = requirement.Storage,
                 Graphics = requirement.Graphics,
-                
+
             };
         }
         public async Task SaveSystemRequirementsAsync(SystemRequirementViewModel model)
@@ -48,7 +43,7 @@ namespace GameSaleProject_Service.Services
             var existingRequirement = await repository.Get(r => r.GameId == model.GameId);
             if (existingRequirement != null)
             {
-               
+
                 existingRequirement.OS = model.OS;
                 existingRequirement.SystemProcessor = model.SystemProcessor;
                 existingRequirement.SystemMemory = model.SystemMemory;
@@ -59,7 +54,7 @@ namespace GameSaleProject_Service.Services
             }
             else
             {
-                
+
                 var systemRequirement = new SystemRequirement
                 {
                     GameId = model.GameId,

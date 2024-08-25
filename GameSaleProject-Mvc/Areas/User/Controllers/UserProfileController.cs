@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using GameSaleProject_Entity.Entities;
-using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
-using GameSaleProject_Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameSaleProject_Mvc.Areas.User.Controllers

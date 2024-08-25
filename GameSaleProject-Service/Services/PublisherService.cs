@@ -3,11 +3,6 @@ using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.UnitOfWorks;
 using GameSaleProject_Entity.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Services
 {
@@ -68,7 +63,7 @@ namespace GameSaleProject_Service.Services
         {
             var publisher = await _unitOfWork.GetRepository<Publisher>().GetAll(
                 filter: p => p.UserId == userId,
-                includes: p=>p.Games
+                includes: p => p.Games
 
             );
 

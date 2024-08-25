@@ -1,7 +1,5 @@
-﻿using GameSaleProject_Entity.Entities;
-using GameSaleProject_Entity.Interfaces;
+﻿using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
-using GameSaleProject_Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameSaleProject_Mvc.Controllers
@@ -44,11 +42,11 @@ namespace GameSaleProject_Mvc.Controllers
 
             if (string.IsNullOrEmpty(userName))
             {
-                
+
                 return RedirectToAction("Login", "Account");
             }
 
-            
+
             var user = await _accountService.FindByUserNameAsync(userName);
 
             await _cartService.AddToCartAsync(userName, gameId, price);
@@ -92,7 +90,7 @@ namespace GameSaleProject_Mvc.Controllers
 
         public async Task<IActionResult> OrderConfirmation(int gameSaleId)
         {
-            
+
             var sale = await _gameSaleService.GetGameSaleByIdAsync(gameSaleId);
             return View(sale);
         }
@@ -111,7 +109,7 @@ namespace GameSaleProject_Mvc.Controllers
         public async Task<IActionResult> Payment(PaymentViewModel model)
         {
             if (ModelState.IsValid)
-            {               
+            {
                 var userName = User.Identity.Name;
                 var gameSale = await _cartService.CheckoutAsync(userName);
 
@@ -121,7 +119,7 @@ namespace GameSaleProject_Mvc.Controllers
                 }
 
                 return RedirectToAction("OrderConfirmation", new { gameSaleId = gameSale.Id });
-            }           
+            }
             return View(model);
         }
         [HttpPost]

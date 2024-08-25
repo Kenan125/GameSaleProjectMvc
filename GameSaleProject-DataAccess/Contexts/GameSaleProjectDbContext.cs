@@ -12,7 +12,7 @@ namespace GameSaleProject_DataAccess.Contexts
         public GameSaleProjectDbContext(DbContextOptions<GameSaleProjectDbContext> options) : base(options) { }
 
         public DbSet<Game> Games { get; set; }
-        public DbSet<Category> Categories { get; set; }       
+        public DbSet<Category> Categories { get; set; }
         public DbSet<GameSale> GameSales { get; set; }
         public DbSet<GameSaleDetail> GameSaleDetails { get; set; }
         public DbSet<Review> Reviews { get; set; }
@@ -32,21 +32,21 @@ namespace GameSaleProject_DataAccess.Contexts
                       .HasDefaultValue("/images/DefaultPfp.jpg");
             });
 
-            
+
             modelBuilder.Entity<Publisher>()
                 .HasOne(p => p.User)
                 .WithMany()
-                .HasForeignKey(p => p.UserId);
-            
+                .HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Restrict); ;
 
-            
+
+
             modelBuilder.Entity<Game>()
                 .HasOne(g => g.Publisher)
                 .WithMany(p => p.Games)
                 .HasForeignKey(g => g.PublisherId);
 
-            
-      
+
+
             modelBuilder.Entity<Game>()
             .Property(g => g.Price)
             .HasColumnType("decimal(18, 2)");
@@ -67,7 +67,7 @@ namespace GameSaleProject_DataAccess.Contexts
             .WithOne(i => i.Game)
             .HasForeignKey(i => i.GameId);
 
-           
+
 
             modelBuilder.Entity<Game>()
                 .HasOne(g => g.Publisher)
@@ -103,7 +103,7 @@ namespace GameSaleProject_DataAccess.Contexts
                 new Category { Id = 5, Name = "Simulation", Description = "Simulation games" }
             );
 
-            
+
 
             // Seed data for Game
             modelBuilder.Entity<Game>().HasData(
@@ -133,8 +133,8 @@ namespace GameSaleProject_DataAccess.Contexts
 
             // Seed data for Image
             modelBuilder.Entity<Image>().HasData(
-                new Image { Id = 1, GameId = 1, ImageUrl = "/images/witcher3.jpg", Name = "witcher3",ImageType="card" },
-                new Image { Id = 2, GameId = 2, ImageUrl = "/images/gtav.jpg", Name = "gtav" , ImageType = "card" },
+                new Image { Id = 1, GameId = 1, ImageUrl = "/images/witcher3.jpg", Name = "witcher3", ImageType = "card" },
+                new Image { Id = 2, GameId = 2, ImageUrl = "/images/gtav.jpg", Name = "gtav", ImageType = "card" },
                 new Image { Id = 3, GameId = 3, ImageUrl = "/images/cyberpunk2077.jpg", Name = "cyberpunk2077" },
                 new Image { Id = 4, GameId = 4, ImageUrl = "/images/rdr2.jpg", Name = "rdr2", ImageType = "card" },
                 new Image { Id = 5, GameId = 5, ImageUrl = "/images/civ6.jpg", Name = "civ6", ImageType = "card" },

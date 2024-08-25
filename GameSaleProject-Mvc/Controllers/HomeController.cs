@@ -1,6 +1,5 @@
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Mvc.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -21,7 +20,7 @@ namespace GameSaleProject_Mvc.Controllers
         {
             var gamesWithImages = await _gameService.GetAllGamesAsync();
             return View(gamesWithImages);
-        }       
+        }
         public IActionResult Privacy()
         {
             return View();

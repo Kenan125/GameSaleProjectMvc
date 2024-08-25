@@ -1,11 +1,10 @@
-﻿using GameSaleProject_Entity.Entities;
-using GameSaleProject_Entity.ViewModels;
+﻿using GameSaleProject_Entity.ViewModels;
 
 namespace GameSaleProject_Entity.Interfaces
 {
-    public interface ICategoryService 
+    public interface ICategoryService
     {
-        
+
         Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync();
         Task<CategoryViewModel> GetCategoryByIdAsync(int categoryId);
         Task AddCategoryAsync(CategoryViewModel model);

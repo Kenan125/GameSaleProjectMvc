@@ -3,11 +3,6 @@ using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.UnitOfWorks;
 using GameSaleProject_Entity.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Services
 {
@@ -21,7 +16,7 @@ namespace GameSaleProject_Service.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        
+
 
         public async Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync()
         {

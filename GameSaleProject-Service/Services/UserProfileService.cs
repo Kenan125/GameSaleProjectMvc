@@ -7,11 +7,6 @@ using GameSaleProject_Entity.UnitOfWorks;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Services
 {
@@ -134,7 +129,7 @@ namespace GameSaleProject_Service.Services
 
             if (publisher != null)
             {
-                
+
                 var games = await _unitOfWork.GetRepository<Game>()
                                              .GetAllAsync(g => g.PublisherId == publisher.Id);
                 foreach (var game in games)
@@ -142,11 +137,11 @@ namespace GameSaleProject_Service.Services
                     _unitOfWork.GetRepository<Game>().Delete(game);
                 }
 
-                
+
                 _unitOfWork.GetRepository<Publisher>().Delete(publisher);
             }
 
-            
+
             var user = await _unitOfWork.GetRepository<AppUser>().GetByIdAsync(userId);
             if (user != null)
             {

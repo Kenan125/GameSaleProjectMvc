@@ -2,7 +2,6 @@
 using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
-using GameSaleProject_Service.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -48,7 +47,7 @@ namespace GameSaleProject_Mvc.Areas.Publisher.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await GetAuthenticatedUserAsync();
-          
+
             var games = await _gameService.GetAllGamesAsync();
 
             var publisher = await _publisherService.GetPublisherByUserIdAsync(user.Id);
@@ -59,7 +58,7 @@ namespace GameSaleProject_Mvc.Areas.Publisher.Controllers
                 GameName = game.GameName,
                 Price = game.Price,
                 Discount = game.Discount,
-                
+
                 Images = game.Images.Select(img => new ImageViewModel
                 {
                     Id = img.Id,
@@ -150,13 +149,13 @@ namespace GameSaleProject_Mvc.Areas.Publisher.Controllers
         public async Task<IActionResult> UpdateGame(int gameId)
         {
             var user = await _accountService.FindByUserNameAsync(User.Identity.Name);
-            
+
 
             var publisher = await _publisherService.GetPublisherByUserIdAsync(user.Id);
-            
+
 
             var game = await _gameService.GetGameByIdAsync(gameId);
-            
+
 
             var categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.Categories = new SelectList(categories, "Id", "Name", game.CategoryId);

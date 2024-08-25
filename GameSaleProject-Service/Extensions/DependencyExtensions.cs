@@ -7,11 +7,6 @@ using GameSaleProject_Service.Initialization;
 using GameSaleProject_Service.Mapping;
 using GameSaleProject_Service.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Extensions
 {
@@ -32,7 +27,7 @@ namespace GameSaleProject_Service.Extensions
                     opt.User.AllowedUserNameCharacters = "zxcvbnmasdfghjklqwertyuiop1234567890"; //kullanıcı adı girilirken bunlardan başka birkarakter girilmesine izin vermez.
                     opt.Lockout.MaxFailedAccessAttempts = 3;  //default 5
                     opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); //default 5
-                    
+
                 }).AddEntityFrameworkStores<GameSaleProjectDbContext>();
 
             services.AddScoped<IGameService, GameService>();
@@ -47,7 +42,7 @@ namespace GameSaleProject_Service.Extensions
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<ISystemRequirementService, SystemRequirementService>();
             services.AddScoped<IUserProfileService, UserProfileService>();
-            
+
             services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddScoped<RoleInitializer>();

@@ -1,15 +1,9 @@
-﻿using GameSaleProject_Entity.Entities;
-using GameSaleProject_Entity.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameSaleProject_Entity.Identity;
 
 namespace GameSaleProject_Entity.ViewModels
 {
-	public class GameSaleViewModel
-	{
+    public class GameSaleViewModel
+    {
         public int Id { get; set; }
         public int UserId { get; set; }
         public string UserName { get; set; }

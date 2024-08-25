@@ -1,12 +1,7 @@
 ﻿using GameSaleProject_DataAccess.Contexts;
 using GameSaleProject_Entity.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_DataAccess.Repositories
 {
@@ -23,32 +18,32 @@ namespace GameSaleProject_DataAccess.Repositories
         public async Task Add(T entity)
         {
             await _dbSet.AddAsync(entity);
-            
+
         }
         public void Update(T entity)
         {
             _dbSet.Update(entity);
-            
+
         }
         public void Delete(int id)
         {
             var entity = _dbSet.Find(id);
             _dbSet.Remove(entity);
-            
+
         }
         public void Delete(T entity)
         {
             var isDeletedProperty = entity.GetType().GetProperty("IsDeleted");
             if (isDeletedProperty != null)
             {
-                isDeletedProperty.SetValue(entity, true);  
+                isDeletedProperty.SetValue(entity, true);
                 _dbSet.Update(entity);
             }
             else
             {
                 _dbSet.Remove(entity);
             }
-            
+
         }
         public async Task<T> Get(Expression<Func<T, bool>> filter)
         {

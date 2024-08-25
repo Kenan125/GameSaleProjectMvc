@@ -2,11 +2,6 @@
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.UnitOfWorks;
 using GameSaleProject_Entity.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Services
 {
@@ -35,7 +30,7 @@ namespace GameSaleProject_Service.Services
         }
         public async Task SubmitReviewAsync(ReviewViewModel reviewModel)
         {
-            
+
             if (reviewModel.Rating <= 0)
             {
                 throw new InvalidOperationException("A star rating is required to submit a review.");
@@ -61,7 +56,7 @@ namespace GameSaleProject_Service.Services
 
             if (reviews == null || !reviews.Any())
             {
-                return 0;  
+                return 0;
             }
 
             return reviews.Average(r => r.Rating);
