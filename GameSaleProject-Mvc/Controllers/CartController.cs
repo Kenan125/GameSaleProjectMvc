@@ -1,16 +1,18 @@
 ﻿using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameSaleProject_Mvc.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private readonly ICartService _cartService;
         private readonly IAccountService _accountService;
         private readonly IGameSaleService _gameSaleService;
         private readonly IGameService _gameService;
-
+        private string UserName => User.Identity.Name;
         public CartController(ICartService cartService, IAccountService accountService, IGameSaleService gameSaleService, IGameService gameService)
         {
             _cartService = cartService;
@@ -23,48 +25,21 @@ namespace GameSaleProject_Mvc.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var userName = User.Identity.Name;
-
-            if (string.IsNullOrEmpty(userName))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var cartViewModel = await _cartService.GetCartViewModelAsync(userName);
-
+            var cartViewModel = await _cartService.GetCartViewModelAsync(UserName);
             return View(cartViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddToCart(int gameId, decimal price)
         {
-            var userName = User.Identity.Name;
-
-            if (string.IsNullOrEmpty(userName))
-            {
-
-                return RedirectToAction("Login", "Account");
-            }
-
-
-            var user = await _accountService.FindByUserNameAsync(userName);
-
-            await _cartService.AddToCartAsync(userName, gameId, price);
-
+            await _cartService.AddToCartAsync(UserName, gameId, price);
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         public async Task<IActionResult> Checkout()
         {
-            var userName = User.Identity.Name;
-
-            if (string.IsNullOrEmpty(userName))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var cart = await _cartService.GetCartAsync(userName);
+            var cart = await _cartService.GetCartAsync(UserName);
             if (cart == null || !cart.Items.Any())
             {
                 return RedirectToAction("Index", "Cart");
@@ -77,8 +52,7 @@ namespace GameSaleProject_Mvc.Controllers
                 return RedirectToAction("Payment", new { totalPrice });
             }
 
-            var gameSale = await _cartService.CheckoutAsync(userName);
-
+            var gameSale = await _cartService.CheckoutAsync(UserName);
             if (gameSale == null)
             {
                 return RedirectToAction("Index", "Cart");
@@ -110,9 +84,7 @@ namespace GameSaleProject_Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userName = User.Identity.Name;
-                var gameSale = await _cartService.CheckoutAsync(userName);
-
+                var gameSale = await _cartService.CheckoutAsync(UserName);
                 if (gameSale == null)
                 {
                     return RedirectToAction("Index", "Cart");
@@ -125,15 +97,7 @@ namespace GameSaleProject_Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveFromCart(int gameId)
         {
-            var userName = User.Identity.Name;
-
-            if (string.IsNullOrEmpty(userName))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            await _cartService.RemoveFromCartAsync(userName, gameId);
-
+            await _cartService.RemoveFromCartAsync(UserName, gameId);
             return RedirectToAction("Index");
         }
     }

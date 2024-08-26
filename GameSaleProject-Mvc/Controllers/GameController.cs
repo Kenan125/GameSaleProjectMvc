@@ -61,7 +61,7 @@ namespace GameSaleProject_Mvc.Controllers
 
         public async Task<IActionResult> Detail(int id)
         {
-            
+
             var game = await _gameService.GetGameByIdAsync(id);
             if (game == null)
             {
@@ -225,21 +225,21 @@ namespace GameSaleProject_Mvc.Controllers
         [HttpPost]
         [Authorize(Roles = "Publisher, Admin")]
         public async Task<IActionResult> DeleteImage(int imageId, int gameId)
-        {            
+        {
             var game = await _gameService.GetGameByIdAsync(gameId);
             if (game == null)
             {
                 return NotFound();
             }
-          
+
             var image = game.Images.FirstOrDefault(img => img.Id == imageId);
             if (image == null)
             {
                 return NotFound();
             }
-          
+
             game.Images.Remove(image);
-       
+
             var result = await _gameService.UpdateGameAsync(game);
 
             if (result != "Game updated successfully.")
@@ -247,7 +247,7 @@ namespace GameSaleProject_Mvc.Controllers
                 TempData["Message"] = "Failed to delete the image.";
                 return RedirectToAction("UpdateGame", new { id = gameId });
             }
-         
+
             var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.ImageUrl.TrimStart('/'));
             if (System.IO.File.Exists(imagePath))
             {

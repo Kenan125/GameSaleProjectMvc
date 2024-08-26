@@ -46,26 +46,12 @@ namespace GameSaleProject_Mvc.Controllers
                 if (result == "OK")
                 {
                     var user = await _userManager.FindByNameAsync(model.UserName);
-                    var roles = await _userManager.GetRolesAsync(user);
-
-                    // Sign in the user with the Remember Me option
                     var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
 
                     if (signInResult.Succeeded)
                     {
-                        // Redirect based on role
-                        if (roles.Contains("Admin"))
-                        {
-                            return RedirectToAction("Index", "Home", new { area = "Admin" });
-                        }
-                        else if (roles.Contains("Publisher"))
-                        {
-                            return RedirectToAction("Index", "PublisherProfile", new { area = "Publisher" });
-                        }
-                        else
-                        {
-                            return RedirectToAction("Index", "UserProfile", new { area = "User" });
-                        }
+                        // Redirect to the ReturnUrl or to the home page if ReturnUrl is not specified
+                        return LocalRedirect(model.ReturnUrl ?? Url.Content("~/"));
                     }
                     else
                     {
@@ -78,9 +64,10 @@ namespace GameSaleProject_Mvc.Controllers
                 }
             }
 
-            model.ReturnUrl = model.ReturnUrl ?? Url.Content("~/");
+            // If we got this far, something failed, redisplay form
             return View(model);
         }
+
 
 
         public IActionResult Register()

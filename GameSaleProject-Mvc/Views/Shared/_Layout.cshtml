@@ -37,6 +37,12 @@
                             var user = await UserManager.GetUserAsync(User);
                             if (user != null)
                             {
+                                <li class="nav-item align-content-center">
+                                    <a class="nav-link text-light " asp-area="" asp-controller="Cart" asp-action="Index">
+                                        <i class="bi bi-bag-fill"></i>
+                                    </a>
+                                </li>
+
                                 var roles = await UserManager.GetRolesAsync(user);
                                 var profilePictureUrl = Url.Content(user?.ProfilePictureUrl ?? "/images/DefaultPfp.jpg");
 
@@ -87,6 +93,7 @@
             </div>
         </nav>
     </header>
+
 
     <div class="d-flex">
         @if (ViewContext.RouteData.Values["controller"].ToString() == "UserProfile" || ViewContext.RouteData.Values["controller"].ToString() == "PublisherProfile")
