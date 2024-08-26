@@ -1,28 +1,55 @@
-﻿@model List<GameSaleProject_Entity.Entities.Game>
+﻿@model IEnumerable<GameSaleProject_Entity.ViewModels.GameViewModel>
 
 @{
     ViewData["Title"] = "Owned Games";
-    Layout = "~/Areas/User/Views/Shared/_LayoutUser.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Your Owned Games</h2>
 
 @if (Model != null && Model.Any())
 {
-    <ul class="list-group">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         @foreach (var game in Model)
         {
-            <li class="list-group-item">
-                <h4>@(game?.GameName ?? "Unknown Game")</h4> <!-- Handle null GameName -->
-                <p>@(game?.Description ?? "No description available.")</p> <!-- Handle null Description -->
-                <p>Price: @(game?.Price.ToString("C") ?? "Unknown Price")</p> <!-- Handle null Price -->
-                @if (game?.Discount > 0)
-                {
-                    <p>Discount: @game.Discount%</p>
-                }
-            </li>
+            <div class="col">
+                <div class="card h-100 text-light bg-dark">                   
+                    @if (game.Images != null && game.Images.Any(img => img.ImageType == "card"))
+                    {
+                        var cardImage = game.Images.First(img => img.ImageType == "card");
+                        <img src="@cardImage.ImageUrl" class="card-img-top" alt="@game.GameName" />
+                    }
+                    else
+                    {
+                        <img src="/images/placeholder.png" class="card-img-top" alt="No Image Available" />
+                    }
+
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => game.GameName)</h5>
+                        <p class="card-text">@Html.DisplayFor(modelItem => game.Description)</p>
+                        <p class="card-text">
+                            @if (game.Price == 0)
+                            {
+                                <span class="text-success">Free</span>
+                            }
+                            @if (game.Discount > 0)
+                            {
+                                <span class="text-decoration-line-through">@game.Price.ToString("C")</span>
+                                <span class="text-danger">@(((decimal)game.Price * (decimal)(1 - (decimal)game.Discount / 100)).ToString("C"))</span>
+                            }
+                            else if (game.Price != 0)
+                            {
+                                <span>@game.Price.ToString("C")</span>
+                            }
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Owned</small>
+                    </div>
+                </div>
+            </div>
         }
-    </ul>
+    </div>
 }
 else
 {

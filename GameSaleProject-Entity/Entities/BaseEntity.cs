@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GameSaleProject_Entity.Entities
+﻿namespace GameSaleProject_Entity.Entities
 {
-	public class BaseEntity
-	{
-		public int Id { get; set; }
-		public DateTime CreatedDate { get; set; } = DateTime.Now;
-		public bool IsDeleted { get; set; }
-	}
+    public class BaseEntity
+    {
+        public int Id { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public bool IsDeleted { get; set; }
+    }
 }

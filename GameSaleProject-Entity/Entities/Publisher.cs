@@ -3,8 +3,8 @@
 namespace GameSaleProject_Entity.Entities
 {
     public class Publisher : BaseEntity
-	{
-        
+    {
+
 
         public string Name { get; set; }
         public int? UserId { get; set; }

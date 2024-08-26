@@ -4,8 +4,7 @@
     Layout = "~/Areas/User/Views/Shared/_LayoutUser.cshtml";
 }
 
-<div class="d-flex">
-    <!-- Main Content -->
+<div class="d-flex">    
     <div class="main-content">
         <h2>My Profile</h2>
         <div class="form-group">
@@ -33,11 +32,6 @@
         <div class="form-group">
             <label>Phone Number</label>
             <p class="form-control-static">@Model.PhoneNumber</p>
-        </div>
-
-        <!-- Edit Profile Button -->
-        <a asp-action="EditProfile" class="btn btn-primary">Edit Profile</a>
-        <a asp-action="OwnedGames" class="btn btn-primary">Owned Games</a>
-        <a asp-action="PurchaseHistory" class="btn btn-primary">PurchaseHistory</a>
+        </div>              
     </div>
 </div>

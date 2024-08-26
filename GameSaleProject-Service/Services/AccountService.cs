@@ -1,17 +1,11 @@
 ﻿using AutoMapper;
 using GameSaleProject_DataAccess.Contexts;
-using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Services
 {
@@ -150,9 +144,9 @@ namespace GameSaleProject_Service.Services
             var userViewModels = _mapper.Map<List<UserViewModel>>(users);
             return userViewModels;
         }
-        
 
-        
+
+
         public async Task<string> SaveProfilePictureAsync(IFormFile formFile)
         {
             var fileName = Path.GetFileNameWithoutExtension(formFile.FileName);

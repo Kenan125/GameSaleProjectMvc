@@ -18,7 +18,6 @@ namespace GameSaleProject_Mvc
               ));
 
             builder.Services.AddExtensions();
-
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
@@ -27,6 +26,7 @@ namespace GameSaleProject_Mvc
             });
 
             builder.Services.AddHttpContextAccessor();
+            builder.Services.ConfigureCustomCookies();
 
             var app = builder.Build();
 
@@ -73,7 +73,7 @@ namespace GameSaleProject_Mvc
           );
             app.MapControllerRoute(
             name: "area",
-            pattern: "{controller=Home}/{action=Index}/{area=Publisher}"
+            pattern: "{controller=PublisherProfile}/{action=Index}/{area=Publisher}"
           );
             app.Run();
         }

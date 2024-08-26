@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GameSaleProject_Entity.ViewModels
+﻿namespace GameSaleProject_Entity.ViewModels
 {
-	public class GameViewModel
-	{
+    public class GameViewModel
+    {
         public int Id { get; set; }
         public string GameName { get; set; }
 
@@ -34,7 +28,7 @@ namespace GameSaleProject_Entity.ViewModels
         public bool IsDeleted { get; set; }
 
         //new prop
-        public ICollection<ImageViewModel>? Images { get; set; } = new List<ImageViewModel>();
+        public List<ImageViewModel>? Images { get; set; } = new List<ImageViewModel>();
         public ICollection<ReviewViewModel>? Reviews { get; set; } = new List<ReviewViewModel>();
         public SystemRequirementViewModel? SystemRequirements { get; set; }
         public PublisherViewModel? Publisher { get; set; }

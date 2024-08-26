@@ -1,10 +1,9 @@
-﻿using GameSaleProject_Entity.Entities;
-using GameSaleProject_Entity.ViewModels;
+﻿using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Http;
 
 namespace GameSaleProject_Entity.Interfaces
 {
-    public interface IAccountService 
+    public interface IAccountService
     {
         Task<string> CreateUserAsync(RegisterViewModel model);
         Task<bool> AssignRoleToUserAsync(string userId, string roleName);

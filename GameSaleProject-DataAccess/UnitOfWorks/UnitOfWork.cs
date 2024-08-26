@@ -2,11 +2,6 @@
 using GameSaleProject_DataAccess.Repositories;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.UnitOfWorks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_DataAccess.UnitOfWorks
 {

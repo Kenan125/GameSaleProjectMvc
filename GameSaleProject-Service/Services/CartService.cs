@@ -3,11 +3,6 @@ using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
 using GameSaleProject_Service.Extensions;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Services
 {
@@ -27,19 +22,19 @@ namespace GameSaleProject_Service.Services
 
         public async Task AddToCartAsync(string userName, int gameId, decimal price)
         {
-            
+
             var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
             if (userPurchases.Any(purchase => purchase.GameSaleDetails.Any(detail => detail.GameId == gameId)))
             {
-               
-                return; 
+
+                return;
             }
 
             var cart = await GetCartAsync(userName) ?? new Cart { UserName = userName };
             var existingItem = cart.Items.FirstOrDefault(item => item.GameId == gameId);
             if (existingItem == null)
             {
-                
+
                 cart.Items.Add(new CartItem
                 {
                     GameId = gameId,
@@ -48,8 +43,8 @@ namespace GameSaleProject_Service.Services
             }
             else
             {
-                
-                existingItem.Price = price; 
+
+                existingItem.Price = price;
             }
 
             await SaveCartAsync(cart);

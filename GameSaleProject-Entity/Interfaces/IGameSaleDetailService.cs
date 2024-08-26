@@ -1,5 +1,4 @@
 ﻿using GameSaleProject_Entity.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace GameSaleProject_Entity.Interfaces
 {
@@ -7,6 +6,6 @@ namespace GameSaleProject_Entity.Interfaces
     {
         Task<GameSaleDetail> GetGameSaleDetailByIdAsync(int gameSaleDetailId);
         Task RefundGameSaleDetailAsync(int gameSaleDetailId);
-        
+
     }
 }

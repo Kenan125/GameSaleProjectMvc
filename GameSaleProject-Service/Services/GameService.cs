@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
-using GameSaleProject_DataAccess.UnitOfWorks;
 using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.UnitOfWorks;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Services
 {
@@ -107,33 +102,52 @@ namespace GameSaleProject_Service.Services
 
         public async Task<List<GameViewModel>> SearchGamesAsync(string searchTerm)
         {
+            searchTerm = searchTerm.ToLower();
+
             var games = await _unitOfWork.GetRepository<Game>().GetAllAsync(
-                filter: g => g.GameName.Contains(searchTerm) || g.Description.Contains(searchTerm)
+                filter: g => g.GameName.ToLower().Contains(searchTerm) ||
+                             g.Description.ToLower().Contains(searchTerm),
+                includes: new Expression<Func<Game, object>>[]
+                {
+            g => g.Images,
+            g => g.Reviews,
+            g => g.Publisher
+                }
             );
 
             return _mapper.Map<List<GameViewModel>>(games);
         }
 
+
         public async Task<string> UpdateGameAsync(GameViewModel model)
         {
-            var repository = _unitOfWork.GetRepository<Game>();
-            var game = await repository.GetByIdAsync(model.Id);
+            var game = await _unitOfWork.GetRepository<Game>().GetByIdAsync(model.Id);
 
             if (game == null)
                 return "Game not found.";
 
             _mapper.Map(model, game);
 
-            if (model.Images != null)
+            if (model.Images != null && model.Images.Any())
             {
-                game.Images = _mapper.Map<List<Image>>(model.Images);
+                game.Images.RemoveAll(img => !model.Images.Any(m => m.Id == img.Id));
+
+                foreach (var modelImage in model.Images)
+                {
+                    var existingImage = game.Images.FirstOrDefault(img => img.Id == modelImage.Id);
+                    if (existingImage != null)
+                        _mapper.Map(modelImage, existingImage);
+                    else
+                        game.Images.Add(_mapper.Map<Image>(modelImage));
+                }
             }
 
-            repository.Update(game);
+            _unitOfWork.GetRepository<Game>().Update(game);
             await _unitOfWork.CommitAsync();
 
             return "Game updated successfully.";
         }
+
         public async Task<List<GameViewModel>> GetGamesByPublisherAsync(int publisherId)
         {
             var games = await _unitOfWork.GetRepository<Game>().GetAllAsync(
@@ -174,5 +188,6 @@ namespace GameSaleProject_Service.Services
 
             return images;
         }
+
     }
 }

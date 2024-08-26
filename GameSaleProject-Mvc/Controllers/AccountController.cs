@@ -1,6 +1,7 @@
 ﻿using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,27 +11,31 @@ namespace GameSaleProject_Mvc.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public AccountController(IAccountService accountService, SignInManager<AppUser> signInManager)
+        public AccountController(IAccountService accountService, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
         {
             _accountService = accountService;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
         {
             return View();
         }
+
         [HttpGet]
         public IActionResult Login(string? ReturnUrl)
         {
             LoginViewModel model = new LoginViewModel()
             {
-                ReturnUrl = ReturnUrl ?? Url.Content("~/") 
+                ReturnUrl = ReturnUrl ?? Url.Content("~/")
             };
             TempData["message"] = null;
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -40,23 +45,36 @@ namespace GameSaleProject_Mvc.Controllers
 
                 if (result == "OK")
                 {
+                    var user = await _userManager.FindByNameAsync(model.UserName);
+                    var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
 
-
-                    return LocalRedirect(model.ReturnUrl ?? Url.Content("~/")); ;
-                    
+                    if (signInResult.Succeeded)
+                    {
+                        // Redirect to the ReturnUrl or to the home page if ReturnUrl is not specified
+                        return LocalRedirect(model.ReturnUrl ?? Url.Content("~/"));
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                    }
                 }
                 else
                 {
                     ModelState.AddModelError("", result);
                 }
             }
-            model.ReturnUrl = model.ReturnUrl ?? Url.Content("~/");
+
+            // If we got this far, something failed, redisplay form
             return View(model);
         }
-        public IActionResult Register() 
+
+
+
+        public IActionResult Register()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model, IFormFile formFile)
         {
@@ -83,12 +101,11 @@ namespace GameSaleProject_Mvc.Controllers
 
             return View(model);
         }
-
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-
     }
 }

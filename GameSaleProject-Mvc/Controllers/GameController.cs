@@ -1,6 +1,6 @@
 ﻿using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
-using GameSaleProject_Service.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameSaleProject_Mvc.Controllers
@@ -15,8 +15,9 @@ namespace GameSaleProject_Mvc.Controllers
         private readonly ISystemRequirementService _systemRequirementService;
         private readonly IGameSaleService _gameSaleService;
         private readonly IImageService _imageService;
+        private readonly IAccountService _accountService;
 
-        public GameController(ILogger<GameController> logger, IGameService gameService, ICategoryService categoryService, IPublisherService publisherService, IReviewService reviewService, ISystemRequirementService systemRequirementService, IGameSaleService gameSaleService, IImageService imageService)
+        public GameController(ILogger<GameController> logger, IGameService gameService, ICategoryService categoryService, IPublisherService publisherService, IReviewService reviewService, ISystemRequirementService systemRequirementService, IGameSaleService gameSaleService, IImageService imageService, IAccountService accountService)
         {
             _logger = logger;
             _gameService = gameService;
@@ -26,47 +27,31 @@ namespace GameSaleProject_Mvc.Controllers
             _systemRequirementService = systemRequirementService;
             _gameSaleService = gameSaleService;
             _imageService = imageService;
+            _accountService = accountService;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(string searchTerm)
         {
-            var userName = User.Identity.Name;
+            List<GameViewModel> games;
 
-            // Retrieve all games, categories, and publishers
-            var games = await _gameService.GetAllGamesAsync();
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                // Perform search if a search term is provided
+                games = await _gameService.SearchGamesAsync(searchTerm);
+            }
+            else
+            {
+                // Otherwise, retrieve all games
+                games = await _gameService.GetAllGamesAsync();
+            }
+
             var categories = await _categoryService.GetAllCategoriesAsync();
             var publishers = await _publisherService.GetAllPublishersAsync();
 
-            games = games.Where(g => !g.IsDeleted).ToList();
-
-            // Retrieve user's purchase history
-            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName); // This should be implemented in your service
-            var purchasedGameIds = userPurchases.SelectMany(purchase => purchase.GameSaleDetails)
-                                                .Select(detail => detail.GameId)
-                                                .ToHashSet();
-
-            // Map games to view model and mark if they are in the user's library
-            var gameViewModels = games.Select(game => new GameViewModel
-            {
-                Id = game.Id,
-                GameName = game.GameName,
-                Price = game.Price,
-                Discount = game.Discount,
-                IsInLibrary = purchasedGameIds.Contains(game.Id),
-                Images = game.Images.Select(img => new ImageViewModel
-                {
-                    Id = img.Id,
-                    Name = img.Name,
-                    ImageUrl = img.ImageUrl,
-                    ImageType = img.ImageType
-                }).ToList(),
-                // Add other properties as needed
-            }).ToList();
-
-            // Prepare the model for the view
             var model = new GameCategoryPublisherViewModel
             {
-                Games = gameViewModels,
+                Games = games,
                 Categories = categories,
                 Publishers = publishers
             };
@@ -74,23 +59,20 @@ namespace GameSaleProject_Mvc.Controllers
             return View(model);
         }
 
-
         public async Task<IActionResult> Detail(int id)
         {
-            // Retrieve the game data
+
             var game = await _gameService.GetGameByIdAsync(id);
             if (game == null)
             {
                 return NotFound();
             }
-
-            
             var publisher = await _publisherService.GetPublisherByIdAsync(game.PublisherId);
-         
+
             var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
-            
+
             var systemRequirements = await _systemRequirementService.GetSystemRequirementsByGameIdAsync(id);
-           
+
             var model = new GameViewModel
             {
                 Id = game.Id,
@@ -102,8 +84,8 @@ namespace GameSaleProject_Mvc.Controllers
                 PublisherId = game.PublisherId,
                 Publisher = publisher != null ? new PublisherViewModel { Id = publisher.Id, Name = publisher.Name } : null,
                 Platform = game.Platform,
-                Images = game.Images, 
-                Reviews = reviews, 
+                Images = game.Images,
+                Reviews = reviews,
                 SystemRequirements = systemRequirements != null ? new SystemRequirementViewModel
                 {
                     OS = systemRequirements.OS,
@@ -115,12 +97,12 @@ namespace GameSaleProject_Mvc.Controllers
                 } : null
             };
 
-            
+
             return View(model);
         }
 
-
         [HttpGet]
+        [Authorize(Roles = "Publisher, Admin")]
         public async Task<IActionResult> AddGame()
         {
             return View();
@@ -139,7 +121,6 @@ namespace GameSaleProject_Mvc.Controllers
             return View(model);
         }
 
-
         public async Task<IActionResult> FilterByCategory(int categoryId)
         {
             var games = await _gameService.GetGamesByCategoryAsync(categoryId);
@@ -147,36 +128,78 @@ namespace GameSaleProject_Mvc.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Publisher, Admin")]
         public async Task<IActionResult> UpdateGame(int id)
         {
+            var user = await _accountService.FindByUserNameAsync(User.Identity.Name);
             var game = await _gameService.GetGameByIdAsync(id);
+
             if (game == null)
-            {
                 return NotFound();
+
+            if (User.IsInRole("Publisher"))
+            {
+                var publisher = await _publisherService.GetPublisherByUserIdAsync(user.Id);
+                if (game.PublisherId != publisher.Id)
+                    return Forbid();
             }
 
-            var categories = await _categoryService.GetAllCategoriesAsync();
-            var publishers = await _publisherService.GetAllPublishersAsync();
-
-            ViewBag.Categories = categories;
-            ViewBag.Publishers = publishers;
+            ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
+            ViewBag.Publishers = await _publisherService.GetAllPublishersAsync();
 
             return View(game);
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> UpdateGame(GameViewModel model, IFormFile CardImage, List<IFormFile> DisplayImages)
+        public async Task<IActionResult> UpdateGame(GameViewModel model, IFormFile cardImage, List<IFormFile> DisplayImages)
         {
+            ModelState.Remove("cardImage");
             if (ModelState.IsValid)
             {
-                model.Images = await _gameService.HandleImageUploads(CardImage, DisplayImages);
-                var result = await _gameService.UpdateGameAsync(model);
-                if (result == "Category does not exist." || result == "Publisher does not exist.")
+
+                model.Images = model.Images ?? new List<ImageViewModel>();
+
+
+                if (cardImage != null && cardImage.Length > 0)
                 {
-                    ModelState.AddModelError("", result);
-                    ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
-                    ViewBag.Publishers = await _publisherService.GetAllPublishersAsync();
+
+                    model.Images = model.Images.Where(img => img.ImageType != "card").ToList();
+
+
+                    var cardImageUrl = await _imageService.UploadImageAsync(cardImage, "card");
+                    model.Images.Add(new ImageViewModel
+                    {
+                        Name = Path.GetFileName(cardImageUrl),
+                        ImageUrl = cardImageUrl,
+                        ImageType = "card"
+                    });
+                }
+
+
+                foreach (var displayImage in DisplayImages)
+                {
+                    if (displayImage.Length > 0)
+                    {
+                        var displayImageUrl = await _imageService.UploadImageAsync(displayImage, "display");
+                        model.Images.Add(new ImageViewModel
+                        {
+                            Name = Path.GetFileName(displayImageUrl),
+                            ImageUrl = displayImageUrl,
+                            ImageType = "display"
+                        });
+                    }
+                }
+
+
+                var result = await _gameService.UpdateGameAsync(model);
+                if (result == "Category does not exist.")
+                {
+                    ModelState.AddModelError("CategoryId", "Selected category does not exist.");
+                    return View(model);
+                }
+                if (result == "Publisher does not exist.")
+                {
+                    ModelState.AddModelError("PublisherId", "Selected publisher does not exist.");
                     return View(model);
                 }
 
@@ -184,13 +207,14 @@ namespace GameSaleProject_Mvc.Controllers
                 return RedirectToAction("Index");
             }
 
+
             ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.Publishers = await _publisherService.GetAllPublishersAsync();
             return View(model);
         }
 
-
         [HttpPost]
+        [Authorize(Roles = "Publisher, Admin")]
         public async Task<IActionResult> DeleteGame(int id)
         {
             var result = await _gameService.DeleteGameAsync(id);
@@ -199,26 +223,23 @@ namespace GameSaleProject_Mvc.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Publisher, Admin")]
         public async Task<IActionResult> DeleteImage(int imageId, int gameId)
         {
-            // Fetch the game associated with the image
             var game = await _gameService.GetGameByIdAsync(gameId);
             if (game == null)
             {
                 return NotFound();
             }
 
-            // Find the image to be deleted
             var image = game.Images.FirstOrDefault(img => img.Id == imageId);
             if (image == null)
             {
                 return NotFound();
             }
 
-            // Remove the image from the collection
             game.Images.Remove(image);
 
-            // Update the game with the updated image list
             var result = await _gameService.UpdateGameAsync(game);
 
             if (result != "Game updated successfully.")
@@ -227,7 +248,6 @@ namespace GameSaleProject_Mvc.Controllers
                 return RedirectToAction("UpdateGame", new { id = gameId });
             }
 
-            // Optionally, delete the image file from the server
             var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.ImageUrl.TrimStart('/'));
             if (System.IO.File.Exists(imagePath))
             {

@@ -1,17 +1,11 @@
-﻿using GameSaleProject_Entity.Entities;
-using GameSaleProject_Entity.Interfaces;
+﻿using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.UnitOfWorks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Services
 {
-    public class ImageService :IImageService
+    public class ImageService : IImageService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _environment;

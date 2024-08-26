@@ -3,11 +3,6 @@ using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.UnitOfWorks;
 using GameSaleProject_Entity.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Services
 {
@@ -43,22 +38,33 @@ namespace GameSaleProject_Service.Services
                 Name = publisher.Name
             };
         }
-        public async Task CreatePublisherAsync(PublisherViewModel model, int userId)
+        public async Task<bool> CreatePublisherAsync(PublisherViewModel model, int userId)
         {
-            var publisher = new Publisher
+            try
             {
-                Name = model.Name,
-                UserId = userId,
-                
-            };
+                var publisher = new Publisher
+                {
+                    Name = model.Name,
+                    UserId = userId,
+                };
 
-            await _unitOfWork.GetRepository<Publisher>().Add(publisher);
-            await _unitOfWork.CommitAsync();
+                await _unitOfWork.GetRepository<Publisher>().Add(publisher);
+                await _unitOfWork.CommitAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                // Handle exceptions, log them if necessary
+                return false;
+            }
         }
         public async Task<PublisherViewModel> GetPublisherByUserIdAsync(int userId)
         {
-            var publisher = await _unitOfWork.GetRepository<Publisher>().Get(
-                filter: p => p.UserId == userId
+            var publisher = await _unitOfWork.GetRepository<Publisher>().GetAll(
+                filter: p => p.UserId == userId,
+                includes: p => p.Games
+
             );
 
             if (publisher == null)
@@ -66,7 +72,7 @@ namespace GameSaleProject_Service.Services
                 return null;
             }
 
-            return _mapper.Map<PublisherViewModel>(publisher);
+            return _mapper.Map<PublisherViewModel>(publisher.FirstOrDefault());
         }
     }
 }

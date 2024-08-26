@@ -1,4 +1,5 @@
-﻿using GameSaleProject_DataAccess.Contexts;
+﻿using AutoMapper;
+using GameSaleProject_DataAccess.Contexts;
 using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
@@ -6,11 +7,6 @@ using GameSaleProject_Entity.UnitOfWorks;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameSaleProject_Service.Services
 {
@@ -19,15 +15,17 @@ namespace GameSaleProject_Service.Services
         private readonly GameSaleProjectDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public UserProfileService(GameSaleProjectDbContext context, UserManager<AppUser> userManager, IUnitOfWork unitOfWork)
+        public UserProfileService(GameSaleProjectDbContext context, UserManager<AppUser> userManager, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _context = context;
             _userManager = userManager;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<List<Game>> GetOwnedGamesAsync(int userId)
+        public async Task<List<GameViewModel>> GetOwnedGamesAsync(int userId)
         {
             var gameSales = await _context.GameSales
                 .Include(gs => gs.GameSaleDetails)
@@ -39,9 +37,9 @@ namespace GameSaleProject_Service.Services
                                       .Distinct()
                                       .ToList();
 
-            return ownedGames;
+            return _mapper.Map<List<GameViewModel>>(ownedGames);
         }
-        public async Task<List<GameSale>> GetPurchaseHistoryAsync(int userId)
+        public async Task<List<GameSaleViewModel>> GetPurchaseHistoryAsync(int userId)
         {
             var purchaseHistory = await _context.GameSales
                 .Include(gs => gs.GameSaleDetails)
@@ -50,15 +48,15 @@ namespace GameSaleProject_Service.Services
                 .OrderByDescending(gs => gs.CreatedDate)
                 .ToListAsync();
 
-            return purchaseHistory;
+            return _mapper.Map<List<GameSaleViewModel>>(purchaseHistory);
         }
-        public async Task<AppUser> GetUserProfileAsync(int userId)
+        public async Task<UserViewModel> GetUserProfileAsync(int userId)
         {
             var user = await _userManager.Users
                 .Where(u => u.Id == userId)
                 .FirstOrDefaultAsync();
 
-            return user;
+            return _mapper.Map<UserViewModel>(user);
         }
 
         public async Task<bool> RefundGameAsync(int userId, int gameId)
@@ -86,16 +84,14 @@ namespace GameSaleProject_Service.Services
                 return false;
             }
 
-
             if (!string.IsNullOrEmpty(model.ProfilePictureUrl))
             {
                 user.ProfilePictureUrl = model.ProfilePictureUrl;
             }
 
-
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-
+            user.Email = model.Email;
 
             if (!string.IsNullOrEmpty(model.UserName) && model.UserName != user.UserName)
             {
@@ -110,9 +106,7 @@ namespace GameSaleProject_Service.Services
                 }
             }
 
-
             user.PhoneNumber = model.PhoneNumber;
-
 
             if (!string.IsNullOrEmpty(model.CurrentPassword) && !string.IsNullOrEmpty(model.NewPassword))
             {
@@ -123,11 +117,10 @@ namespace GameSaleProject_Service.Services
                 }
             }
 
-
             var result = await _userManager.UpdateAsync(user);
-
             return result.Succeeded;
         }
+
 
         public async Task DeleteUserAndRelatedDataAsync(int userId)
         {
@@ -136,7 +129,7 @@ namespace GameSaleProject_Service.Services
 
             if (publisher != null)
             {
-                
+
                 var games = await _unitOfWork.GetRepository<Game>()
                                              .GetAllAsync(g => g.PublisherId == publisher.Id);
                 foreach (var game in games)
@@ -144,11 +137,11 @@ namespace GameSaleProject_Service.Services
                     _unitOfWork.GetRepository<Game>().Delete(game);
                 }
 
-                
+
                 _unitOfWork.GetRepository<Publisher>().Delete(publisher);
             }
 
-            
+
             var user = await _unitOfWork.GetRepository<AppUser>().GetByIdAsync(userId);
             if (user != null)
             {
