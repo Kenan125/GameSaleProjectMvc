@@ -18,7 +18,6 @@ namespace GameSaleProject_Mvc
               ));
 
             builder.Services.AddExtensions();
-            builder.Services.ConfigureCustomCookies();
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
@@ -27,6 +26,7 @@ namespace GameSaleProject_Mvc
             });
 
             builder.Services.AddHttpContextAccessor();
+            builder.Services.ConfigureCustomCookies();
 
             var app = builder.Build();
 
