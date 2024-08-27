@@ -147,7 +147,8 @@ a {
     background-color: #1f1f1f; /* Dark background for the footer */
     padding: 1rem;
     text-align: center;
-    position: absolute;
+    position:absolute;
+    border:none;
     bottom: 0;
     width: 100%;
     color: #ffffff; /* Light text color */
@@ -197,3 +198,17 @@ a {
         height: auto; /* Maintain aspect ratio */
         border-radius: 8px;
     }
+
+    .col-md-8{
+        display:flex;
+        flex-wrap:wrap;
+        flex:0 0 auto;
+        width:66%;
+    }
+
+.col-md-4 {
+    padding: 3px;
+    flex: 0 0 auto;
+    width: 33%;
+}
+

@@ -1,0 +1,180 @@
+﻿/* Global Styles */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.col-md-8, .col-md-4 {
+    flex-basis: 48%;
+    margin-bottom: 20px;
+}
+
+/* Carousel Styles */
+
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.carousel-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s;
+}
+
+    .carousel-item.active {
+        opacity: 1;
+    }
+
+.carousel-control-prev, .carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.carousel-control-prev {
+    left: 0;
+}
+
+.carousel-control-next {
+    right: 0;
+}
+
+/* Game Info Styles */
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 18px;
+    color: #666;
+}
+
+/* System Requirements Styles */
+
+.system-requirements {
+    margin-top: 20px;
+}
+
+    .system-requirements ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .system-requirements li {
+        margin-bottom: 10px;
+    }
+
+        .system-requirements li strong {
+            font-weight: bold;
+        }
+
+/* User Reviews Styles */
+
+.user-reviews {
+    margin-top: 20px;
+}
+
+    .user-reviews h4 {
+        font-weight: bold;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .user-reviews.mb-3 {
+        margin-bottom: 20px;
+    }
+
+    .user-reviews.fa-star {
+        color: #ff9900;
+    }
+
+        .user-reviews.fa-star.checked {
+            color: #ff9900;
+        }
+
+/* Add Review Form Styles */
+
+.add-review-form {
+    margin-top: 20px;
+}
+
+    .add-review-form.form-group {
+        margin-bottom: 20px;
+    }
+
+    .add-review-form label {
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .add-review-form.form-control {
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .add-review-form.btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        background-color: #4CAF50;
+        color: #fff;
+        cursor: pointer;
+    }
+
+        .add-review-form.btn:hover {
+            background-color: #3e8e41;
+        }

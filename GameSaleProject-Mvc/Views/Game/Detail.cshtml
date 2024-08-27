@@ -1,9 +1,11 @@
 ﻿@model GameViewModel
 
 @{
-    ViewData["Title"] = "Detail";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //ViewData["Title"] = "Detail";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+
 
 <div class="container mt-4">
     <div class="row">
@@ -142,6 +144,208 @@
         </form>
     </div>
 </div>
+
+
+
+<style>
+
+    .pb-3{
+        height:1200px;
+        position:relative;
+        display:contents;
+
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      
+    }
+
+    .container {
+        position:relative;
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+        height:auto;
+        border: 1px solid #ddd;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Carousel Styles */
+
+    .carousel {
+       /* position: relative;*/
+        width: 100%;
+        height: 400px;
+        margin-bottom: 20px;
+    }
+
+    .carousel-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .carousel-item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+    }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 20px;
+        color: #ddd;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+    }
+
+    .carousel-control-prev {
+        left: 10px;
+    }
+
+    .carousel-control-next {
+        right: 10px;
+    }
+
+    /* Card Styles */
+
+
+    .card {
+        margin-bottom: 20px;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .card-text {
+        font-size: 14px;
+        color: #666;
+    }
+
+    /* Review Styles */
+
+    .review {
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .review-rating {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .review-comment {
+        font-size: 14px;
+        color: #666;
+    }
+
+    /* Form Styles */
+
+    form {
+        margin-top: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: navy;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            input[type="submit"]:hover {
+                background-color: #3e8e41;
+            }
+
+    /* Miscellaneous Styles */
+
+    .checked {
+        color: #ffd700;
+    }
+
+    .fa-star {
+        font-size: 18px;
+        margin-right: 5px;
+    }
+
+    .footer {
+        background-color: #1f1f1f; 
+        padding: 1rem;
+        text-align: center;
+        position: absolute;
+        border: none;
+        bottom: 0;
+        width: 100%;
+        color: #ffffff; 
+        bottom:auto;
+        height:115px;
+
+    }
+
+    
+   
+
+   
+</style>
+
+
 
 @section Scripts {
     <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- For star icons -->

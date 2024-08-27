@@ -3,13 +3,13 @@ using GameSaleProject_Service.Extensions;
 using GameSaleProject_Service.Initialization;
 using Microsoft.EntityFrameworkCore;
 namespace GameSaleProject_Mvc
-{
+{           
     public class Program
-    {
+    {   
         public static async Task Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
-
+        {   
+           var builder = WebApplication.CreateBuilder(args);
+            
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<GameSaleProjectDbContext>(
