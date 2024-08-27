@@ -57,7 +57,7 @@
                             <span>@Model.Price.ToString("C")</span>
                         }
                     </p>
-                    <a href="#" class="btn btn-success btn-block mb-2">Buy Now</a>
+                    
                     <!-- Conditionally display "In Library" or "Add to Cart" -->
                     @if (Model.IsInLibrary)
                     {
@@ -92,9 +92,9 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><strong>OS:</strong> @Model.SystemRequirements?.OS</li>
                         <li class="list-group-item"><strong>Processor:</strong> @Model.SystemRequirements?.SystemProcessor</li>
-                        <li class="list-group-item"><strong>Memory:</strong> @Model.SystemRequirements?.SystemMemory GB</li>
+                        <li class="list-group-item"><strong>Memory:</strong> @Model.SystemRequirements?.SystemMemory</li>
                         <li class="list-group-item"><strong>Graphics:</strong> @Model.SystemRequirements?.Graphics</li>
-                        <li class="list-group-item"><strong>Storage:</strong> @Model.SystemRequirements?.Storage GB</li>
+                        <li class="list-group-item"><strong>Storage:</strong> @Model.SystemRequirements?.Storage</li>
                     </ul>
                 </div>
             </div>

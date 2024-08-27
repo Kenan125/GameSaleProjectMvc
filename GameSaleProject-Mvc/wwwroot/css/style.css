@@ -2070,6 +2070,118 @@ ol {
 .footer__copyright__text a {
 	color: #e53637;
 }
+/*---------------------
+  Cart
+-----------------------*/
+.cart-table {
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+	vertical-align: middle;
+	text-align: left;
+	border-top: none;
+	padding: 10px 20px;
+}
+
+.cart-buttons {
+	margin-top: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: nowrap;
+}
+
+.total-box {
+	background-color: #f8f9fa;
+	padding: 10px 20px;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	margin-bottom: 0;
+	flex-shrink: 0;
+}
+
+	.total-box h3 {
+		margin: 0;
+		font-size: 20px;
+		font-weight: 700;
+	}
+
+.button-group {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.box-button {
+	display: inline-block;
+	padding: 10px 20px;
+	font-size: 16px;
+	border-radius: 10px;
+	background-color: #007bff;
+	color: #fff;
+	text-align: center;
+	text-decoration: none;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transition: background-color 0.3s ease;
+	white-space: nowrap;
+}
+
+	.box-button:hover {
+		background-color: #0056b3;
+	}
+
+.card-body {
+	background-color: #f9f9f9;
+	border-radius: 10px;
+	padding: 20px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	margin-top: 10px;
+}
+
+#paymentForm .form-label {
+	font-weight: 600;
+}
+
+#paymentForm .form-control {
+	border-radius: 5px;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+#paymentForm .btn {
+	border-radius: 25px;
+	padding: 10px 20px;
+}
+
+.collapse.show {
+	display: block !important;
+	width: 100%;
+}
+
+.payment-section {
+	margin-top: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
+@media (min-width: 768px) {
+	.cart-buttons {
+		margin-bottom: 20px;
+	}
+
+	.payment-section {
+		flex-wrap: nowrap;
+	}
+}
+
+
+
 
 /*--------------------------------- Responsive Media Quaries -----------------------------*/
 
