@@ -151,7 +151,116 @@ namespace GameSaleProject_DataAccess.Contexts
                 new Image { Id = 12, GameId = 4, ImageUrl = "/images/rdr2Caus.jpg", Name = "rdr2Caus", ImageType = "carousel" },
                 new Image { Id = 13, GameId = 9, ImageUrl = "/images/fortniteCaus.jpg", Name = "fortniteCaus", ImageType = "carousel" }
             );
-
+            modelBuilder.Entity<SystemRequirement>().HasData(
+        new SystemRequirement
+        {
+            Id = 1,
+            SystemProcessor = "Intel Core i5-3470",
+            SystemMemory = "8 GB",
+            Storage = "72 GB",
+            Graphics = "NVIDIA GTX 660 2GB",
+            OS = "Windows 10",
+            GameId = 2,
+            CreatedDate = DateTime.Now,
+            IsDeleted = false
+        },
+        new SystemRequirement
+        {
+            Id = 2,
+            SystemProcessor = "Intel Core i7-4790",
+            SystemMemory = "12 GB",
+            Storage = "70 GB",
+            Graphics = "NVIDIA GTX 1060 6GB",
+            OS = "Windows 10",
+            GameId = 3,
+            CreatedDate = DateTime.Now,
+            IsDeleted = false
+        },
+        new SystemRequirement
+        {
+            Id = 3,
+            SystemProcessor = "Intel Core i5-2500K",
+            SystemMemory = "8 GB",
+            Storage = "150 GB",
+            Graphics = "NVIDIA GTX 770 2GB",
+            OS = "Windows 10",
+            GameId = 4,
+            CreatedDate = DateTime.Now,
+            IsDeleted = false
+        },
+        new SystemRequirement
+        {
+            Id = 4,
+            SystemProcessor = "Intel Core i3-3225",
+            SystemMemory = "4 GB",
+            Storage = "12 GB",
+            Graphics = "Intel HD Graphics 4000",
+            OS = "Windows 10",
+            GameId = 5,
+            CreatedDate = DateTime.Now,
+            IsDeleted = false
+        },
+        new SystemRequirement
+        {
+            Id = 5,
+            SystemProcessor = "Intel Core i5-2500",
+            SystemMemory = "8 GB",
+            Storage = "8 GB",
+            Graphics = "AMD Radeon HD 6870",
+            OS = "Windows 7",
+            GameId = 6,
+            CreatedDate = DateTime.Now,
+            IsDeleted = false
+        },
+        new SystemRequirement
+        {
+            Id = 6,
+            SystemProcessor = "Intel Core i3-3210",
+            SystemMemory = "4 GB",
+            Storage = "1 GB",
+            Graphics = "Intel HD Graphics 4000",
+            OS = "Windows 10",
+            GameId = 7,
+            CreatedDate = DateTime.Now,
+            IsDeleted = false
+        },
+        new SystemRequirement
+        {
+            Id = 7,
+            SystemProcessor = "Intel Core i5-7300U",
+            SystemMemory = "8 GB",
+            Storage = "20 GB",
+            Graphics = "Intel HD Graphics 620",
+            OS = "Windows 10",
+            GameId = 8,
+            CreatedDate = DateTime.Now,
+            IsDeleted = false
+        },
+        new SystemRequirement
+        {
+            Id = 8,
+            SystemProcessor = "Intel Core i3-2100",
+            SystemMemory = "2 GB",
+            Storage = "500 MB",
+            Graphics = "Intel HD Graphics 3000",
+            OS = "Windows 7",
+            GameId = 9,
+            CreatedDate = DateTime.Now,
+            IsDeleted = false
+        },
+        new SystemRequirement
+        {
+            Id = 9,
+            SystemProcessor = "Intel Core i7-6700K",
+            SystemMemory = "16 GB",
+            Storage = "100 GB",
+            Graphics = "NVIDIA GTX 1080 8GB",
+            OS = "Windows 10",
+            GameId = 10,
+            CreatedDate = DateTime.Now,
+            IsDeleted = false
+        }
+    );
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -97,7 +97,9 @@ namespace GameSaleProject_Service.Services
         public async Task<List<GameViewModel>> GetGamesByCategoryAsync(int categoryId)
         {
             var games = await _unitOfWork.GetRepository<Game>().GetAllAsync(
-                filter: g => g.CategoryId == categoryId
+                filter: g => g.CategoryId == categoryId,
+                includes: g=>g.Images
+                
             );
 
             return _mapper.Map<List<GameViewModel>>(games);

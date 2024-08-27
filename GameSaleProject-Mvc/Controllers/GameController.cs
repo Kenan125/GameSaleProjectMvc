@@ -1,4 +1,5 @@
-﻿using GameSaleProject_Entity.Interfaces;
+﻿using GameSaleProject_Entity.Entities;
+using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ namespace GameSaleProject_Mvc.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string searchTerm)
+        public async Task<IActionResult> Index(string searchTerm, int? categoryId)
         {
             List<GameViewModel> games;
 
@@ -40,15 +41,31 @@ namespace GameSaleProject_Mvc.Controllers
                 // Perform search if a search term is provided
                 games = await _gameService.SearchGamesAsync(searchTerm);
             }
+            else if (categoryId.HasValue)
+            {
+                // If the same category is clicked, display all games
+                var currentCategoryId = ViewData["CurrentCategoryId"] as int?;
+                if (currentCategoryId.HasValue && currentCategoryId.Value == categoryId.Value)
+                {
+                    games = await _gameService.GetAllGamesAsync();
+                    ViewData["CurrentCategoryId"] = null; // Reset the category filter
+                }
+                else
+                {
+                    // Filter games by the selected category
+                    games = await _gameService.GetGamesByCategoryAsync(categoryId.Value);
+                    ViewData["CurrentCategoryId"] = categoryId.Value; // Set the current category
+                }
+            }
             else
             {
                 // Otherwise, retrieve all games
                 games = await _gameService.GetAllGamesAsync();
+                ViewData["CurrentCategoryId"] = null; // Ensure the category filter is reset
             }
 
             var categories = await _categoryService.GetAllCategoriesAsync();
             var publishers = await _publisherService.GetAllPublishersAsync();
-            
 
             var model = new GameCategoryPublisherViewModel
             {
@@ -59,6 +76,7 @@ namespace GameSaleProject_Mvc.Controllers
 
             return View(model);
         }
+
 
         public async Task<IActionResult> Detail(int id)
         {
@@ -96,8 +114,8 @@ namespace GameSaleProject_Mvc.Controllers
                     SystemProcessor = systemRequirements.SystemProcessor,
                     SystemMemory = systemRequirements.SystemMemory,
                     Storage = systemRequirements.Storage,
-                    Graphics = systemRequirements.Graphics,
-                    IsMinimum = systemRequirements.IsMinimum
+                    Graphics = systemRequirements.Graphics
+                    
                 } : null
             };
 

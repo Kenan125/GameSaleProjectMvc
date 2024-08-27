@@ -3,102 +3,122 @@
 @{
     ViewData["Title"] = "Games";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var random = new Random();
 }
 
-<h1>Games</h1>
-
-<!-- Search Form -->
-<form method="get" asp-action="Index" asp-controller="Game">
-    <input type="text" name="searchTerm" value="@ViewData["searchTerm"]" placeholder="Search games..." />
-    <button type="submit" class="btn btn-primary">Search</button>
-</form>
-
-<hr />
-
-<div class="row">
-    <div class="col-md-8">
-        @if (Model.Games != null && Model.Games.Any())
-        {
-            <div class="row">
-                @foreach (var game in Model.Games)
-                {
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            @if (game.Images != null && game.Images.Any(img => img.ImageType == "card"))
-                            {
-                                var cardImage = game.Images.First(img => img.ImageType == "card");
-                                <img src="@cardImage.ImageUrl" class="card-img-top" alt="@game.GameName" />
-                            }
-                            else
-                            {
-                                <img src="/images/placeholder.png" class="card-img-top" alt="No Image Available" />
-                            }
-                            <div class="card-body">
-                                <h5 class="card-title">@game.GameName</h5>
-                                <p class="card-text">@game.Description</p>
-                                <p class="card-text">
-                                    @if (game.Price == 0)
-                                    {
-                                        <span class="text-success">Free</span>
-                                    }
-                                    else if (game.Discount > 0)
-                                    {
-                                        <span class="text-decoration-line-through">@game.Price.ToString("C")</span>
-                                        <span class="text-danger">@(((decimal)game.Price * (decimal)(1 - (decimal)game.Discount / 100)).ToString("C"))</span>
-                                    }
-                                    else
-                                    {
-                                        <span>@game.Price.ToString("C")</span>
-                                    }
-                                </p>
-
-                                <!-- Details Button -->
-                                <a asp-action="Detail" asp-controller="Game" asp-route-id="@game.Id" class="btn btn-info">Details</a>
-
-                                <!-- Update Game Button -->
-                                <a asp-action="UpdateGame" asp-controller="Game" asp-route-id="@game.Id" class="btn btn-primary">Update Game</a>
-
-                                <!-- Conditionally display "In Library" or "Add to Cart" -->
-                                @if (game.IsInLibrary)
+<section class="product spad">
+    <div class="container">
+        <div class="row">
+            <!-- Categories Section -->
+            <div class="col-lg-3">
+                <div class="sidebar">
+                    <div class="section-title">
+                        <h4>Categories</h4>
+                    </div>
+                    <ul class="list-group">
+                        @foreach (var category in Model.Categories)
+                        {
+                            var isActive = (category.Id == ViewData["CurrentCategoryId"] as int?);
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <a asp-action="Index" asp-controller="Game" asp-route-categoryId="@category.Id" class="text-decoration-none @(isActive ? "text-danger" : "text-dark")">@category.Name</a>
+                                @if (isActive)
                                 {
-                                    <button class="btn btn-success" disabled>In Library</button>
+                                    <a asp-action="Index" asp-controller="Game" class="text-decoration-none text-dark">×</a>
                                 }
-                                else
-                                {
-                                    <!-- Add to Cart Button -->
-                                    <form asp-action="AddToCart" asp-controller="Cart" method="post" style="display:inline;">
-                                        <input type="hidden" name="gameId" value="@game.Id" />
-                                        <input type="hidden" name="price" value="@(((decimal)game.Price * (decimal)(1 - (decimal)game.Discount / 100)))" />
-                                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Games Section -->
+            <div class="col-lg-9">
+                <div class="trending__product">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8 col-sm-8">
+                            <div class="section-title d-flex justify-content-between align-items-center">
+                                <h4>@ViewData["Title"]</h4>
+
+                                <!-- Search bar integration -->
+                                <div class="search-bar-container active" style="position: relative; display: flex; align-items: center; margin-left: 20px;">
+                                    <img src="https://cdn4.iconfinder.com/data/icons/evil-icons-user-interface/64/magnifier-512.png" alt="magnifier" class="magnifier" style="position: absolute; left: 15px;" />
+                                    <form method="get" asp-action="Index" asp-controller="Game" class="d-flex" style="flex-grow: 1; margin-left: 50px;">
+                                        <input type="text" name="searchTerm" value="@ViewData["searchTerm"]" class="input" placeholder="Search games..." />
                                     </form>
-                                }
-
-                                <!-- Delete Game Button -->
-                                <form asp-action="DeleteGame" asp-controller="Game" asp-route-id="@game.Id" method="post" style="display:inline;">
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this game?');">Delete Game</button>
-                                </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
-            </div>
-        }
-        else
-        {
-            <p>No games found.</p>
-        }
-    </div>
 
-    <div class="col-md-4">       
-        @await Html.PartialAsync("_Default.cshtml", Model.Categories)       
-        <div class="publishers-list">
-            <h4>Publishers</h4>
-            <ul>
-                @foreach (var publisher in Model.Publishers)
-                {
-                    <li>@publisher.Name</li>
-                }
-            </ul>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if (Model.Games != null && Model.Games.Any())
+                        {
+                            @foreach (var game in Model.Games)
+                            {
+                                <div class="col-lg-4 col-md-6 col-sm-6">
+                                    <div class="product__item">
+                                        @if (game.Images != null && game.Images.Any(img => img.ImageType == "card"))
+                                        {
+                                            var cardImage = game.Images.First(img => img.ImageType == "card");
+                                            <a asp-action="Detail" asp-controller="Game" asp-route-id="@game.Id">
+                                                <div class="product__item__pic set-bg" data-setbg="@Url.Content(cardImage.ImageUrl)">
+                                                    @if (game.Discount > 0)
+                                                    {
+                                                        <div class="ep">Discount: @game.Discount%</div>
+                                                    }
+                                                    <div class="comment"><i class="fa fa-comments"></i> @game.Reviews.Count</div>
+                                                    <div class="view"><i class="fa fa-eye"></i> @random.Next(500, 3000)</div>
+                                                </div>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <div class="product__item__pic set-bg" style="background-image: url('/images/placeholder.png');">
+                                                <div class="ep">No Image</div>
+                                                <div class="comment"><i class="fa fa-comments"></i> @game.Reviews.Count</div>
+                                                <div class="view"><i class="fa fa-eye"></i> @random.Next(500, 3000)</div>
+                                            </div>
+                                        }
+                                        <div class="product__item__text">
+                                            <ul>
+                                                @if (game.Category != null)
+                                                {
+                                                    <li>@game.Category.Name</li>
+                                                }
+                                                <li>@game.Platform</li>
+                                            </ul>
+                                            <h5>
+                                                <a asp-action="Detail" asp-controller="Game" asp-route-id="@game.Id">@game.GameName</a>
+                                            </h5>
+                                            <p class="card-text">
+                                                @if (game.Price == 0)
+                                                {
+                                                    <span class="text-success">Free</span>
+                                                }
+                                                @if (game.Discount > 0)
+                                                {
+                                                    <span class="text-decoration-line-through text-white">@game.Price.ToString("C")</span>
+                                                    <span class="text-danger">@(((decimal)game.Price * (decimal)(1 - (decimal)game.Discount / 100)).ToString("C"))</span>
+                                                }
+                                                else if (game.Price != 0)
+                                                {
+                                                    <span class="text-white">@game.Price.ToString("C")</span>
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-center">No games found.</p>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
