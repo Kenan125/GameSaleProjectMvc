@@ -1,3 +1,12 @@
+/*  ---------------------------------------------------
+    Theme Name: Anime
+    Description: Anime video tamplate
+    Author: Colorib
+    Author URI: https://colorib.com/
+    Version: 1.0
+    Created: Colorib
+---------------------------------------------------------  */
+
 'use strict';
 
 (function ($) {
@@ -10,7 +19,7 @@
         $("#preloder").delay(200).fadeOut("slow");
 
         /*------------------
-            Filter
+            FIlter
         --------------------*/
         $('.filter__controls li').on('click', function () {
             $('.filter__controls li').removeClass('active');
@@ -30,31 +39,28 @@
         $(this).css('background-image', 'url(' + bg + ')');
     });
 
-    /*------------------
-        Search Bar Toggle
-    --------------------*/
-    const searchBarContainerEl = document.querySelector(".search-bar-container");
-
-    const magnifierEl = document.querySelector(".magnifier");
-
-    magnifierEl.addEventListener("click", () => {
-        searchBarContainerEl.classList.toggle("active");
+    // Search model
+    $('.search-switch').on('click', function () {
+        $('.search-model').fadeIn(400);
     });
 
-
-
+    $('.search-close-switch').on('click', function () {
+        $('.search-model').fadeOut(400, function () {
+            $('#search-input').val('');
+        });
+    });
 
     /*------------------
-        Navigation
-    --------------------*/
+		Navigation
+	--------------------*/
     $(".mobile-menu").slicknav({
         prependTo: '#mobile-menu-wrap',
         allowParentLinks: true
     });
 
     /*------------------
-        Hero Slider
-    --------------------*/
+		Hero Slider
+	--------------------*/
     var hero_s = $(".hero__slider");
     hero_s.owlCarousel({
         loop: true,
@@ -70,7 +76,16 @@
         autoplay: true,
         mouseDrag: false
     });
+    /*------------------
+        search
+    --------------------*/
+    const searchBarContainerEl = document.querySelector(".search-bar-container");
 
+    const magnifierEl = document.querySelector(".magnifier");
+
+    magnifierEl.addEventListener("click", () => {
+        searchBarContainerEl.classList.toggle("active");
+    });
     /*------------------
         Video Player
     --------------------*/
@@ -87,9 +102,9 @@
     /*------------------
         Scroll To Top
     --------------------*/
-    $("#scrollToTopButton").click(function () {
+    $("#scrollToTopButton").click(function() {
         $("html, body").animate({ scrollTop: 0 }, "fast");
         return false;
-    });
+     });
 
 })(jQuery);

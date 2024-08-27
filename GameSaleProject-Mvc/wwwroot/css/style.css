@@ -338,12 +338,12 @@ ol {
 .search-bar-container {
 	display: flex;
 	align-items: center;
-	background-color: #99F443;
+	background-color: rgb(250, 250, 250);
 	padding: 5px;
 	width: 300px;
 	height: 50px;
 	border-radius: 50px;
-	box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.2), -2px -2px 10px #99F443;
+	box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.2), -2px -2px 10px #f5050d;
 	margin: 10px;
 	position: relative;
 	transition: width 1.5s;
@@ -386,6 +386,7 @@ ol {
 .active .mic-icon {
 	width: 0;
 }
+
 
 
 	
