@@ -19,8 +19,13 @@
                         @foreach (var category in Model.Categories)
                         {
                             var isActive = (category.Id == ViewData["CurrentCategoryId"] as int?);
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <a asp-action="Index" asp-controller="Game" asp-route-categoryId="@category.Id" class="text-decoration-none @(isActive ? "text-danger" : "text-dark")">@category.Name</a>
+                            <li class="list-group-item  d-flex justify-content-between align-items-center @(isActive ? "active-category  bg-danger" : "")"
+                                style="border: 0px solid; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                                <a asp-action="Index" asp-controller="Game" asp-route-categoryId="@category.Id"
+                                   class="text-decoration-none text-dark"
+                                   style="width: 100%; text-align: center; font-weight: @(isActive ? "bold text-white" : "normal");">
+                                    @category.Name
+                                </a>
                                 @if (isActive)
                                 {
                                     <a asp-action="Index" asp-controller="Game" class="text-decoration-none text-dark">×</a>
@@ -29,6 +34,7 @@
                         }
                     </ul>
                 </div>
+
             </div>
 
             <!-- Games Section -->

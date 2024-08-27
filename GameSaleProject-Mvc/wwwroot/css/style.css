@@ -2348,7 +2348,9 @@ ol {
 		width: 100%;
 	}
 }
-
+.active-category {
+	font-weight: bold;
+}
 /* Small Device = 320px */
 
 @media only screen and (max-width: 479px) {
