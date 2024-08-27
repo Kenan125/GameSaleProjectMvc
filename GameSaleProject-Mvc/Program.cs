@@ -65,8 +65,13 @@ namespace GameSaleProject_Mvc
 
             app.MapControllerRoute(
             name: "area",
-            pattern: "{controller=Home}/{action=Index}/{area=Admin}"
+            pattern: "{controller=Admin}/{action=Index}/{area=Admin}"
           );
+
+            app.MapControllerRoute(
+                        name: "area",
+                        pattern: "{controller=Admin}/{action=Index}/{id}/{area=Admin}"
+                      );
             app.MapControllerRoute(
             name: "area",
             pattern: "{controller=UserProfile}/{action=Index}/{area=User}"

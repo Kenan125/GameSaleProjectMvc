@@ -1,4 +1,5 @@
-﻿using GameSaleProject_Entity.Interfaces;
+﻿using GameSaleProject_Entity.Entities;
+using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ namespace GameSaleProject_Mvc.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string searchTerm)
+        public async Task<IActionResult> Index(string searchTerm, int? categoryId)
         {
             List<GameViewModel> games;
 
@@ -40,10 +41,27 @@ namespace GameSaleProject_Mvc.Controllers
                 // Perform search if a search term is provided
                 games = await _gameService.SearchGamesAsync(searchTerm);
             }
+            else if (categoryId.HasValue)
+            {
+                // If the same category is clicked, display all games
+                var currentCategoryId = ViewData["CurrentCategoryId"] as int?;
+                if (currentCategoryId.HasValue && currentCategoryId.Value == categoryId.Value)
+                {
+                    games = await _gameService.GetAllGamesAsync();
+                    ViewData["CurrentCategoryId"] = null; // Reset the category filter
+                }
+                else
+                {
+                    // Filter games by the selected category
+                    games = await _gameService.GetGamesByCategoryAsync(categoryId.Value);
+                    ViewData["CurrentCategoryId"] = categoryId.Value; // Set the current category
+                }
+            }
             else
             {
                 // Otherwise, retrieve all games
                 games = await _gameService.GetAllGamesAsync();
+                ViewData["CurrentCategoryId"] = null; // Ensure the category filter is reset
             }
 
             var categories = await _categoryService.GetAllCategoriesAsync();
@@ -59,6 +77,7 @@ namespace GameSaleProject_Mvc.Controllers
             return View(model);
         }
 
+
         public async Task<IActionResult> Detail(int id)
         {
 
@@ -70,6 +89,7 @@ namespace GameSaleProject_Mvc.Controllers
             var publisher = await _publisherService.GetPublisherByIdAsync(game.PublisherId);
 
             var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
+            var category = await _categoryService.GetCategoryByIdAsync(game.CategoryId);
 
             var systemRequirements = await _systemRequirementService.GetSystemRequirementsByGameIdAsync(id);
 
@@ -83,6 +103,8 @@ namespace GameSaleProject_Mvc.Controllers
                 Developer = game.Developer,
                 PublisherId = game.PublisherId,
                 Publisher = publisher != null ? new PublisherViewModel { Id = publisher.Id, Name = publisher.Name } : null,
+                CategoryId = game.CategoryId,
+                Category = category != null ? new CategoryViewModel { Id = category.Id, Name = category.Name } : null,
                 Platform = game.Platform,
                 Images = game.Images,
                 Reviews = reviews,
@@ -92,8 +114,8 @@ namespace GameSaleProject_Mvc.Controllers
                     SystemProcessor = systemRequirements.SystemProcessor,
                     SystemMemory = systemRequirements.SystemMemory,
                     Storage = systemRequirements.Storage,
-                    Graphics = systemRequirements.Graphics,
-                    IsMinimum = systemRequirements.IsMinimum
+                    Graphics = systemRequirements.Graphics
+                    
                 } : null
             };
 
@@ -128,9 +150,10 @@ namespace GameSaleProject_Mvc.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Publisher, Admin")]
+        [Authorize(Roles = "Publisher, Admin,User")]
         public async Task<IActionResult> UpdateGame(int id)
         {
+
             var user = await _accountService.FindByUserNameAsync(User.Identity.Name);
             var game = await _gameService.GetGameByIdAsync(id);
 
@@ -154,6 +177,8 @@ namespace GameSaleProject_Mvc.Controllers
         public async Task<IActionResult> UpdateGame(GameViewModel model, IFormFile cardImage, List<IFormFile> DisplayImages)
         {
             ModelState.Remove("cardImage");
+            ModelState.Remove("Category");
+            ModelState.Remove("SystemRequirement");
             if (ModelState.IsValid)
             {
 
@@ -215,9 +240,9 @@ namespace GameSaleProject_Mvc.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Publisher, Admin")]
-        public async Task<IActionResult> DeleteGame(int id)
+        public async Task<IActionResult> SoftDeleteGame(int id)
         {
-            var result = await _gameService.DeleteGameAsync(id);
+            var result = await _gameService.SoftDeleteGameAsync(id);
             TempData["Message"] = result;
             return RedirectToAction("Index");
         }

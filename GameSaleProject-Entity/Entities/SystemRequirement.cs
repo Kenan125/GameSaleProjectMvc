@@ -4,14 +4,11 @@
     {
 
 
-
-
-
         public string SystemProcessor { get; set; }
 
-        public byte SystemMemory { get; set; }
+        public string SystemMemory { get; set; }
 
-        public int Storage { get; set; }
+        public string Storage { get; set; }
 
         public string Graphics { get; set; }
         public string OS { get; set; }

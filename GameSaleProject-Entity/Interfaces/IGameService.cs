@@ -11,6 +11,7 @@ namespace GameSaleProject_Entity.Interfaces
         Task<string> UpdateGameAsync(GameViewModel model);
 
         Task<string> DeleteGameAsync(int gameId);
+        Task<string> SoftDeleteGameAsync(int gameId);
 
         Task<GameViewModel> GetGameByIdAsync(int gameId);
 

@@ -1,105 +1,113 @@
 ﻿@model CartViewModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Cart";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (Model.Items.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Game</th>
-                <th>Price</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Items)
-            {
-                <tr>
-                    <td>@item.GameName</td>
-                    <td>
-                        @if (item.Price == 0)
-                        {
-                            <span class="text-success">Free</span>
-                        }
-                        else
-                        {
-                            @item.Price.ToString("C")
-                        }
-                        
-                        </td>
-                    <td>
-                        <!-- Remove Button -->
-                        <form action="@Url.Action("RemoveFromCart", "Cart")" method="post" style="display:inline;">
-                            <input type="hidden" name="gameId" value="@item.GameId" />
-                            <button type="submit" class="btn btn-danger">Remove</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <h3>
-        @if (Model.TotalPrice==0)
-        {
-            <span class="text-success">Free</span>
-        }
-        else
-        {
-            <span>Total Price: @Model.TotalPrice.ToString("C")</span>
-
-        }
-    </h3>
-
-    @if (Model.TotalPrice > 0)
-    {
-        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="collapse" data-bs-target="#paymentFormSection" aria-expanded="false" aria-controls="paymentFormSection">
-            Checkout
-        </button>
-
-        <!-- Collapsible Payment Form Section -->
-        <div class="collapse" id="paymentFormSection">
-            <div class="card card-body">
-                <form id="paymentForm" asp-action="Payment" method="post">
-                    <div class="mb-3">
-                        <label for="CardNumber" class="form-label">Card Number</label>
-                        <input type="text" class="form-control" id="CardNumber" name="CardNumber" maxlength="19" required style="max-width: 300px;" placeholder="xxxx xxxx xxxx xxxx">
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                @if (Model.Items.Any())
+                {
+                    <div class="cart-table">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Game</th>
+                                    <th>Price</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Items)
+                                {
+                                    <tr>
+                                        <td>@item.GameName</td>
+                                        <td>
+                                            @if (item.Price == 0)
+                                            {
+                                                <span class="text-success">Free</span>
+                                            }
+                                            else
+                                            {
+                                                @item.Price.ToString("C")
+                                            }
+                                        </td>
+                                        <td class="text-end">
+                                            <!-- Remove Button -->
+                                            <form action="@Url.Action("RemoveFromCart", "Cart")" method="post" style="display:inline;">
+                                                <input type="hidden" name="gameId" value="@item.GameId" />
+                                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="mb-3">
-                        <label for="CardHolderName" class="form-label">Card Holder Name</label>
-                        <input type="text" class="form-control" id="CardHolderName" name="CardHolderName" required style="max-width: 300px;">
+
+                    <div class="payment-section d-flex justify-content-between align-items-center mt-3">
+                        <div class="total-box">
+                            <h3>Total Price: @Model.TotalPrice.ToString("C")</h3>
+                        </div>
+                        <div class="button-group">
+                            <a href="@Url.Action("Index", "Home")" class="btn btn-secondary mb-3 box-button">Continue Shopping</a>
+
+                            @if (Model.TotalPrice > 0)
+                            {
+                                <button type="button" class="btn btn-primary mb-3 box-button" data-bs-toggle="collapse" data-bs-target="#paymentFormSection" aria-expanded="false" aria-controls="paymentFormSection">
+                                    Checkout
+                                </button>
+                            }
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="ExpiryDate" class="form-label">Expiry Date</label>
-                        <input type="text" class="form-control" id="ExpiryDate" name="ExpiryDate" placeholder="MM/YY" required style="max-width: 100px;">
+
+                    <!-- Collapsible Payment Form Section -->
+                    @if (Model.TotalPrice > 0)
+                    {
+                        <div class="collapse w-100 mt-3" id="paymentFormSection">
+                            <div class="card card-body" style="max-width: 350px; margin: auto; padding: 20px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+                                <form id="paymentForm" asp-action="Payment" method="post">
+                                    <div id="errorMsg" style="display:none; color:red; margin-bottom:10px;"></div>
+                                    <div class="mb-3">
+                                        <label for="CardNumber" class="form-label">Card Number</label>
+                                        <input type="text" class="form-control" id="CardNumber" name="CardNumber" maxlength="19" required placeholder="xxxx xxxx xxxx xxxx" style="font-size: 16px; padding: 8px; border-radius: 5px;">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="CardHolderName" class="form-label">Card Holder Name</label>
+                                        <input type="text" class="form-control" id="CardHolderName" name="CardHolderName" required placeholder="John Doe" style="font-size: 16px; padding: 8px; border-radius: 5px;">
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="mb-3" style="flex: 0 0 48%;">
+                                            <label for="ExpiryDate" class="form-label">Expiry Date</label>
+                                            <input type="text" class="form-control" id="ExpiryDate" name="ExpiryDate" placeholder="MM/YY" required style="font-size: 16px; padding: 8px; border-radius: 5px;">
+                                        </div>
+                                        <div class="mb-3" style="flex: 0 0 48%;">
+                                            <label for="CVV" class="form-label">CVV</label>
+                                            <input type="text" class="form-control" id="CVV" name="CVV" maxlength="3" required placeholder="123" style="font-size: 16px; padding: 8px; border-radius: 5px;">
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="Amount" name="Amount" value="@Model.TotalPrice" />
+                                    <button type="submit" class="btn btn-success w-100" style="font-size: 16px; padding: 10px; border-radius: 5px;">Confirm Purchase</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="d-flex justify-content-center align-items-center" style="height: 300px;">
+                        <div class="card card-body text-center" style="max-width: 350px; padding: 20px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+                            <h4>Your cart is empty. 🥹</h4>
+                            <a href="@Url.Action("Index", "Home")" class="btn btn-secondary box-button mt-3">Continue Shopping</a>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="CVV" class="form-label">CVV</label>
-                        <input type="text" class="form-control" id="CVV" name="CVV" maxlength="3" required style="max-width: 100px;">
-                    </div>
-                    <input type="hidden" id="Amount" name="Amount" value="@Model.TotalPrice" />
-                    <button type="submit" class="btn btn-primary">Confirm Purchase</button>
-                </form>
+                }
             </div>
         </div>
-    }
-    else
-    {
-        <form asp-action="Checkout" method="post">
-            <button type="submit" class="btn btn-primary">Checkout</button>
-        </form>
-    }
-}
-else
-{
-    <p>Your cart is empty.</p>
-}
-
-<a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Continue Shopping</a>
-
+    </div>
+</section>
 @section Scripts {
     <script>
         // Format card number input
@@ -110,20 +118,34 @@ else
 
         // Validate expiry date input
         document.getElementById('ExpiryDate').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            let value = e.target.value.replace(/\D/g, '').substring(0, 4); // Remove non-digits and limit to 4 digits (MMYY)
             if (value.length > 2) {
                 value = value.substring(0, 2) + '/' + value.substring(2, 4); // Add slash after month
             }
-            e.target.value = value.substring(0, 5); // Limit to 5 characters (MM/YY)
+            e.target.value = value; // Limit to 5 characters (MM/YY)
+        });
+
+        // Ensure CVV is only 3 digits
+        document.getElementById('CVV').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '').substring(0, 3); // Remove non-digits and limit to 3 digits
+            e.target.value = value; // Set formatted value
         });
 
         document.getElementById('paymentForm').addEventListener('submit', function (e) {
             const expiryDateInput = document.getElementById('ExpiryDate').value;
             const [month, year] = expiryDateInput.split('/');
+            const errorMsgElement = document.getElementById('errorMsg');
 
             if (!isValidExpiryDate(month, year)) {
                 e.preventDefault();
-                alert('Please enter a valid expiration date.');
+                errorMsgElement.textContent = 'Please enter a valid expiration date.';
+                errorMsgElement.style.display = 'block';
+            } else if (isExpired(month, year)) {
+                e.preventDefault();
+                errorMsgElement.textContent = 'The card is expired.';
+                errorMsgElement.style.display = 'block';
+            } else {
+                errorMsgElement.style.display = 'none';
             }
         });
 
@@ -131,8 +153,15 @@ else
             if (month === undefined || year === undefined || month.length !== 2 || year.length !== 2) return false;
 
             const inputDate = new Date(`20${year}-${month}-01`);
+            return inputDate > new Date('2000-01-01'); // Ensure that the date is valid
+        }
+
+        function isExpired(month, year) {
+            const inputDate = new Date(`20${year}-${month}-01`);
             const currentDate = new Date();
-            return inputDate >= new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            return inputDate < new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
         }
     </script>
 }
+
+

@@ -4,7 +4,9 @@
     ViewData["Title"] = "Edit Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@section Sidebar {
+    @await Html.PartialAsync("~/Views/Shared/Components/SideBar/_Sidebar.cshtml")
+}
 <h2>Edit Profile</h2>
 
 <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
