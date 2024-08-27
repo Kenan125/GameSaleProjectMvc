@@ -1,0 +1,95 @@
+﻿@model GameSaleProject_Mvc.Areas.Admin.Models.AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Sidebar {
+    @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
+}
+
+<div class="container-fluid mt-5">
+    <div class="card shadow-sm p-3 mb-5 rounded" style="background-color: rgb(11, 12, 42); min-height: 85vh;">
+        <div class="card-body" style="background-color: rgb(11, 12, 42);">
+            <h2 class="card-title mb-4 text-center text-white">Admin Dashboard</h2>
+
+            <!-- Metrics Section -->
+            <div class="row">
+                <div class="col-sm-6 col-md-3">
+                    <div class="card mb-3" style="background-color: rgb(56, 169, 255); border: 2px solid rgb(56, 169, 255);">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Games</h5>
+                            <p class="card-text display-6">@Model.TotalGames</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-3">
+                    <div class="card mb-3" style="background-color: rgb(40, 199, 111); border: 2px solid rgb(40, 199, 111);">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Users</h5>
+                            <p class="card-text display-6">@Model.TotalUsers</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-3">
+                    <div class="card mb-3" style="background-color: rgb(255, 199, 56); border: 2px solid rgb(255, 199, 56);">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Sales</h5>
+                            <p class="card-text display-6">@Model.TotalSales</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-6">
+                    <div class="card mb-3" style="background-color: rgb(255, 56, 56); border: 2px solid rgb(255, 56, 56);">
+                        <div class="card-body ">
+                            <h5 class="card-title">Total Revenue: @Model.TotalRevenue</h5>
+                            <canvas id="totalRevenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js initialization -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const ctx = document.getElementById('totalRevenueChart').getContext('2d');
+        const totalRevenueChart = new Chart(ctx, {
+            type: 'line', // Line chart
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.SalesByDate.Select(s => s.Date.ToString("yyyy-MM-dd")))),
+                datasets: [{
+                    label: 'Revenue in $',
+                    data: @Html.Raw(Json.Serialize(Model.SalesByDate.Select(s => s.TotalRevenue))),
+                    backgroundColor: 'rgba(255, 56, 56, 0.2)',
+                    borderColor: 'rgba(255, 56, 56, 1)',
+                    borderWidth: 2,
+                    fill: true // Set to false for no fill below the line
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true // Show legend for the dataset
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: false // No need to start at zero for the x-axis
+                    },
+                    y: {
+                        beginAtZero: true // Start y-axis at zero
+                    }
+                }
+            }
+        });
+    });
+</script>

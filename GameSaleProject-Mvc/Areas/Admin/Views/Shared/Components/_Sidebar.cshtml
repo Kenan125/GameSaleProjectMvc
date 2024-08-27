@@ -1,0 +1,152 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using GameSaleProject_Entity.Identity
+@inject UserManager<AppUser> UserManager
+@inject SignInManager<AppUser> SignInManager
+
+@{
+    Layout = null;
+    ViewBag.IsCollapsed = ViewBag.IsCollapsed ?? false;  // Ensure IsCollapsed is always a boolean
+    ViewBag.ToggleIcon = ViewBag.IsCollapsed ? "<i class='bi bi-chevron-right'></i>" : "<i class='bi bi-chevron-left'></i>";
+    var user = await UserManager.GetUserAsync(User);
+    var roles = await UserManager.GetRolesAsync(user);
+    var isAdmin = roles.Contains("Admin");
+}
+
+<style>
+    .sidebar {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        background-color: #1c1c1c; /* Dark background */
+        padding: 24px 16px;
+        transition: width 0.4s ease;
+        color: #f1f1f1; /* Light text color */
+        height: 100%;
+    }
+
+    .sidebar.collapsed {
+        width: 80px;
+    }
+
+    .sidebar__collapse-button {
+        cursor: pointer;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 16px;
+        background-color: #2c2c2c; /* Darker background for button */
+        border: 1px solid #444; /* Dark border */
+        right: -10px;
+        top: 16px;
+        z-index: 10;
+        color: #f1f1f1; /* Light text color */
+    }
+
+    .sidebar-item {
+        position: relative;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        cursor: pointer;
+        font-weight: 500;
+        color: #f1f1f1; /* Light text color */
+        transition: all 0.4s ease;
+        border-radius: 12px; /* Rounded corners for all items */
+    }
+
+    .sidebar-item__active {
+        background-color: #333; /* Slightly lighter dark color */
+        border-radius: 12px;
+    }
+
+    .sidebar-item__icon {
+        display: flex;
+        color: #f1f1f1; /* Light icon color */
+    }
+
+    .sidebar-item__title {
+        display: inline-block;
+        transition: opacity 0.4s ease;
+    }
+
+    .sidebar.collapsed .sidebar-item__title {
+        opacity: 0;
+    }
+
+    .sidebar-item a {
+        color: #f1f1f1; /* Light text color */
+        text-decoration: none;
+    }
+
+    .sidebar-item a:hover {
+        color: #ddd; /* Slightly lighter on hover */
+    }
+
+    /* Admin-specific styles */
+    .sidebar-item.dashboard {
+        background-color: #4d79ff; /* Blue background for dashboard */
+        color: #fff; /* White text color */
+        border-radius: 12px; /* Rounded corners */
+    }
+
+    .sidebar-item.dashboard:hover {
+        background-color: #6699ff; /* Lighter blue on hover */
+    }
+</style>
+
+<div class="sidebar @(ViewBag.IsCollapsed ? "collapsed" : "")" id="sidebar">
+    <button class="sidebar__collapse-button" onclick="toggleSidebar()">
+        <span id="toggleIcon">@Html.Raw(ViewBag.ToggleIcon)</span>
+    </button>
+
+    <div class="sidebar-item dashboard @(ViewBag.ActivePage == "Dashboard" ? "sidebar-item__active" : "")">
+        <a class="sidebar-item__icon" asp-area="Admin" asp-controller="Admin" asp-action="Index">
+            <i class="bi bi-speedometer2"></i>
+        </a>
+        <a class="sidebar-item__title" asp-area="Admin" asp-controller="Admin" asp-action="Index">Dashboard</a>
+    </div>
+    <div class="sidebar-item @(ViewBag.ActivePage == "ManageUsers" ? "sidebar-item__active" : "")">
+        <a class="sidebar-item__icon" asp-area="Admin" asp-controller="UserManagement" asp-action="Index">
+            <i class="bi bi-people"></i>
+        </a>
+        <a class="sidebar-item__title" asp-area="Admin" asp-controller="UserManagement" asp-action="Index">Manage Users</a>
+    </div>
+    <div class="sidebar-item @(ViewBag.ActivePage == "ManageGames" ? "sidebar-item__active" : "")">
+        <a class="sidebar-item__icon" asp-area="Admin" asp-controller="Admin" asp-action="ManageGames">
+            <i class="bi bi-controller"></i>
+        </a>
+        <a class="sidebar-item__title" asp-area="Admin" asp-controller="Admin" asp-action="ManageGames">Manage Games</a>
+    </div>
+    <div class="sidebar-item @(ViewBag.ActivePage == "SalesStats" ? "sidebar-item__active" : "")">
+        <a class="sidebar-item__icon" asp-area="Admin" asp-controller="SalesStats" asp-action="Index">
+            <i class="bi bi-bar-chart"></i>
+        </a>
+        <a class="sidebar-item__title" asp-area="Admin" asp-controller="SalesStats" asp-action="Index">Sales Stats</a>
+    </div>
+    <div class="sidebar-item @(ViewBag.ActivePage == "AddGame" ? "sidebar-item__active" : "")">
+        <a class="sidebar-item__icon" asp-area="Admin" asp-controller="Admin" asp-action="AddGame">
+            <i class="bi bi-bar-chart"></i>
+        </a>
+        <a class="sidebar-item__title" asp-area="Admin" asp-controller="Admin" asp-action="AddGame">Add Game</a>
+    </div>
+</div>
+
+<script>
+    function toggleSidebar() {
+        var sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("collapsed");
+
+        var toggleIcon = document.getElementById("toggleIcon");
+        if (sidebar.classList.contains("collapsed")) {
+            toggleIcon.innerHTML = "<i class='bi bi-chevron-right'></i>";
+        } else {
+            toggleIcon.innerHTML = "<i class='bi bi-chevron-left'></i>";
+        }
+    }
+</script>

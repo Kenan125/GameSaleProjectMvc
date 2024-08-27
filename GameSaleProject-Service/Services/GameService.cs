@@ -44,17 +44,34 @@ namespace GameSaleProject_Service.Services
         public async Task<string> DeleteGameAsync(int gameId)
         {
             var repository = _unitOfWork.GetRepository<Game>();
+
+            // This ensures that the hard delete method is called
+            repository.Delete(gameId);
+
+            await _unitOfWork.CommitAsync();
+            return "Game deleted successfully.";
+        }
+
+        public async Task<string> SoftDeleteGameAsync(int gameId)
+        {
+            var repository = _unitOfWork.GetRepository<Game>();
             var game = await repository.GetByIdAsync(gameId);
             if (game == null)
             {
                 return "Game not found.";
             }
 
-            repository.Delete(game);
-            await _unitOfWork.CommitAsync();
-            return "Game deleted successfully.";
-        }
+            // Update the IsDeleted property to true instead of deleting the record
+            game.IsDeleted = true;
 
+            // Update the game in the repository
+            repository.Update(game);
+
+            // Commit the changes to the database
+            await _unitOfWork.CommitAsync();
+
+            return "Game marked as deleted successfully.";
+        }
         public async Task<List<GameViewModel>> GetAllGamesAsync()
         {
             var games = await _unitOfWork.GetRepository<Game>().GetAllAsync(
@@ -63,7 +80,8 @@ namespace GameSaleProject_Service.Services
                     g => g.Images,
                     g => g.Reviews,
                     g => g.Category,
-                    g=> g.SystemRequirement
+                    g=> g.SystemRequirement,
+                    g=>g.Publisher
                     
                 }
             );

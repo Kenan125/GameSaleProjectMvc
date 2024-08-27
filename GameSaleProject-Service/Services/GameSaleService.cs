@@ -71,5 +71,23 @@ namespace GameSaleProject_Service.Services
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<int> GetTotalSalesCountAsync()
+        {
+            return await _context.GameSales.CountAsync();
+        }
+
+        public async Task<decimal> GetTotalRevenueAsync()
+        {
+            return await _context.GameSales.SumAsync(gs => gs.TotalPrice);
+        }
+        public async Task<DateTime?> GetFirstGameSaleDateAsync()
+        {
+            var firstGameSale = await _context.GameSales
+                .OrderBy(gs => gs.CreatedDate)
+                .FirstOrDefaultAsync();
+
+            return firstGameSale?.CreatedDate;
+        }
     }
 }

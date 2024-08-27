@@ -9,5 +9,8 @@ namespace GameSaleProject_Entity.Interfaces
         Task<GameSaleViewModel> GetGameSaleByIdAsync(int gameSaleId);
         Task<List<GameSaleViewModel>> GetUserPurchasesAsync(string userName);
         Task RefundGameSaleAsync(int gameSaleId, int? gameSaleDetailId = null);
+        Task<int> GetTotalSalesCountAsync();
+        Task<decimal> GetTotalRevenueAsync();
+        Task<DateTime?> GetFirstGameSaleDateAsync();
     }
 }

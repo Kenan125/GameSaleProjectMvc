@@ -240,9 +240,9 @@ namespace GameSaleProject_Mvc.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Publisher, Admin")]
-        public async Task<IActionResult> DeleteGame(int id)
+        public async Task<IActionResult> SoftDeleteGame(int id)
         {
-            var result = await _gameService.DeleteGameAsync(id);
+            var result = await _gameService.SoftDeleteGameAsync(id);
             TempData["Message"] = result;
             return RedirectToAction("Index");
         }
