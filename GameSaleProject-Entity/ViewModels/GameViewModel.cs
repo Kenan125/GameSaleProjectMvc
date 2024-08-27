@@ -32,6 +32,8 @@
         public ICollection<ReviewViewModel>? Reviews { get; set; } = new List<ReviewViewModel>();
         public SystemRequirementViewModel? SystemRequirements { get; set; }
         public PublisherViewModel? Publisher { get; set; }
+        public CategoryViewModel Category { get; set; }
+        public SystemRequirementViewModel SystemRequirement { get; set; }
 
     }
 }

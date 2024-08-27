@@ -48,6 +48,7 @@ namespace GameSaleProject_Mvc.Controllers
 
             var categories = await _categoryService.GetAllCategoriesAsync();
             var publishers = await _publisherService.GetAllPublishersAsync();
+            
 
             var model = new GameCategoryPublisherViewModel
             {
@@ -70,6 +71,7 @@ namespace GameSaleProject_Mvc.Controllers
             var publisher = await _publisherService.GetPublisherByIdAsync(game.PublisherId);
 
             var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
+            var category = await _categoryService.GetCategoryByIdAsync(game.CategoryId);
 
             var systemRequirements = await _systemRequirementService.GetSystemRequirementsByGameIdAsync(id);
 
@@ -83,6 +85,8 @@ namespace GameSaleProject_Mvc.Controllers
                 Developer = game.Developer,
                 PublisherId = game.PublisherId,
                 Publisher = publisher != null ? new PublisherViewModel { Id = publisher.Id, Name = publisher.Name } : null,
+                CategoryId = game.CategoryId,
+                Category = category != null ? new CategoryViewModel { Id = category.Id, Name = category.Name } : null,
                 Platform = game.Platform,
                 Images = game.Images,
                 Reviews = reviews,
@@ -128,9 +132,10 @@ namespace GameSaleProject_Mvc.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Publisher, Admin")]
+        [Authorize(Roles = "Publisher, Admin,User")]
         public async Task<IActionResult> UpdateGame(int id)
         {
+
             var user = await _accountService.FindByUserNameAsync(User.Identity.Name);
             var game = await _gameService.GetGameByIdAsync(id);
 
@@ -154,6 +159,8 @@ namespace GameSaleProject_Mvc.Controllers
         public async Task<IActionResult> UpdateGame(GameViewModel model, IFormFile cardImage, List<IFormFile> DisplayImages)
         {
             ModelState.Remove("cardImage");
+            ModelState.Remove("Category");
+            ModelState.Remove("SystemRequirement");
             if (ModelState.IsValid)
             {
 

@@ -30,5 +30,7 @@
         public virtual Category Category { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
         public virtual List<Image> Images { get; set; }
+
+        public virtual SystemRequirement SystemRequirement { get; set; }
     }
 }

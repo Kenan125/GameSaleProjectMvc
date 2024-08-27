@@ -10,5 +10,7 @@
         public int Storage { get; set; }
         public string Graphics { get; set; }
         public int GameId { get; set; }
+
+        public virtual GameViewModel Game { get; set; }
     }
 }

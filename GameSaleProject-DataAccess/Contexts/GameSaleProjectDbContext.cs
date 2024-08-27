@@ -67,6 +67,10 @@ namespace GameSaleProject_DataAccess.Contexts
             .WithOne(i => i.Game)
             .HasForeignKey(i => i.GameId);
 
+            modelBuilder.Entity<Game>()
+        .HasOne(g => g.SystemRequirement)
+        .WithOne(sr => sr.Game)
+        .HasForeignKey<SystemRequirement>(sr => sr.GameId);
 
 
             modelBuilder.Entity<Game>()

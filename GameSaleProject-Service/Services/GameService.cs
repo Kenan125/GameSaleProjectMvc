@@ -61,7 +61,10 @@ namespace GameSaleProject_Service.Services
                 includes: new Expression<Func<Game, object>>[]
                 {
                     g => g.Images,
-                    g => g.Reviews
+                    g => g.Reviews,
+                    g => g.Category,
+                    g=> g.SystemRequirement
+                    
                 }
             );
 

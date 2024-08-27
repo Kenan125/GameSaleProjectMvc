@@ -4,7 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
-
+@section Sidebar {
+    @await Html.PartialAsync("~/Views/Shared/Components/SideBar/_Sidebar.cshtml")
+}
 <h1>UpdateGame</h1>
 
 @using (Html.BeginForm("UpdateGame", "PublisherProfile", FormMethod.Post, new { enctype = "multipart/form-data" }))
