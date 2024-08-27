@@ -72,17 +72,17 @@ namespace GameSaleProject_Service.Services
 
             return "Game marked as deleted successfully.";
         }
-        public async Task<List<GameViewModel>> GetAllGamesAsync()
+        public async Task<List<GameViewModel>> GetAllGamesAsync(bool includeDeleted = false)
         {
             var games = await _unitOfWork.GetRepository<Game>().GetAllAsync(
+                filter: g => includeDeleted || !g.IsDeleted, // Include deleted games based on the parameter
                 includes: new Expression<Func<Game, object>>[]
                 {
-                    g => g.Images,
-                    g => g.Reviews,
-                    g => g.Category,
-                    g=> g.SystemRequirement,
-                    g=>g.Publisher
-                    
+            g => g.Images,
+            g => g.Reviews,
+            g => g.Category,
+            g => g.SystemRequirement,
+            g=> g.Publisher
                 }
             );
 
@@ -112,24 +112,24 @@ namespace GameSaleProject_Service.Services
             return gameViewModel;
         }
 
-        public async Task<List<GameViewModel>> GetGamesByCategoryAsync(int categoryId)
+        public async Task<List<GameViewModel>> GetGamesByCategoryAsync(int categoryId, bool includeDeleted = false)
         {
             var games = await _unitOfWork.GetRepository<Game>().GetAllAsync(
-                filter: g => g.CategoryId == categoryId,
-                includes: g=>g.Images
-                
+                filter: g => (includeDeleted || !g.IsDeleted) && g.CategoryId == categoryId, // Include deleted games based on the parameter
+                includes: g => g.Images
             );
 
             return _mapper.Map<List<GameViewModel>>(games);
         }
 
-        public async Task<List<GameViewModel>> SearchGamesAsync(string searchTerm)
+        public async Task<List<GameViewModel>> SearchGamesAsync(string searchTerm, bool includeDeleted = false)
         {
             searchTerm = searchTerm.ToLower();
 
             var games = await _unitOfWork.GetRepository<Game>().GetAllAsync(
-                filter: g => g.GameName.ToLower().Contains(searchTerm) ||
-                             g.Description.ToLower().Contains(searchTerm),
+                filter: g => (includeDeleted || !g.IsDeleted) &&
+                             (g.GameName.ToLower().Contains(searchTerm) ||
+                              g.Description.ToLower().Contains(searchTerm)),
                 includes: new Expression<Func<Game, object>>[]
                 {
             g => g.Images,

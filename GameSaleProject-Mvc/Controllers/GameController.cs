@@ -1,4 +1,5 @@
-﻿using GameSaleProject_Entity.Entities;
+﻿using AutoMapper;
+using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -17,8 +18,9 @@ namespace GameSaleProject_Mvc.Controllers
         private readonly IGameSaleService _gameSaleService;
         private readonly IImageService _imageService;
         private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
 
-        public GameController(ILogger<GameController> logger, IGameService gameService, ICategoryService categoryService, IPublisherService publisherService, IReviewService reviewService, ISystemRequirementService systemRequirementService, IGameSaleService gameSaleService, IImageService imageService, IAccountService accountService)
+        public GameController(ILogger<GameController> logger, IGameService gameService, ICategoryService categoryService, IPublisherService publisherService, IReviewService reviewService, ISystemRequirementService systemRequirementService, IGameSaleService gameSaleService, IImageService imageService, IAccountService accountService, IMapper mapper)
         {
             _logger = logger;
             _gameService = gameService;
@@ -29,6 +31,7 @@ namespace GameSaleProject_Mvc.Controllers
             _gameSaleService = gameSaleService;
             _imageService = imageService;
             _accountService = accountService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -36,31 +39,30 @@ namespace GameSaleProject_Mvc.Controllers
         {
             List<GameViewModel> games;
 
+            // Check if the current user is in the Admin role
+            bool isAdmin = User.IsInRole("Admin");
+
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                // Perform search if a search term is provided
-                games = await _gameService.SearchGamesAsync(searchTerm);
+                games = await _gameService.SearchGamesAsync(searchTerm, isAdmin);
             }
             else if (categoryId.HasValue)
             {
-                // If the same category is clicked, display all games
                 var currentCategoryId = ViewData["CurrentCategoryId"] as int?;
                 if (currentCategoryId.HasValue && currentCategoryId.Value == categoryId.Value)
                 {
-                    games = await _gameService.GetAllGamesAsync();
+                    games = await _gameService.GetAllGamesAsync(isAdmin);
                     ViewData["CurrentCategoryId"] = null; // Reset the category filter
                 }
                 else
                 {
-                    // Filter games by the selected category
-                    games = await _gameService.GetGamesByCategoryAsync(categoryId.Value);
+                    games = await _gameService.GetGamesByCategoryAsync(categoryId.Value, isAdmin);
                     ViewData["CurrentCategoryId"] = categoryId.Value; // Set the current category
                 }
             }
             else
             {
-                // Otherwise, retrieve all games
-                games = await _gameService.GetAllGamesAsync();
+                games = await _gameService.GetAllGamesAsync(isAdmin);
                 ViewData["CurrentCategoryId"] = null; // Ensure the category filter is reset
             }
 
@@ -78,50 +80,33 @@ namespace GameSaleProject_Mvc.Controllers
         }
 
 
+
         public async Task<IActionResult> Detail(int id)
         {
+            var userName = User.Identity.Name;
 
+            
             var game = await _gameService.GetGameByIdAsync(id);
             if (game == null)
             {
                 return NotFound();
             }
-            var publisher = await _publisherService.GetPublisherByIdAsync(game.PublisherId);
 
-            var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
-            var category = await _categoryService.GetCategoryByIdAsync(game.CategoryId);
+            
+            var model = _mapper.Map<GameViewModel>(game);
 
-            var systemRequirements = await _systemRequirementService.GetSystemRequirementsByGameIdAsync(id);
+            
+            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
+            var purchasedGameIds = userPurchases.SelectMany(purchase => purchase.GameSaleDetails)
+                                                .Select(detail => detail.GameId)
+                                                .ToHashSet();
+            model.IsInLibrary = purchasedGameIds.Contains(game.Id);
 
-            var model = new GameViewModel
-            {
-                Id = game.Id,
-                GameName = game.GameName,
-                Description = game.Description,
-                Price = game.Price,
-                Discount = game.Discount,
-                Developer = game.Developer,
-                PublisherId = game.PublisherId,
-                Publisher = publisher != null ? new PublisherViewModel { Id = publisher.Id, Name = publisher.Name } : null,
-                CategoryId = game.CategoryId,
-                Category = category != null ? new CategoryViewModel { Id = category.Id, Name = category.Name } : null,
-                Platform = game.Platform,
-                Images = game.Images,
-                Reviews = reviews,
-                SystemRequirements = systemRequirements != null ? new SystemRequirementViewModel
-                {
-                    OS = systemRequirements.OS,
-                    SystemProcessor = systemRequirements.SystemProcessor,
-                    SystemMemory = systemRequirements.SystemMemory,
-                    Storage = systemRequirements.Storage,
-                    Graphics = systemRequirements.Graphics
-                    
-                } : null
-            };
-
+            
 
             return View(model);
         }
+
 
         [HttpGet]
         [Authorize(Roles = "Publisher, Admin")]

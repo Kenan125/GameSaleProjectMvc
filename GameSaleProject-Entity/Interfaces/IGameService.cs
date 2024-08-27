@@ -15,11 +15,11 @@ namespace GameSaleProject_Entity.Interfaces
 
         Task<GameViewModel> GetGameByIdAsync(int gameId);
 
-        Task<List<GameViewModel>> GetAllGamesAsync();
+        Task<List<GameViewModel>> GetAllGamesAsync(bool includeDeleted = false);
 
-        Task<List<GameViewModel>> SearchGamesAsync(string searchTerm);
+        Task<List<GameViewModel>> SearchGamesAsync(string searchTerm, bool includeDeleted = false);
 
-        Task<List<GameViewModel>> GetGamesByCategoryAsync(int categoryId);
+        Task<List<GameViewModel>> GetGamesByCategoryAsync(int categoryId, bool includeDeleted = false);
         Task<List<GameViewModel>> GetGamesByPublisherAsync(int publisherId);
         Task<List<ImageViewModel>> HandleImageUploads(IFormFile cardImage, List<IFormFile> displayImages);
     }
