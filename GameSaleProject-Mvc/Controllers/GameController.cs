@@ -113,6 +113,7 @@ namespace GameSaleProject_Mvc.Controllers
         [Authorize]
         public async Task<IActionResult> SubmitReview(ReviewViewModel reviewModel)
         {
+            ModelState.Remove("User");
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Please ensure all required fields are filled.";

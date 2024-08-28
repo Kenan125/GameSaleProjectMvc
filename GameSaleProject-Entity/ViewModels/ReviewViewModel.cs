@@ -10,7 +10,9 @@ namespace GameSaleProject_Entity.ViewModels
         [Required(ErrorMessage = "Please select a star rating.")]
         public int Rating { get; set; }
         public string CustomerReview { get; set; }
+        public DateTime CreatedDate { get; set; }
 
-
+        // Add a property for the user associated with the review
+        public UserViewModel User { get; set; }
     }
 }

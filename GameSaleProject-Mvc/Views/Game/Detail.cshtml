@@ -5,6 +5,7 @@
     ViewData["Title"] = "Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var words = Model.GameName.Split(' ');
+    var sortedReviews = Model.Reviews.OrderByDescending(r => r.CreatedDate).ToList();
 }
 
 <div class="container mt-4">
@@ -84,7 +85,7 @@
                          class="img-fluid rounded">
                 </div>
                 <h1 class="mb-3" style="font-size: 1.5rem;">
-                    <span id="gameNameRightPart1">@string.Join(" ", words.Take(words.Length / 2))</span>
+                    <span class="text-white" id="gameNameRightPart1">@string.Join(" ", words.Take(words.Length / 2))</span>
                     <span id="gameNameRightPart2">@string.Join(" ", words.Skip(words.Length / 2))</span>
                 </h1>
                 <div class="price-section mb-4">
@@ -157,36 +158,7 @@
 
     <!-- User Reviews -->
     <!-- User Reviews -->
-    <div class="mt-5 text-white">
-        <h4>User Reviews</h4>
-        @if (Model.Reviews != null && Model.Reviews.Any())
-        {
-            @foreach (var review in Model.Reviews)
-            {
-                <div class="review mb-4">
-                    <div>
-                        @for (int i = 0; i < review.Rating; i++)
-                        {
-                            <span class="fa fa-star checked text-warning"></span>
-                        }
-                        @for (int i = review.Rating; i < 5; i++)
-                        {
-                            <span class="fa fa-star text-muted"></span>
-                        }
-                    </div>
-                    @if (!string.IsNullOrEmpty(review.CustomerReview))
-                    {
-                        <p class="text-white mt-2">@Html.Raw(review.CustomerReview)</p>
-                    }
-                </div>
-            }
-        }
-        else
-        {
-            <p class="text-muted">No reviews yet. Be the first to review this game!</p>
-        }
-
-        <!-- Add Review Form -->
+    <div class="mt-5" style="background-color: #2C2D49; border-radius: 8px;">
         <div class="mt-5 p-4" style="background-color: yellow; border-radius: 8px;">
             <h5 class="text-dark">Add Your Review</h5>
             <form asp-action="SubmitReview" method="post">
@@ -208,7 +180,47 @@
                 <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
             </form>
         </div>
+        <h4 class="text-white text-center">User Reviews</h4>
+        @if (sortedReviews.Any())
+        {
+            @foreach (var review in sortedReviews)
+            {
+                <div style="border-bottom: 1px solid #ccc;">
+                    <div class="review mb-3 mt-3 d-flex align-items-start" style="margin-left: 20px; padding-bottom: 10px;">
+                        <img src="@review.User.ProfilePictureUrl" alt="@review.User.ProfilePictureUrl" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                        <div class="ml-3 flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center text-white">
+                                <h5 class="text-white mb-1" style="margin-left: 10px;">@review.User.UserName</h5>
+                                <span class="text-white" style="font-size: 0.9rem; margin-right:10px">@review.CreatedDate.ToString("dd MMM, yyyy")</span>
+                            </div>
+                            <div style="margin-left: 10px;">
+                                @for (int i = 0; i < review.Rating; i++)
+                                {
+                                    <span class="fa fa-star checked text-warning"></span>
+                                }
+                                @for (int i = review.Rating; i < 5; i++)
+                                {
+                                    <span class="fa fa-star text-muted"></span>
+                                }
+                            </div>
+                            @if (!string.IsNullOrEmpty(review.CustomerReview))
+                            {
+                                <div class="mt-2" style="color: white;">
+                                    @Html.Raw(review.CustomerReview)
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted">No reviews yet. Be the first to review this game!</p>
+        }
     </div>
+
+
 
 
 
@@ -219,21 +231,28 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
     <script>
         ClassicEditor.create(document.querySelector('[name="CustomerReview"]'), {
-            removePlugins: ['Bold', 'Italic', 'Link', 'List'],
-            toolbar: [] 
+            toolbar: {
+                items: [
+                    // List all the tools you want to keep, excluding 'imageUpload' and 'mediaEmbed'
+                    'heading', '|',
+                    'bold', 'italic', '|',
+                    'blockQuote', 'insertTable', 'undo', 'redo'
+                ]
+            },
+            removePlugins: ['ImageUpload', 'MediaEmbed', 'Image', 'EasyImage', 'VideoEmbed'],
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                    { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                    { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+                ]
+            }
         })
             .catch(error => {
                 console.error(error);
             });
     </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Add 'text-black' class to all <p> elements inside the CKEditor content
-            document.querySelectorAll('.ck-content p').forEach(function (p) {
-                p.classList.add('text-black');
-            });
-        });
-    </script>
+    
 
 
     <script>
