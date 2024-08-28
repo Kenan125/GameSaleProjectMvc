@@ -102,9 +102,38 @@ namespace GameSaleProject_Mvc.Controllers
                                                 .ToHashSet();
             model.IsInLibrary = purchasedGameIds.Contains(game.Id);
 
-            
+            var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
+            model.Reviews = reviews;
+
 
             return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> SubmitReview(ReviewViewModel reviewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Please ensure all required fields are filled.";
+                return RedirectToAction("Detail", new { id = reviewModel.GameId });
+            }
+
+            try
+            {
+                await _reviewService.SubmitReviewAsync(reviewModel);
+                TempData["Message"] = "Review submitted successfully.";
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "An error occurred while submitting your review.";
+            }
+
+            return RedirectToAction("Detail", new { id = reviewModel.GameId });
         }
 
 

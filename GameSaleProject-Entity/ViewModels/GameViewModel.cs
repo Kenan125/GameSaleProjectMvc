@@ -30,6 +30,7 @@
         //new prop
         public List<ImageViewModel>? Images { get; set; } = new List<ImageViewModel>();
         public ICollection<ReviewViewModel>? Reviews { get; set; } = new List<ReviewViewModel>();
+        public ReviewViewModel? NewReview { get; set; }
         public SystemRequirementViewModel? SystemRequirements { get; set; }
         public PublisherViewModel? Publisher { get; set; }
         public CategoryViewModel Category { get; set; }

@@ -1,4 +1,5 @@
 ﻿@model GameViewModel
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Detail";
@@ -19,7 +20,10 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="hero__text">
-                                            <h2 class="text-shadow fw-bold">@Model.GameName</h2>
+                                            <h2 class="text-shadow fw-bold">
+                                                <span id="gameNamePart1">@string.Join(" ", words.Take(words.Length / 2))</span>
+                                                <span id="gameNamePart2">@string.Join(" ", words.Skip(words.Length / 2))</span>
+                                            </h2>
                                         </div>
                                     </div>
                                 </div>
@@ -36,26 +40,26 @@
             </div>
 
             <!-- System Requirements -->
-            <div class="system-requirements mt-5 p-4" style="background-color: #1e1e1e; border-radius: 8px;">
+            <div class="system-requirements mt-5 p-4" style="background-color: #2C2D49; border-radius: 8px;">
                 <h2 class="text-white mb-3">
                     @if (words.Length > 1)
                     {
                         <span>@string.Join(" ", words.Take(words.Length / 2))</span>
-                        <span class="text-primary">@string.Join(" ", words.Skip(words.Length / 2))</span>
+                        <span id="dominantColorText">@string.Join(" ", words.Skip(words.Length / 2))</span>
                     }
                     else
                     {
-                        <span>@Model.GameName</span>
+                        <span id="dominantColorText">@Model.GameName</span>
                     }
                     System Requirements
                 </h2>
-                
+
                 <hr style="border-color: #007bff;">
                 <div class="platform-section text-white mt-4">
                     <h4>Recommended</h4>
                     <ul class="list-unstyled">
                         <li class="mb-3">
-                            
+
                             <ul class="list-unstyled ml-4 mt-2">
                                 <li><span style="color: #b0b0b0;">OS version</span> <div style="padding-left: 20px;">@Model.SystemRequirement?.OS</div></li>
                                 <li><span style="color: #b0b0b0;">Processor</span> <div style="padding-left: 20px;">@Model.SystemRequirement?.SystemProcessor</div></li>
@@ -71,21 +75,37 @@
 
         <!-- Right Side: Game Info and Purchase Options -->
         <div class="col-lg-4">
-            <div class="game-info">
-                <h1 class="text-white mb-3">@Model.GameName</h1>
+            <div class="game-info p-4 text-white rounded" style="background-color: #2C2D49;">
+                <!-- Visible Card Image Under the Game Info -->
+                <div class="card-image mt-4">
+                    <img id="gameCardImage"
+                         src="@Url.Content(Model.Images.FirstOrDefault(i => i.ImageType == "card")?.ImageUrl ?? "/images/placeholder.png")"
+                         alt="@Model.GameName"
+                         class="img-fluid rounded">
+                </div>
+                <h1 class="mb-3" style="font-size: 1.5rem;">
+                    <span id="gameNameRightPart1">@string.Join(" ", words.Take(words.Length / 2))</span>
+                    <span id="gameNameRightPart2">@string.Join(" ", words.Skip(words.Length / 2))</span>
+                </h1>
                 <div class="price-section mb-4">
                     @if (Model.Discount > 0)
                     {
-                        <div class="original-price text-decoration-line-through text-muted">@Model.Price.ToString("C")</div>
-                        <div class="discounted-price text-danger">@(((decimal)Model.Price * (decimal)(1 - (decimal)Model.Discount / 100)).ToString("C"))</div>
+                        <div class="d-flex align-items-center">
+                            <span class="text-decoration-line-through text-white me-2">@Model.Price.ToString("C")</span>
+                            <span class="badge bg-danger text-white" style="font-size: 0.875rem; padding: 0.25rem 0.5rem;">
+                                @Model.Discount% OFF
+                            </span>
+                        </div>
+
+                        <div class="text-danger fw-bold">@(((decimal)Model.Price * (decimal)(1 - (decimal)Model.Discount / 100)).ToString("C"))</div>
                     }
                     else if (Model.Price == 0)
                     {
-                        <div class="price text-success">Free</div>
+                        <div class="text-success fw-bold">Free</div>
                     }
                     else
                     {
-                        <div class="price text-white">@Model.Price.ToString("C")</div>
+                        <div class="text-white fw-bold">@Model.Price.ToString("C")</div>
                     }
                 </div>
 
@@ -104,62 +124,139 @@
                 }
 
                 <div class="details-list">
-                    <ul class="list-unstyled text-white">
-                        <li><strong>Developer:</strong> @Model.Developer</li>
-                        <li><strong>Publisher:</strong> @Model.Publisher?.Name</li>
-                        <li><strong>Category:</strong> @Model.Category?.Name</li>
-                        <li><strong>Release Date:</strong> @Model.CreatedDate.ToString("MM/dd/yyyy")</li>
-                        <li><strong>Platform:</strong> @Model.Platform</li>
+                    <ul class="list-unstyled">
+                        <li class="d-flex justify-content-between py-2 border-bottom border-light">
+                            <strong style="color: #b0b0b0;">Developer</strong>
+                            <span>@Model.Developer</span>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom border-light">
+                            <strong style="color: #b0b0b0;">Publisher</strong>
+                            <span>@Model.Publisher?.Name</span>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom border-light">
+                            <strong style="color: #b0b0b0;">Category</strong>
+                            <span>@Model.Category?.Name</span>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom border-light">
+                            <strong style="color: #b0b0b0;">Release Date</strong>
+                            <span>@Model.CreatedDate.ToString("dd-MM-yyyy").Replace("-", "/")</span>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom border-light">
+                            <strong style="color: #b0b0b0;">Platform</strong>
+                            <span>@Model.Platform</span>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
+
+
+
+
     </div>
 
     <!-- User Reviews -->
+    <!-- User Reviews -->
     <div class="mt-5 text-white">
         <h4>User Reviews</h4>
-        @foreach (var review in Model.Reviews)
+        @if (Model.Reviews != null && Model.Reviews.Any())
         {
-            <div class="review mb-4">
-                <div>
-                    @for (int i = 0; i < review.Rating; i++)
+            @foreach (var review in Model.Reviews)
+            {
+                <div class="review mb-4">
+                    <div>
+                        @for (int i = 0; i < review.Rating; i++)
+                        {
+                            <span class="fa fa-star checked text-warning"></span>
+                        }
+                        @for (int i = review.Rating; i < 5; i++)
+                        {
+                            <span class="fa fa-star text-muted"></span>
+                        }
+                    </div>
+                    @if (!string.IsNullOrEmpty(review.CustomerReview))
                     {
-                        <span class="fa fa-star checked text-warning"></span>
-                    }
-                    @for (int i = review.Rating; i < 5; i++)
-                    {
-                        <span class="fa fa-star text-muted"></span>
+                        <p class="text-white mt-2">@Html.Raw(review.CustomerReview)</p>
                     }
                 </div>
-                @if (!string.IsNullOrEmpty(review.CustomerReview))
-                {
-                    <p class="text-white mt-2">@review.CustomerReview</p>
-                }
-            </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted">No reviews yet. Be the first to review this game!</p>
         }
 
         <!-- Add Review Form -->
-        <h5 class="text-white">Add Your Review</h5>
-        <form asp-action="AddReview" method="post">
-            <div class="form-group">
-                <label class="text-white">Stars</label>
-                <select class="form-control" name="Rating">
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        <option value="@i">@i Star@(i > 1 ? "s" : "")</option>
-                    }
-                </select>
-            </div>
-            <div class="form-group mt-2">
-                <label class="text-white">Comment (optional)</label>
-                <textarea class="form-control" name="CustomerReview" rows="3"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
-        </form>
+        <div class="mt-5 p-4" style="background-color: yellow; border-radius: 8px;">
+            <h5 class="text-dark">Add Your Review</h5>
+            <form asp-action="SubmitReview" method="post">
+                <div class="form-group">
+                    <label class="text-dark">Stars</label>
+                    <select class="form-control" name="Rating" required style="color: black;">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <option value="@i">@i Star@(i > 1 ? "s" : "")</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group mt-2">
+                    <label class="text-dark">Comment (optional)</label>
+                    <textarea class="form-control" name="CustomerReview" rows="3" style="color: black;"></textarea>
+                </div>
+                <input type="hidden" name="GameId" value="@Model.Id" />
+                <input type="hidden" name="UserId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
+                <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
+            </form>
+        </div>
     </div>
+
+
+
 </div>
 
 @section Scripts {
     <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- For star icons -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor.create(document.querySelector('[name="CustomerReview"]'), {
+            removePlugins: ['Bold', 'Italic', 'Link', 'List'],
+            toolbar: [] 
+        })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Add 'text-black' class to all <p> elements inside the CKEditor content
+            document.querySelectorAll('.ck-content p').forEach(function (p) {
+                p.classList.add('text-black');
+            });
+        });
+    </script>
+
+
+    <script>
+        // Initialize CKEditor for the review textarea
+        ClassicEditor.create(document.querySelector('[name="CustomerReview"]'));
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var img = document.getElementById('gameCardImage');
+            var colorThief = new ColorThief();
+
+            img.addEventListener('load', function () {
+                var dominantColor = colorThief.getColor(img);
+                var colorString = 'rgb(' + dominantColor.join(',') + ')';
+
+                document.getElementById('gameNamePart2').style.color = colorString;
+                document.getElementById('gameNameRightPart2').style.color = colorString;
+                document.getElementById('dominantColorText').style.color = colorString;
+            });
+
+            if (img.complete) {
+                img.dispatchEvent(new Event('load'));
+            }
+        });
+    </script>
 }
+

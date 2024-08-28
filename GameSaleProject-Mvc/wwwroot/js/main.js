@@ -106,5 +106,22 @@
         $("html, body").animate({ scrollTop: 0 }, "fast");
         return false;
      });
+     /*------------------
+         Dominant Color
+     --------------------*/
+    document.addEventListener("DOMContentLoaded", function () {
+        var img = document.getElementById('gameCardImage');
+        var colorThief = new ColorThief();
+
+        img.addEventListener('load', function () {
+            var dominantColor = colorThief.getColor(img);
+            var colorString = 'rgb(' + dominantColor.join(',') + ')';
+            document.getElementById('gameTitle').style.color = colorString;
+        });
+
+        if (img.complete) {
+            img.dispatchEvent(new Event('load'));
+        }
+    });
 
 })(jQuery);
