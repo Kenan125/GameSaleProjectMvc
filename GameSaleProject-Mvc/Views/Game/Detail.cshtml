@@ -159,22 +159,28 @@
     <!-- User Reviews -->
     <!-- User Reviews -->
     <div class="mt-5" style="background-color: #2C2D49; border-radius: 8px;">
-        <div class="mt-5 p-4" style="background-color: yellow; border-radius: 8px;">
-            <h5 class="text-dark">Add Your Review</h5>
+        <div class="mt-5 p-4" style="background-color: #c0392b; border-radius: 8px;">
+            <h5 class="text-dark mb-3"><span class="r p-1" style="background-color: #a499c9; border-radius: 5px;">Add Your Review</span></h5>
+
             <form asp-action="SubmitReview" method="post">
+                @Html.AntiForgeryToken()
+
                 <div class="form-group">
-                    <label class="text-dark">Stars</label>
-                    <select class="form-control" name="Rating" required style="color: black;">
+                    
+                    <div id="starRating" class="d-flex align-items-center">
                         @for (int i = 1; i <= 5; i++)
                         {
-                            <option value="@i">@i Star@(i > 1 ? "s" : "")</option>
+                            <span class="fa fa-star star-rating text-muted" data-value="@i" style="cursor: pointer; font-size: 24px;"></span>
                         }
-                    </select>
+                    </div>
+                    <input type="hidden" name="Rating" id="Rating" required />
                 </div>
+
                 <div class="form-group mt-2">
                     <label class="text-dark">Comment (optional)</label>
                     <textarea class="form-control" name="CustomerReview" rows="3" style="color: black;"></textarea>
                 </div>
+
                 <input type="hidden" name="GameId" value="@Model.Id" />
                 <input type="hidden" name="UserId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
                 <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
@@ -277,5 +283,31 @@
             }
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const stars = document.querySelectorAll('.star-rating');
+            const ratingInput = document.getElementById('Rating');
+
+            stars.forEach(star => {
+                star.addEventListener('click', function () {
+                    const ratingValue = this.getAttribute('data-value');
+                    ratingInput.value = ratingValue;
+
+                    // Reset all stars
+                    stars.forEach(s => {
+                        s.classList.remove('text-warning');
+                        s.classList.add('text-muted');
+                    });
+
+                    // Highlight the selected stars
+                    for (let i = 0; i < ratingValue; i++) {
+                        stars[i].classList.remove('text-muted');
+                        stars[i].classList.add('text-warning');
+                    }
+                });
+            });
+        });
+    </script>
+
 }
 
