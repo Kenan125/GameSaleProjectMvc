@@ -98,7 +98,9 @@ namespace GameSaleProject_Service.Services
                 {
             g => g.Images,
             g => g.Reviews,
-            g => g.Publisher
+            g => g.Publisher,
+            g=>g.SystemRequirement,
+            g=>g.Category
                 }
             );
 

@@ -12,6 +12,7 @@ namespace GameSaleProject_Service.Mapping
             CreateMap<Game, GameViewModel>()
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Images))
                 .ForMember(dest => dest.Reviews, opt => opt.MapFrom(src => src.Reviews))
+                .ForMember(dest=>dest.SystemRequirement, opt=>opt.MapFrom(src=>src.SystemRequirement))
                 .ReverseMap();
             CreateMap<AppUser, UserViewModel>().ReverseMap();
 
