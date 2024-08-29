@@ -21,154 +21,139 @@
 <style>
     .form-container {
         display: flex;
-        justify-content: center; /* Center the entire form in the middle */
-        align-items: flex-start; /* Align items at the top */
-        gap: 10px; /* Small space between main form and the side section */
+        justify-content: center; /* Centers the divs horizontally */
+        align-items: flex-start; /* Aligns the divs to the top of the container */
+        gap: 20px; /* Adjust the space between the divs */
+        width: 100%;
+        margin: 0 auto; /* Center the form-container within the form */
     }
 
-    .main-form, .system-requirements {
-        box-sizing: border-box; /* Ensure padding doesn't affect the width */
+    .main-form-section, .side-section {
+        box-sizing: border-box;
+        flex: 1; /* Allow both sections to take up equal space */
     }
 
-    .main-form {
-        width: 50%; /* Main form occupies half of the container */
-        max-width: 400px; /* Prevents it from becoming too wide */
+    .main-form-section {
+        max-width: 600px;
         border: 1px solid white;
-        padding: 1em; /* Padding for internal spacing */
+        padding: 1em;
         border-radius: 0.5em;
     }
 
-    .system-requirements {
-        width: 45%; /* Side section takes slightly less space */
-        max-width: 350px; /* Restrict the maximum width */
-        border: 1px solid white; /* White border for visual separation */
-        padding: 1em; /* Padding for internal spacing */
+    .side-section {
+        max-width: 400px;
+        border: 1px solid white;
+        padding: 1em;
         border-radius: 0.5em;
-    }
-
-    .image-preview {
-        display: inline-block;
-        margin-right: 10px;
-        margin-bottom: 10px;
-        position: relative;
-    }
-
-        .image-preview img {
-            max-width: 100px;
-            max-height: 100px;
-        }
-
-    .remove-image-btn,
-    .remove-card-image-btn {
-        position: absolute;
-        top: 5px;
-        right: 5px;
     }
 </style>
 
-<div class="form-container">
-    <form class="main-form" asp-action="AddGame" method="post" enctype="multipart/form-data">
-        <div class="form-group text-white">
-            <label asp-for="GameName"></label>
-            <input asp-for="GameName" class="form-control" />
-            <span asp-validation-for="GameName" class="text-danger"></span>
-        </div>
-        <div class="form-group text-white">
-            <label asp-for="Description"></label>
-            <input asp-for="Description" class="form-control" />
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-        <div class="form-group text-white">
-            <label asp-for="Discount"></label>
-            <input asp-for="Discount" class="form-control" type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />
-            <span asp-validation-for="Discount" class="text-danger"></span>
-        </div>
-        <div class="form-group text-white">
-            <label asp-for="Price"></label>
-            <input asp-for="Price" class="form-control" type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />
-            <span asp-validation-for="Price" class="text-danger"></span>
-        </div>
-        <div class="form-group text-white">
-            <label asp-for="Developer"></label>
-            <input asp-for="Developer" class="form-control" />
-            <span asp-validation-for="Developer" class="text-danger"></span>
-        </div>
 
-        @if (User.IsInRole("Admin"))
-        {
+<form asp-action="AddGame" method="post" enctype="multipart/form-data">
+    <div class="form-container">
+        <div class="main-form-section">
+            <!-- Main Form Section -->
             <div class="form-group text-white">
-                <label asp-for="PublisherId">Publisher</label>
-                <select asp-for="PublisherId" asp-items="@(ViewBag.Publishers != null ? new SelectList(ViewBag.Publishers, "Id", "Name") : new SelectList(Enumerable.Empty<SelectListItem>()))" class="form-control">
-                    <option value="">Select Publisher</option>
-                </select>
-                <span asp-validation-for="PublisherId" class="text-danger"></span>
+                <label asp-for="GameName"></label>
+                <input asp-for="GameName" class="form-control" />
+                <span asp-validation-for="GameName" class="text-danger"></span>
             </div>
-        }
-        else if (User.IsInRole("Publisher"))
-        {
-            <input type="hidden" asp-for="PublisherId" />
-        }
+            <div class="form-group text-white">
+                <label asp-for="Description"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group text-white">
+                <label asp-for="Discount"></label>
+                <input asp-for="Discount" class="form-control" type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />
+                <span asp-validation-for="Discount" class="text-danger"></span>
+            </div>
+            <div class="form-group text-white">
+                <label asp-for="Price"></label>
+                <input asp-for="Price" class="form-control" type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group text-white">
+                <label asp-for="Developer"></label>
+                <input asp-for="Developer" class="form-control" />
+                <span asp-validation-for="Developer" class="text-danger"></span>
+            </div>
 
-        <div class="form-group text-white">
-            <label asp-for="CategoryId">Category</label>
-            <select asp-for="CategoryId" asp-items="@(ViewBag.Categories != null ? new SelectList(ViewBag.Categories, "Id", "Name") : new SelectList(Enumerable.Empty<SelectListItem>()))" class="form-control">
-                <option value="">Select Category</option>
-            </select>
-            <span asp-validation-for="CategoryId" class="text-danger"></span>
-        </div>
-        <div class="form-group text-white">
-            <label asp-for="Platform"></label>
-            <input asp-for="Platform" class="form-control" />
-            <span asp-validation-for="Platform" class="text-danger"></span>
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="form-group text-white">
+                    <label asp-for="PublisherId">Publisher</label>
+                    <select asp-for="PublisherId" asp-items="@(ViewBag.Publishers != null ? new SelectList(ViewBag.Publishers, "Id", "Name") : new SelectList(Enumerable.Empty<SelectListItem>()))" class="form-control">
+                        <option value="">Select Publisher</option>
+                    </select>
+                    <span asp-validation-for="PublisherId" class="text-danger"></span>
+                </div>
+            }
+            else if (User.IsInRole("Publisher"))
+            {
+                <input type="hidden" asp-for="PublisherId" />
+            }
+
+            <div class="form-group text-white">
+                <label asp-for="CategoryId">Category</label>
+                <select asp-for="CategoryId" asp-items="@(ViewBag.Categories != null ? new SelectList(ViewBag.Categories, "Id", "Name") : new SelectList(Enumerable.Empty<SelectListItem>()))" class="form-control">
+                    <option value="">Select Category</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group text-white">
+                <label asp-for="Platform"></label>
+                <input asp-for="Platform" class="form-control" />
+                <span asp-validation-for="Platform" class="text-danger"></span>
+            </div>
+
+            <!-- File input for the display images with preview and delete option -->
+            <div class="form-group text-white">
+                <label>Display Images</label>
+                <input type="file" name="DisplayImages" multiple class="form-control" id="displayImagesInput" />
+                <div id="displayImagesPreview" class="mt-3"></div>
+            </div>
         </div>
 
-        <!-- File input for the display images with preview and delete option -->
-        <div class="form-group text-white">
-            <label>Display Images</label>
-            <input type="file" name="DisplayImages" multiple class="form-control" id="displayImagesInput" />
-            <div id="displayImagesPreview" class="mt-3"></div>
-        </div>
-        <div class="system-requirements text-white">
-            <!-- File input for the card image with preview -->
-            <div class="form-group">
+        <div class="side-section">
+            <!-- Side Section -->
+            <div class="form-group text-white">
                 <label>Card Image</label>
                 <input type="file" name="CardImage" class="form-control" id="cardImageInput" />
                 <div id="cardImagePreview" class="mt-3"></div>
             </div>
 
-            <h4>System Requirements</h4>
-            <div class="form-group">
+            <h4 class="text-white">System Requirements</h4>
+            <div class="form-group text-white">
                 <label asp-for="SystemRequirement.SystemProcessor"></label>
                 <input asp-for="SystemRequirement.SystemProcessor" class="form-control" />
                 <span asp-validation-for="SystemRequirement.SystemProcessor" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-white">
                 <label asp-for="SystemRequirement.SystemMemory"></label>
                 <input asp-for="SystemRequirement.SystemMemory" class="form-control" />
                 <span asp-validation-for="SystemRequirement.SystemMemory" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-white">
                 <label asp-for="SystemRequirement.Storage"></label>
                 <input asp-for="SystemRequirement.Storage" class="form-control" />
                 <span asp-validation-for="SystemRequirement.Storage" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-white">
                 <label asp-for="SystemRequirement.Graphics"></label>
                 <input asp-for="SystemRequirement.Graphics" class="form-control" />
                 <span asp-validation-for="SystemRequirement.Graphics" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-white">
                 <label asp-for="SystemRequirement.OS"></label>
                 <input asp-for="SystemRequirement.OS" class="form-control" />
                 <span asp-validation-for="SystemRequirement.OS" class="text-danger"></span>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Add Game</button>
-    </form>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Add Game</button>
+</form>
 
-    <!-- System Requirements Form -->
-    
-</div>
 
 @section Scripts {
     <script>
@@ -221,7 +206,7 @@
                     const imagePreview = document.createElement('div');
                     imagePreview.classList.add('image-preview');
                     imagePreview.innerHTML = `
-                                        <img src="${e.target.result}" alt="Selected Image" class="img-thumbnail">
+                                                <img src="${e.target.result}" alt="Selected Image" class="img-thumbnail" style="max-width: 150px; max-height: 150px;">
                                         <button type="button" class="btn btn-danger btn-sm mt-1 remove-image-btn" data-index="${index}">Remove</button>
                                     `;
                     previewContainer.appendChild(imagePreview);
