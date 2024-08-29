@@ -37,38 +37,39 @@ namespace GameSaleProject_Mvc.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string searchTerm, int? categoryId)
         {
-            List<GameViewModel> games;
-
-            // Check if the current user is in the Admin role
+            // Determine if the user is an Admin
             bool isAdmin = User.IsInRole("Admin");
 
-            if (!string.IsNullOrEmpty(searchTerm))
+            // Get the games based on searchTerm or categoryId
+            List<GameViewModel> games = await _gameService.GetGamesAsync(searchTerm, categoryId, isAdmin);
+
+            // Fetch categories and publishers for the view model
+            var categories = await _categoryService.GetAllCategoriesAsync();
+            var publishers = await _publisherService.GetAllPublishersAsync();
+
+            
+            if (categoryId.HasValue)
             {
-                games = await _gameService.SearchGamesAsync(searchTerm, isAdmin);
-            }
-            else if (categoryId.HasValue)
-            {
+                // If a category is selected, fetch games by category
                 var currentCategoryId = ViewData["CurrentCategoryId"] as int?;
                 if (currentCategoryId.HasValue && currentCategoryId.Value == categoryId.Value)
                 {
-                    games = await _gameService.GetAllGamesAsync(isAdmin);
-                    ViewData["CurrentCategoryId"] = null; // Reset the category filter
+                    
+                    ViewData["CurrentCategoryId"] = null;
                 }
                 else
                 {
-                    games = await _gameService.GetGamesByCategoryAsync(categoryId.Value, isAdmin);
-                    ViewData["CurrentCategoryId"] = categoryId.Value; // Set the current category
+                    
+                    ViewData["CurrentCategoryId"] = categoryId.Value;
                 }
             }
             else
             {
-                games = await _gameService.GetAllGamesAsync(isAdmin);
-                ViewData["CurrentCategoryId"] = null; // Ensure the category filter is reset
+                
+                ViewData["CurrentCategoryId"] = null;
             }
 
-            var categories = await _categoryService.GetAllCategoriesAsync();
-            var publishers = await _publisherService.GetAllPublishersAsync();
-
+            // Create the view model to pass to the view
             var model = new GameCategoryPublisherViewModel
             {
                 Games = games,
@@ -81,29 +82,31 @@ namespace GameSaleProject_Mvc.Controllers
 
 
 
+
+
         public async Task<IActionResult> Detail(int id)
-        {
-            var userName = User.Identity.Name;
+{
+    var userName = User.Identity.Name;
 
-            var game = await _gameService.GetGameByIdAsync(id);
-            if (game == null)
-            {
-                return NotFound();
-            }
+    var game = await _gameService.GetGameByIdAsync(id);
+    if (game == null)
+    {
+        return NotFound();
+    }
 
-            var model = _mapper.Map<GameViewModel>(game);
+    var model = _mapper.Map<GameViewModel>(game);
 
-            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
-            var purchasedGameIds = userPurchases.SelectMany(purchase => purchase.GameSaleDetails)
-                                                .Select(detail => detail.GameId)
-                                                .ToHashSet();
-            model.IsInLibrary = purchasedGameIds.Contains(game.Id);
+    var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
+    var purchasedGameIds = userPurchases.SelectMany(purchase => purchase.GameSaleDetails)
+                                        .Select(detail => detail.GameId)
+                                        .ToHashSet();
+    model.IsInLibrary = purchasedGameIds.Contains(game.Id);
 
-            var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
-            model.Reviews = reviews;
+    var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
+    model.Reviews = reviews;
 
-            return View(model);
-        }
+    return View(model);
+}
 
 
         [HttpPost]

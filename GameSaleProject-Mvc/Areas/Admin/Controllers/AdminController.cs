@@ -33,7 +33,7 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
             var adminProfile = await _userProfileService.GetUserProfileAsync(adminUser.Id);
 
             // Get total counts and revenue
-            var totalGames = (await _gameService.GetAllGamesAsync()).Count;
+            var totalGames = await _context.Games.CountAsync();
             var totalUsers = (await _accountService.GetAllUsers()).Count;
             var totalSales = await _gameSaleService.GetTotalSalesCountAsync();
             var totalRevenue = await _gameSaleService.GetTotalRevenueAsync();
@@ -65,7 +65,7 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
         public async Task<IActionResult> ManageGames()
         {
             ViewBag.ActivePage = "ManageGames";
-            var games = await _gameService.GetAllGamesAsync();
+            var games = await _gameService.GetAllGamesAsync(true);
             return View(games);
         }
                

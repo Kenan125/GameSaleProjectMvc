@@ -2,10 +2,15 @@
 @{
     ViewData["Title"] = "ManageGames";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var activeGames = Model.Where(g => !g.IsDeleted).ToList();
+    var deletedGames = Model.Where(g => g.IsDeleted).ToList();
 }
+
 @section Sidebar {
     @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
 }
+
 <div class="container mt-5">
     <div class="trending__product">
         <div class="row">
@@ -24,10 +29,13 @@
             </div>
         </div>
 
+        <!-- Active Games Section -->
         <div class="row">
-            @if (Model != null && Model.Any())
+            <div class="section-title d-flex justify-content-between align-items-center" ">
+            <h5>Active Games</h5>
+            @if (activeGames.Any())
             {
-                @foreach (var game in Model)
+                @foreach (var game in activeGames)
                 {
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="product__item">
@@ -41,7 +49,7 @@
                                             <div class="ep">Discount: @game.Discount%</div>
                                         }
                                         <div class="comment"><i class="fa fa-comments"></i> @game.Reviews.Count</div>
-                                        
+
                                     </div>
                                 </a>
                             }
@@ -50,7 +58,7 @@
                                 <div class="product__item__pic set-bg" style="background-image: url('/images/placeholder.png');">
                                     <div class="ep">No Image</div>
                                     <div class="comment"><i class="fa fa-comments"></i> @game.Reviews.Count</div>
-                                    
+
                                 </div>
                             }
                             <div class="product__item__text">
@@ -82,9 +90,9 @@
                                 <div class="d-flex justify-content-between">
                                     <a asp-action="UpdateGame" asp-controller="Game" asp-route-id="@game.Id" class="btn btn-primary">Update</a>
                                     <form asp-action="SoftDeleteGame" asp-controller="Game" asp-route-id="@game.Id" method="post" onsubmit="return confirm('Are you sure you want to delete this game?');" style="display:inline;">
-                                        <button type="submit" class="btn btn-danger"> Soft Delete</button>
+                                        <button type="submit" class="btn btn-danger">Soft Delete</button>
                                     </form>
-                                    
+
                                     <form asp-action="DeleteGame" asp-controller="Admin" asp-route-id="@game.Id" asp-area="Admin" method="post" onsubmit="return confirm('Are you sure you want to delete this game?');" style="display:inline;">
                                         <button type="submit" class="btn btn-danger">Hard Delete</button>
                                     </form>
@@ -96,9 +104,93 @@
             }
             else
             {
-                <p class="text-center">No games found.</p>
+                <p class="text-center">No active games found.</p>
             }
+            </div>
+        </div>
+
+        <!-- Deleted Games Section -->
+        <div class="col-lg-9">
+            <div class="trending__product">
+                <div class="row">
+                    <div class="col-lg-12 col-md-8 col-sm-8">
+                        <div class="section-title d-flex justify-content-between align-items-center">
+            <h5>Deleted Games</h5>
+            @if (deletedGames.Any())
+            {
+                @foreach (var game in deletedGames)
+                {
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="product__item">
+                            @if (game.Images != null && game.Images.Any(img => img.ImageType == "card"))
+                            {
+                                var cardImage = game.Images.First(img => img.ImageType == "card");
+                                <a asp-action="Detail" asp-controller="Game" asp-route-id="@game.Id">
+                                    <div class="product__item__pic set-bg" data-setbg="@Url.Content(cardImage.ImageUrl)">
+                                        @if (game.Discount > 0)
+                                        {
+                                            <div class="ep">Discount: @game.Discount%</div>
+                                        }
+                                        <div class="comment"><i class="fa fa-comments"></i> @game.Reviews.Count</div>
+
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <div class="product__item__pic set-bg" style="background-image: url('/images/placeholder.png');">
+                                    <div class="ep">No Image</div>
+                                    <div class="comment"><i class="fa fa-comments"></i> @game.Reviews.Count</div>
+
+                                </div>
+                            }
+                            <div class="product__item__text">
+                                <ul>
+                                    @if (game.Category != null)
+                                    {
+                                        <li>@game.Category.Name</li>
+                                    }
+                                    <li>@game.Platform</li>
+                                </ul>
+                                <h5>
+                                    <a asp-action="Detail" asp-controller="Game" asp-route-id="@game.Id">@game.GameName</a>
+                                </h5>
+                                <p class="card-text">
+                                    @if (game.Price == 0)
+                                    {
+                                        <span class="text-success">Free</span>
+                                    }
+                                    @if (game.Discount > 0)
+                                    {
+                                        <span class="text-decoration-line-through text-white">@game.Price.ToString("C")</span>
+                                        <span class="text-danger">@(((decimal)game.Price * (decimal)(1 - (decimal)game.Discount / 100)).ToString("C"))</span>
+                                    }
+                                    else if (game.Price != 0)
+                                    {
+                                        <span class="text-white">@game.Price.ToString("C")</span>
+                                    }
+                                </p>
+                                <div class="d-flex justify-content-between">
+                                    <form asp-action="RestoreGame" asp-controller="Game" asp-route-id="@game.Id" method="post" onsubmit="return confirm('Are you sure you want to restore this game?');" style="display:inline;">
+                                        <button type="submit" class="btn btn-success">Restore</button>
+                                    </form>
+
+                                    <form asp-action="DeleteGame" asp-controller="Admin" asp-route-id="@game.Id" asp-area="Admin" method="post" onsubmit="return confirm('Are you sure you want to delete this game permanently?');" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger">Hard Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-center">No deleted games found.</p>
+            }
+            </div>
+            </div>
+            </div>
         </div>
     </div>
 </div>
-

@@ -75,20 +75,33 @@ namespace GameSaleProject_Service.Services
         public async Task<List<GameViewModel>> GetAllGamesAsync(bool includeDeleted = false)
         {
             var games = await _unitOfWork.GetRepository<Game>().GetAllAsync(
-                filter: g => includeDeleted || !g.IsDeleted, // Include deleted games based on the parameter
+                filter: g => includeDeleted || !g.IsDeleted, // Include soft-deleted games based on the flag
                 includes: new Expression<Func<Game, object>>[]
                 {
             g => g.Images,
             g => g.Reviews,
             g => g.Category,
             g => g.SystemRequirement,
-            g=> g.Publisher
+            g => g.Publisher
                 }
             );
 
             return _mapper.Map<List<GameViewModel>>(games);
         }
+        public async Task<List<GameViewModel>> GetGamesAsync(string searchTerm, int? categoryId, bool includeDeleted)
+        {
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                return await SearchGamesAsync(searchTerm, includeDeleted);
+            }
 
+            if (categoryId.HasValue)
+            {
+                return await GetGamesByCategoryAsync(categoryId.Value, includeDeleted);
+            }
+
+            return await GetAllGamesAsync(includeDeleted);
+        }
         public async Task<GameViewModel> GetGameByIdAsync(int gameId)
         {
             var repository = _unitOfWork.GetRepository<Game>();

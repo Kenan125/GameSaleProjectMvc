@@ -16,6 +16,7 @@ namespace GameSaleProject_Entity.Interfaces
         Task<GameViewModel> GetGameByIdAsync(int gameId);
 
         Task<List<GameViewModel>> GetAllGamesAsync(bool includeDeleted = false);
+        Task<List<GameViewModel>> GetGamesAsync(string searchTerm, int? categoryId, bool includeDeleted);
 
         Task<List<GameViewModel>> SearchGamesAsync(string searchTerm, bool includeDeleted = false);
 

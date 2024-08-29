@@ -11,7 +11,7 @@
         <div class="row">
             <!-- Categories Section -->
             <div class="col-lg-3">
-                <div class="sidebar mt-4">
+                <div class="sidebar mt-4" style="position: sticky; top:20px;">
                     <div class="section-title">
                         <h4>Categories</h4>
                     </div>
@@ -19,7 +19,7 @@
                         @foreach (var category in Model.Categories)
                         {
                             var isActive = (category.Id == ViewData["CurrentCategoryId"] as int?);
-                            <li class="list-group-item  d-flex justify-content-between align-items-center @(isActive ? "active-category  bg-danger" : "")"
+                            <li class="list-group-item d-flex justify-content-between align-items-center @(isActive ? "active-category bg-danger" : "")"
                                 style="border: 0px solid; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
                                 <a asp-action="Index" asp-controller="Game" asp-route-categoryId="@category.Id"
                                    class="text-decoration-none text-dark"
@@ -34,8 +34,8 @@
                         }
                     </ul>
                 </div>
-
             </div>
+
 
             <!-- Games Section -->
             <div class="col-lg-9">
