@@ -111,6 +111,12 @@
         </a>
         <a class="sidebar-item__title" asp-area="Admin" asp-controller="Admin" asp-action="Index">Dashboard</a>
     </div>
+    <div class="sidebar-item @(ViewBag.ActivePage == "ManageCategories" ? "sidebar-item__active" : "")">
+        <a class="sidebar-item__icon" asp-area="Admin" asp-controller="Category" asp-action="Index">
+            <i class="bi bi-people"></i>
+        </a>
+        <a class="sidebar-item__title" asp-area="Admin" asp-controller="Category" asp-action="Index">Manage Categories</a>
+    </div>
     <div class="sidebar-item @(ViewBag.ActivePage == "ManageUsers" ? "sidebar-item__active" : "")">
         <a class="sidebar-item__icon" asp-area="Admin" asp-controller="UserManagement" asp-action="Index">
             <i class="bi bi-people"></i>

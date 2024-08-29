@@ -30,11 +30,12 @@ namespace GameSaleProject_Service.Services
             return _mapper.Map<CategoryViewModel>(category);
         }
 
-        public async Task AddCategoryAsync(CategoryViewModel model)
+        public async Task<string> AddCategoryAsync(CategoryViewModel model)
         {
             var category = _mapper.Map<Category>(model);
             await _unitOfWork.GetRepository<Category>().Add(category);
             await _unitOfWork.CommitAsync();
+            return "Category added successfully";
         }
 
         public async Task UpdateCategoryAsync(CategoryViewModel model)

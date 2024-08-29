@@ -7,7 +7,7 @@ namespace GameSaleProject_Entity.Interfaces
 
         Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync();
         Task<CategoryViewModel> GetCategoryByIdAsync(int categoryId);
-        Task AddCategoryAsync(CategoryViewModel model);
+        Task<string> AddCategoryAsync(CategoryViewModel model);
         Task UpdateCategoryAsync(CategoryViewModel model);
         Task DeleteCategoryAsync(int categoryId);
     }

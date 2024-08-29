@@ -79,12 +79,15 @@
     /*------------------
         search
     --------------------*/
-    const searchBarContainerEl = document.querySelector(".search-bar-container");
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchBarContainerEl = document.querySelector(".search-bar-container");
+        const magnifierEl = document.querySelector(".magnifier");
 
-    const magnifierEl = document.querySelector(".magnifier");
-
-    magnifierEl.addEventListener("click", () => {
-        searchBarContainerEl.classList.toggle("active");
+        if (magnifierEl && searchBarContainerEl) {
+            magnifierEl.addEventListener("click", () => {
+                searchBarContainerEl.classList.toggle("active");
+            });
+        }
     });
     /*------------------
         Video Player
