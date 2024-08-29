@@ -166,7 +166,30 @@ namespace GameSaleProject_Service.Services
                         game.Images.Add(_mapper.Map<Image>(modelImage));
                 }
             }
+            // Handle SystemRequirements
+            if (model.SystemRequirement != null)
+            {
+                var existingSystemRequirement = (await _unitOfWork.GetRepository<SystemRequirement>()
+                                                  .GetAllAsync(sr => sr.GameId == model.Id))
+                                                  .FirstOrDefault();
+                if (existingSystemRequirement != null)
+                {
+                    existingSystemRequirement.SystemProcessor = model.SystemRequirement.SystemProcessor;
+                    existingSystemRequirement.SystemMemory = model.SystemRequirement.SystemMemory;
+                    existingSystemRequirement.Storage = model.SystemRequirement.Storage;
+                    existingSystemRequirement.Graphics = model.SystemRequirement.Graphics;
+                    existingSystemRequirement.OS = model.SystemRequirement.OS;
 
+                    _unitOfWork.GetRepository<SystemRequirement>().Update(existingSystemRequirement);
+                }
+                else
+                {
+                    // Add new SystemRequirements if it doesn't exist
+                    var newSystemRequirement = _mapper.Map<SystemRequirement>(model.SystemRequirement);
+                    newSystemRequirement.GameId = model.Id; // Ensure the correct GameId is assigned
+                    await _unitOfWork.GetRepository<SystemRequirement>().Add(newSystemRequirement);
+                }
+            }
             _unitOfWork.GetRepository<Game>().Update(game);
             await _unitOfWork.CommitAsync();
 

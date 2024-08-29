@@ -81,6 +81,11 @@
         </select>
         <span asp-validation-for="PublisherId" class="text-danger"></span>
     </div>
+    <div class="form-group text-white">
+        <label asp-for="Platform"></label>
+        <input asp-for="Platform" class="form-control" />
+        <span asp-validation-for="Platform" class="text-danger"></span>
+    </div>
 
     <div class="form-group text-white">
         <label>Current Card Image</label>
@@ -138,6 +143,36 @@
         <label>Upload New Display Images</label>
         <input type="file" name="DisplayImages" multiple class="form-control" />
     </div>
+    <div class="side-section">
+        
+        
 
+        <h4 class="text-white">System Requirements</h4>
+        <div class="form-group text-white">
+            <label asp-for="SystemRequirement.SystemProcessor"></label>
+            <input asp-for="SystemRequirement.SystemProcessor" class="form-control" />
+            <span asp-validation-for="SystemRequirement.SystemProcessor" class="text-danger"></span>
+        </div>
+        <div class="form-group text-white">
+            <label asp-for="SystemRequirement.SystemMemory"></label>
+            <input asp-for="SystemRequirement.SystemMemory" class="form-control" />
+            <span asp-validation-for="SystemRequirement.SystemMemory" class="text-danger"></span>
+        </div>
+        <div class="form-group text-white">
+            <label asp-for="SystemRequirement.Storage"></label>
+            <input asp-for="SystemRequirement.Storage" class="form-control" />
+            <span asp-validation-for="SystemRequirement.Storage" class="text-danger"></span>
+        </div>
+        <div class="form-group text-white">
+            <label asp-for="SystemRequirement.Graphics"></label>
+            <input asp-for="SystemRequirement.Graphics" class="form-control" />
+            <span asp-validation-for="SystemRequirement.Graphics" class="text-danger"></span>
+        </div>
+        <div class="form-group text-white">
+            <label asp-for="SystemRequirement.OS"></label>
+            <input asp-for="SystemRequirement.OS" class="form-control" />
+            <span asp-validation-for="SystemRequirement.OS" class="text-danger"></span>
+        </div>
+    </div>
     <button type="submit" class="btn btn-primary">Update Game</button>
 </form>
