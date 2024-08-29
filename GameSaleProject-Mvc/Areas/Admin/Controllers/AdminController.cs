@@ -27,6 +27,7 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
+            ViewBag.ActivePage = "Dashboard";
             // Get admin profile information
             var adminUser = await _accountService.FindByUserNameAsync(User.Identity.Name);
             var adminProfile = await _userProfileService.GetUserProfileAsync(adminUser.Id);
@@ -63,27 +64,11 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
         // Manage Games
         public async Task<IActionResult> ManageGames()
         {
+            ViewBag.ActivePage = "ManageGames";
             var games = await _gameService.GetAllGamesAsync();
             return View(games);
         }
-
-        // Manage Categories
-        public IActionResult ManageCategories()
-        {
-            return View();
-        }
-
-        // Manage Publishers
-        public IActionResult ManagePublishers()
-        {
-            return View();
-        }
-
-        // View Sales
-        public IActionResult ViewSales()
-        {
-            return View();
-        }
+               
 
         // Manage Users
         public IActionResult ManageUsers()

@@ -14,6 +14,8 @@ namespace GameSaleProject_Entity.Interfaces
         Task<List<UserViewModel>> GetAllUsers();
         Task<List<RoleViewModel>> GetAllRoles();
         Task<string> SaveProfilePictureAsync(IFormFile formFile);
+        Task DeleteUserAndRelatedDataAsync(int userId);
+        Task<bool> RemoveRoleFromUserAsync(string userId, string roleName);
         Task SignOutAsync();
     }
 }

@@ -13,5 +13,6 @@
         public string? NewPassword { get; set; }
         public string? ConfirmNewPassword { get; set; }
 
+        public IList<string> Roles { get; set; } = new List<string>();
     }
 }

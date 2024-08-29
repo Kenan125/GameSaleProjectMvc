@@ -85,17 +85,14 @@ namespace GameSaleProject_Mvc.Controllers
         {
             var userName = User.Identity.Name;
 
-            
             var game = await _gameService.GetGameByIdAsync(id);
             if (game == null)
             {
                 return NotFound();
             }
 
-            
             var model = _mapper.Map<GameViewModel>(game);
 
-            
             var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
             var purchasedGameIds = userPurchases.SelectMany(purchase => purchase.GameSaleDetails)
                                                 .Select(detail => detail.GameId)
@@ -105,9 +102,9 @@ namespace GameSaleProject_Mvc.Controllers
             var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
             model.Reviews = reviews;
 
-
             return View(model);
         }
+
 
         [HttpPost]
         [Authorize]
@@ -142,12 +139,49 @@ namespace GameSaleProject_Mvc.Controllers
         [Authorize(Roles = "Publisher, Admin")]
         public async Task<IActionResult> AddGame()
         {
-            return View();
+            var user = await _accountService.FindByUserNameAsync(User.Identity.Name);
+
+            ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
+            ViewBag.ActivePage = "AddGame";
+
+            // Check if the user is a Publisher
+            if (User.IsInRole("Publisher"))
+            {
+                var publisher = await _publisherService.GetPublisherByUserIdAsync(user.Id);
+                if (publisher == null)
+                {
+                    TempData["Error"] = "You are not associated with any publisher.";
+                    return RedirectToAction("Index");
+                }
+
+                // Automatically set the PublisherId and hide the Publisher selection for publishers
+                var model = new GameViewModel
+                {
+                    PublisherId = publisher.Id // Automatically set the PublisherId
+                };
+
+                return View(model); // Return the view with the model containing the PublisherId
+            }
+
+            // Admin view: load all publishers and pass them to the view
+            ViewBag.Publishers = await _publisherService.GetAllPublishersAsync();
+            if (ViewBag.Categories == null || ViewBag.Publishers == null)
+            {
+                TempData["Error"] = "Failed to load categories or publishers.";
+                return RedirectToAction("Index");
+            }
+
+            return View(new GameViewModel());
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AddGame(GameViewModel model, IFormFile CardImage, List<IFormFile> DisplayImages)
         {
+            ModelState.Remove("CardImage");
+            ModelState.Remove("Category");
+            ModelState.Remove("CategoryId");
+            ModelState.Remove("SystemRequirement");
             if (ModelState.IsValid)
             {
                 model.Images = await _gameService.HandleImageUploads(CardImage, DisplayImages);
@@ -166,9 +200,9 @@ namespace GameSaleProject_Mvc.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Publisher, Admin,User")]
-        public async Task<IActionResult> UpdateGame(int id)
+        public async Task<IActionResult> UpdateGame(int id, string returnUrl = null)
         {
-
+            ViewBag.ActivePage = "ManageGames";
             var user = await _accountService.FindByUserNameAsync(User.Identity.Name);
             var game = await _gameService.GetGameByIdAsync(id);
 
@@ -184,12 +218,12 @@ namespace GameSaleProject_Mvc.Controllers
 
             ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.Publishers = await _publisherService.GetAllPublishersAsync();
-
+            ViewBag.ReturnUrl = returnUrl ?? Request.Headers["Referer"].ToString();
             return View(game);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateGame(GameViewModel model, IFormFile cardImage, List<IFormFile> DisplayImages)
+        public async Task<IActionResult> UpdateGame(GameViewModel model, IFormFile cardImage, List<IFormFile> DisplayImages, string returnUrl = null)
         {
             ModelState.Remove("cardImage");
             ModelState.Remove("Category");
@@ -235,21 +269,25 @@ namespace GameSaleProject_Mvc.Controllers
                 if (result == "Category does not exist.")
                 {
                     ModelState.AddModelError("CategoryId", "Selected category does not exist.");
+                    ViewBag.ReturnUrl = returnUrl ?? Request.Headers["Referer"].ToString();
                     return View(model);
                 }
                 if (result == "Publisher does not exist.")
                 {
                     ModelState.AddModelError("PublisherId", "Selected publisher does not exist.");
+                    ViewBag.ReturnUrl = returnUrl ?? Request.Headers["Referer"].ToString();
                     return View(model);
                 }
 
                 TempData["Message"] = result;
-                return RedirectToAction("Index");
+
+                return Redirect(returnUrl ?? Request.Headers["Referer"].ToString());
             }
 
 
             ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.Publishers = await _publisherService.GetAllPublishersAsync();
+            ViewBag.ReturnUrl = returnUrl ?? Request.Headers["Referer"].ToString(); ;
             return View(model);
         }
 

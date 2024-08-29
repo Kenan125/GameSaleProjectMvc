@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using GameSaleProject_DataAccess.Contexts;
+using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
+using GameSaleProject_Entity.UnitOfWorks;
 using GameSaleProject_Entity.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,13 +18,15 @@ namespace GameSaleProject_Service.Services
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IMapper _mapper;
         private readonly GameSaleProjectDbContext _context;
-        public AccountService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, SignInManager<AppUser> signInManager, IMapper mapper, GameSaleProjectDbContext context)
+        private readonly IUnitOfWork _unitOfWork;
+        public AccountService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, SignInManager<AppUser> signInManager, IMapper mapper, GameSaleProjectDbContext context, IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _mapper = mapper;
             _context = context;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -142,6 +146,11 @@ namespace GameSaleProject_Service.Services
         {
             var users = await _userManager.Users.ToListAsync();
             var userViewModels = _mapper.Map<List<UserViewModel>>(users);
+            foreach (var userViewModel in userViewModels)
+            {
+                var user = await _userManager.FindByIdAsync(userViewModel.Id.ToString());
+                userViewModel.Roles = (await _userManager.GetRolesAsync(user)).ToList(); // Convert to List<string>
+            }
             return userViewModels;
         }
 
@@ -161,6 +170,43 @@ namespace GameSaleProject_Service.Services
 
             return "/images/" + newFileName;
         }
+        public async Task DeleteUserAndRelatedDataAsync(int userId)
+        {
+            var publisher = await _unitOfWork.GetRepository<Publisher>()
+                                             .Get(p => p.UserId == userId);
+
+            if (publisher != null)
+            {
+                var games = await _unitOfWork.GetRepository<Game>()
+                                             .GetAllAsync(g => g.PublisherId == publisher.Id);
+                foreach (var game in games)
+                {
+                    _unitOfWork.GetRepository<Game>().Delete(game);
+                }
+
+                _unitOfWork.GetRepository<Publisher>().Delete(publisher);
+            }
+
+            var user = await _unitOfWork.GetRepository<AppUser>().GetByIdAsync(userId);
+            if (user != null)
+            {
+                _unitOfWork.GetRepository<AppUser>().Delete(user);
+            }
+
+            await _unitOfWork.CommitAsync();
+        }
+        public async Task<bool> RemoveRoleFromUserAsync(string userId, string roleName)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var result = await _userManager.RemoveFromRoleAsync(user, roleName);
+            return result.Succeeded;
+        }
+
         public async Task SignOutAsync()
         {
             await _signInManager.SignOutAsync();

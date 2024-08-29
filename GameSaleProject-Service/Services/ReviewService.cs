@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using GameSaleProject_DataAccess.Contexts;
 using GameSaleProject_Entity.Entities;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.UnitOfWorks;
 using GameSaleProject_Entity.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameSaleProject_Service.Services
 {
@@ -10,11 +12,13 @@ namespace GameSaleProject_Service.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly GameSaleProjectDbContext _context;
 
-        public ReviewService(IUnitOfWork unitOfWork, IMapper mapper)
+        public ReviewService(IUnitOfWork unitOfWork, IMapper mapper, GameSaleProjectDbContext context)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _context = context;
         }
 
         public async Task<List<ReviewViewModel>> GetReviewsByGameIdAsync(int gameId)
@@ -22,6 +26,10 @@ namespace GameSaleProject_Service.Services
             var reviews = await _unitOfWork.GetRepository<Review>()
                                            .GetAllAsync(r => r.GameId == gameId);
 
+            foreach (var review in reviews)
+            {
+                _context.Entry(review).Reference(r => r.User).Load();
+            }
             // Use AutoMapper to map the list of Review entities to a list of ReviewViewModel
             return _mapper.Map<List<ReviewViewModel>>(reviews);
         }

@@ -18,6 +18,7 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
         // Action to list all categories
         public async Task<IActionResult> Index()
         {
+            ViewBag.ActivePage = "ManageCategories";
             var categories = await _categoryService.GetAllCategoriesAsync();
             return View(categories);
         }

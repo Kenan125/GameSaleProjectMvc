@@ -3,7 +3,9 @@
     ViewData["Title"] = "ManageGames";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@section Sidebar {
+    @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
+}
 <div class="container mt-5">
     <div class="trending__product">
         <div class="row">

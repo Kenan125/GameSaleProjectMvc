@@ -189,36 +189,50 @@
         <h4 class="text-white text-center">User Reviews</h4>
         @if (sortedReviews.Any())
         {
-            @foreach (var review in sortedReviews)
-            {
-                <div style="border-bottom: 1px solid #ccc;">
-                    <div class="review mb-3 mt-3 d-flex align-items-start" style="margin-left: 20px; padding-bottom: 10px;">
-                        <img src="@review.User.ProfilePictureUrl" alt="@review.User.ProfilePictureUrl" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
-                        <div class="ml-3 flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-center text-white">
-                                <h5 class="text-white mb-1" style="margin-left: 10px;">@review.User.UserName</h5>
-                                <span class="text-white" style="font-size: 0.9rem; margin-right:10px">@review.CreatedDate.ToString("dd MMM, yyyy")</span>
-                            </div>
-                            <div style="margin-left: 10px;">
-                                @for (int i = 0; i < review.Rating; i++)
-                                {
-                                    <span class="fa fa-star checked text-warning"></span>
-                                }
-                                @for (int i = review.Rating; i < 5; i++)
-                                {
-                                    <span class="fa fa-star text-muted"></span>
-                                }
-                            </div>
-                            @if (!string.IsNullOrEmpty(review.CustomerReview))
-                            {
-                                <div class="mt-2" style="color: white;">
-                                    @Html.Raw(review.CustomerReview)
+           
+            
+                @foreach (var review in sortedReviews)
+                {
+                    <div style="border-bottom: 1px solid #ccc;">
+                        <div class="review mb-3 mt-3 d-flex align-items-start" style="margin-left: 20px; padding-bottom: 10px;">
+                        @if(review.User != null)
+                        {
+                            <img src="@review.User.ProfilePictureUrl" alt="@review.User.ProfilePictureUrl" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                            <div class="ml-3 flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center text-white">
+                                    <h5 class="text-white mb-1" style="margin-left: 10px;">@review.User.UserName</h5>
+                                    <span class="text-white" style="font-size: 0.9rem; margin-right:10px">@review.CreatedDate.ToString("dd MMM, yyyy")</span>
                                 </div>
-                            }
+                                <div style="margin-left: 10px;">
+                                    @for (int i = 0; i < review.Rating; i++)
+                                    {
+                                        <span class="fa fa-star checked text-warning"></span>
+                                    }
+                                    @for (int i = review.Rating; i < 5; i++)
+                                    {
+                                        <span class="fa fa-star text-muted"></span>
+                                    }
+                                </div>
+                                @if (!string.IsNullOrEmpty(review.CustomerReview))
+                                {
+                                    <div class="mt-2" style="color: white;">
+                                        @Html.Raw(review.CustomerReview)
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <img src="/images/default-profile.png" alt="Deleted User" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                            <h5 class="text-white mb-1" style="margin-left: 10px;">Deleted User</h5>
+                        }
+
+                            
                         </div>
                     </div>
-                </div>
-            }
+                }
+            
+
         }
         else
         {

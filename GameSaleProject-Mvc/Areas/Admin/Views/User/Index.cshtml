@@ -1,87 +1,72 @@
 ﻿@model IEnumerable<UserViewModel>
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var roles = ViewBag.Roles as List<GameSaleProject_Entity.ViewModels.RoleViewModel>;
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
 }
 
-<section class="main-content-w3layouts-agileits">
-    <div class="container">
-        <div class="col-md-8 mx-auto">
-            <h3 class="tittle">Role List</h3>
-            <div class="login p-5 bg-light mx-auto mw-100">
-                <p>
-                    <a asp-action="Create" asp-controller="Role" asp-area="Admin"><strong>Create New Role</strong></a>
-                </p>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.FirstName)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.LastName)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Email)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.UserName)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.PhoneNumber)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.ProfilePictureUrl)
-                            </th>
-                            
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.Count() > 0)
-                        {
-                            @foreach (var item in Model)
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Add Role</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    @foreach (var role in user.Roles)
+                    {
+                        <span class="badge badge-primary text-black">
+                            @role
+                            <form asp-action="RemoveUserRole" method="post" class="d-inline">
+                                <input type="hidden" name="userId" value="@user.Id" />
+                                <input type="hidden" name="roleName" value="@role" />
+                                <button type="submit" class="btn btn-sm btn-danger ml-2">x</button>
+                            </form>
+                        </span>
+                    }
+                </td>
+                <td>
+                    <form asp-action="AddUserRole" method="post" class="form-inline">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <select name="roleName" class="form-control">
+                            @foreach (var role in roles)
                             {
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(item => item.FirstName)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(item => item.LastName)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(item => item.Email)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(item => item.UserName)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(item => item.PhoneNumber)
-                                    </th>
-                                    <th>
-                                        <img src="@item.ProfilePictureUrl" alt="Profile Picture" style="width: 50px; height: 50px; border-radius: 50%;" />
-                                    </th>
-                                    <td>
-                                        <a asp-action="Edit" asp-controller="Role" asp-area="Admin" asp-route-id="@item.Id">Edit</a>
-                                        <a asp-action="Delete" asp-controller="Role" asp-area="Admin" asp-route-id="@item.Id">Delete</a>
-                                    </td>
-                                </tr>
+                                if (!user.Roles.Contains(role.Name))
+                                {
+                                    <option value="@role.Name">@role.Name</option>
+                                }
                             }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="3">
-                                    <div class="alert alert-danger text-center">
-                                        <strong>Kayıtlı rol bulunmamaktadır.</strong>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</section>
+                        </select>
+                        <button type="submit" class="btn btn-primary ml-2">Add Role</button>
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="DeleteUser" method="post" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
