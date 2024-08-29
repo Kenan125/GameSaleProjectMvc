@@ -9,7 +9,19 @@
 @section Sidebar {
     @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
 }
-
+<h3>
+    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseAddCategory" role="button" aria-expanded="false" aria-controls="collapseAddCategory">
+        Add New Category
+    </a>
+</h3>
+<div class="collapse" id="collapseAddCategory">
+    <div class="card card-body">
+        @using (Html.BeginForm("AddCategory", "Category", FormMethod.Post))
+        {
+            @Html.Partial("_AddCategory", new GameSaleProject_Entity.ViewModels.CategoryViewModel())
+        }
+    </div>
+</div>
 <h2>Categories</h2>
 
 <table class="table">
@@ -25,44 +37,26 @@
             <tr>
                 <td>@category.Name</td>
                 <td>
-                    <button class="btn btn-warning" onclick="window.location.href='@Url.Action("EditCategory", "Category", new { id = category.Id, area = "Admin" })'">Edit</button>
+                    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseUpdateCategory_@category.Id" role="button" aria-expanded="false" aria-controls="collapseUpdateCategory_@category.Id">
+                        Update
+                    </a>
+                    <div class="collapse" id="collapseUpdateCategory_@category.Id">
+                        <div class="card card-body">
+                            @using (Html.BeginForm("UpdateCategory", "Category", FormMethod.Post))
+                            {
+                                @Html.Partial("_UpdateCategory", new GameSaleProject_Entity.ViewModels.CategoryViewModel
+                              {
+                                     Id = category.Id,
+                                      Name = category.Name,
+                                         Description = category.Description
+                               })
+                            }
+                        </div>
+                    </div>
                     <a asp-action="Delete" asp-route-id="@category.Id" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-
-<h3>Add New Category</h3>
-
-@Html.Partial("_AddCategory", new GameSaleProject_Entity.ViewModels.CategoryViewModel())
-
-
-
-
-@section Scripts {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#categoryForm').submit(function (event) {
-                event.preventDefault(); // Prevent the form from submitting normally
-                var form = $(this);
-                var actionUrl = form.attr('action');
-
-                $.ajax({
-                    type: 'POST',
-                    url: actionUrl,
-                    data: form.serialize(),
-                    success: function () {
-                        // Reload the categories list
-                        $('#categoriesList').load(window.location.href + ' #categoriesList');
-                        form[0].reset(); // Reset the form after successful submission
-                    }
-                });
-            });
-        });
-    </script>
-}
-
-
 

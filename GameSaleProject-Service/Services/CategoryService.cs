@@ -26,27 +26,28 @@ namespace GameSaleProject_Service.Services
         }
         public async Task<CategoryViewModel> GetCategoryByIdAsync(int categoryId)
         {
-            var category = await _unitOfWork.GetRepository<Category>().GetByIdAsync(categoryId);
-            return _mapper.Map<CategoryViewModel>(category);
+            var repository =  _unitOfWork.GetRepository<Category>();
+            var category = await repository.GetByIdAsync(categoryId);
+            var categoryViewModel = _mapper.Map<CategoryViewModel>(category);
+            return categoryViewModel;
         }
 
-        public async Task<string> AddCategoryAsync(CategoryViewModel model)
+        public async Task AddCategoryAsync(CategoryViewModel model)
         {
             var category = _mapper.Map<Category>(model);
             await _unitOfWork.GetRepository<Category>().Add(category);
             await _unitOfWork.CommitAsync();
-            return "Category added successfully";
+            
         }
 
         public async Task UpdateCategoryAsync(CategoryViewModel model)
         {
             var category = await _unitOfWork.GetRepository<Category>().GetByIdAsync(model.Id);
-            if (category != null)
-            {
-                category = _mapper.Map(model, category);
+            
+                _mapper.Map(model, category);
                 _unitOfWork.GetRepository<Category>().Update(category);
                 await _unitOfWork.CommitAsync();
-            }
+            
         }
 
         public async Task DeleteCategoryAsync(int categoryId)
