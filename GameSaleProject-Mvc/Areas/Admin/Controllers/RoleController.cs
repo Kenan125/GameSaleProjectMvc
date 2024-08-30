@@ -39,5 +39,12 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
             }
             return View(model);
         }
+
+        
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _accountService.DeleteRoleAsync(id);
+            return RedirectToAction("Index");
+        }
     }
 }

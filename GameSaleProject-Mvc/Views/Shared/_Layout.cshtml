@@ -57,12 +57,7 @@
                                 <li class="@(ViewContext.RouteData.Values["controller"].ToString() == "Game" && ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")">
                                     <a asp-area="" asp-controller="Game" asp-action="Index">Keşfet</a>
                                 </li>
-                                <li class="@(ViewContext.RouteData.Values["controller"].ToString() == "Blog" ? "active" : "")">
-                                    <a asp-area="" asp-controller="Blog" asp-action="Index">Our Blog</a>
-                                </li>
-                                <li class="@(ViewContext.RouteData.Values["controller"].ToString() == "Home" && ViewContext.RouteData.Values["action"].ToString() == "Contact" ? "active" : "")">
-                                    <a asp-area="" asp-controller="Home" asp-action="Contact">Contacts</a>
-                                </li>
+                                
                             </ul>
                         </nav>
                     </div>

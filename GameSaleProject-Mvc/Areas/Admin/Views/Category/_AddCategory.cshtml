@@ -1,15 +1,21 @@
 ﻿@model GameSaleProject_Entity.ViewModels.CategoryViewModel
 
-<form asp-action="AddCategory" method="post">
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+<form asp-action="AddCategory" method="post" class="row g-3 w-50">
+    <div class="col-md-6 w-50">
+        <div class="form-group w-50 ">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control border border-danger" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Description"></label>
-        <input asp-for="Description" />
-        <span asp-validation-for="Description" class="text-danger"></span>
+    <div class="col-md-6 w-50">
+        <div class="form-group w-50">
+            <label asp-for="Description"></label>
+            <input asp-for="Description" class="form-control border border-danger" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Add Game</button>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary mt-3">Add Game</button>
+    </div>
 </form>

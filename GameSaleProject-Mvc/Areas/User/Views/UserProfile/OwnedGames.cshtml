@@ -7,7 +7,7 @@
 @section Sidebar {
     @await Html.PartialAsync("~/Views/Shared/Components/SideBar/_Sidebar.cshtml")
 }
-<h2>Your Owned Games</h2>
+<h2 class="text-primary">Your Owned Games</h2>
 
 @if (Model != null && Model.Any())
 {
@@ -55,5 +55,5 @@
 }
 else
 {
-    <p>You have not purchased any games yet.</p>
+    <p class="text-primary">You have not purchased any games yet.</p>
 }

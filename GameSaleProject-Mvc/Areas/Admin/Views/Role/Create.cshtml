@@ -1,9 +1,11 @@
 ﻿@model RoleViewModel
 @{
     ViewData["Title"] = "Create";
-    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+   
 }
-
+@section Sidebar {
+    @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
+}
 <section class="main-content-w3layouts-agileits">
     <div class="container">
         <div class="col-md-8 mx-auto">

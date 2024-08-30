@@ -11,6 +11,7 @@
     @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
 }
 <!-- Active Games Section -->
+
 <div class="col-lg-9 mt-3">
     <div class="trending__product">
         <div class="row">
@@ -117,8 +118,8 @@
         </div>
         <div class="row">
             @if (deletedGames.Any())
-            {
-                @foreach (var game in activeGames)
+            
+                @foreach (var game in deletedGames)
                 {
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="product__item">
@@ -200,4 +201,4 @@
         </div>
     </div>
 </div>
-</div>
+

@@ -206,6 +206,11 @@ namespace GameSaleProject_Service.Services
             var result = await _userManager.RemoveFromRoleAsync(user, roleName);
             return result.Succeeded;
         }
+        public async Task DeleteRoleAsync(string id)
+        {
+			var role = await _roleManager.FindByIdAsync(id);
+            await _roleManager.DeleteAsync(role);
+        }
 
         public async Task SignOutAsync()
         {

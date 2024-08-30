@@ -187,6 +187,7 @@ namespace GameSaleProject_Mvc.Controllers
             ModelState.Remove("SystemRequirement");
             if (ModelState.IsValid)
             {
+
                 model.Images = await _gameService.HandleImageUploads(CardImage, DisplayImages);
                 var result = await _gameService.AddGameAsync(model);
                 TempData["Message"] = result;
@@ -228,6 +229,7 @@ namespace GameSaleProject_Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateGame(GameViewModel model, IFormFile cardImage, List<IFormFile> DisplayImages, string returnUrl = null)
         {
+
             ModelState.Remove("cardImage");
             ModelState.Remove("Category");
             ModelState.Remove("SystemRequirement");

@@ -2,15 +2,17 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    
 }
-
+@section Sidebar {
+    @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
+}
 <section class="main-content-w3layouts-agileits">
     <div class="container">
         <div class="col-md-8 mx-auto">
-            <h3 class="tittle">Role List</h3>
+            <h3 class="title text-primary">Role List</h3>
             <div class="login p-5 bg-light mx-auto mw-100">
-                <p>
+                <p class="text-primary">
                     <a asp-action="Create" asp-controller="Role" asp-area="Admin"><strong>Create New Role</strong></a>
                 </p>
                 <table class="table">
@@ -38,7 +40,7 @@
                                         @Html.DisplayFor(modelItem => item.Description)
                                     </td>
                                     <td>
-                                        <a asp-action="Edit" asp-controller="Role" asp-area="Admin" asp-route-id="@item.Id">Edit</a>
+                                       
                                         <a asp-action="Delete" asp-controller="Role" asp-area="Admin" asp-route-id="@item.Id">Delete</a>
                                     </td>
                                 </tr>
