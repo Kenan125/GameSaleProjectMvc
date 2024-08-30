@@ -7,34 +7,74 @@
 @section Sidebar {
     @await Html.PartialAsync("~/Views/Shared/Components/SideBar/_Sidebar.cshtml")
 }
-<h2>@Model.Name's Profile</h2>
 
-<div class="form-group">
-    <label>First Name:</label>
-    <p>@Model.User.FirstName</p>
-</div>
-<div class="form-group">
-    <label>Last Name:</label>
-    <p>@Model.User.LastName</p>
-</div>
-<div class="form-group">
-    <label>User Name:</label>
-    <p>@Model.User.UserName</p>
-</div>
-<div class="form-group">
-    <label>Email:</label>
-    <p>@Model.User.Email</p>
-</div>
-<div class="form-group">
-    <label>Phone Number:</label>
-    <p>@Model.User.PhoneNumber</p>
+
+<div class="p-4" style="background-color: #2C2D49; color: white; padding: 10px; border-radius: 8px;">
+    <h2 class="mb-3">@Model.Name's Profile</h2>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>First Name:</label>
+                        <p>@Model.User.FirstName</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Last Name:</label>
+                        <p>@Model.User.LastName</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>User Name:</label>
+                        <p>@Model.User.UserName</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <p>@Model.User.Email</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Phone Number:</label>
+                        <p>@Model.User.PhoneNumber</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 text-center mb-5">
+            @if (!string.IsNullOrEmpty(Model.User.ProfilePictureUrl))
+            {
+                <img src="@Model.User.ProfilePictureUrl" alt="@Model.User.UserName's Profile Picture" class="rounded-circle" style="width: 200px; height: 200px;" />
+            }
+            else
+            {
+                <img src="/images/placeholder.png" alt="Default Profile Picture" class="img-fluid rounded-circle" />
+            }
+        </div>
+    </div>
+    
 </div>
 
-<h3>Games Published</h3>
+
 
 @if (Model.Games != null && Model.Games.Any())
 {
-    <div class="row">
+    <div class="col-lg-9 mt-3">
+    <div class="trending__product">
+        <div class="row">
+            <div class="col-lg-12 col-md-8 col-sm-8">
+                <div class="section-title d-flex justify-content-between align-items-center">
+                    <h4>Published Games</h4>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
         @foreach (var game in Model.Games)
         {
             <div class="col-md-4">
@@ -96,6 +136,8 @@
                 </div>
             </div>
         }
+    </div>
+    </div>
     </div>
 }
 else

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameSaleProject_Mvc.Areas.User.Controllers
@@ -14,8 +16,10 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _environment;
         private readonly IPublisherService _publisherService;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public UserProfileController(IUserProfileService userProfileService, IAccountService accountService, IGameSaleService gameSaleService, IMapper mapper, IWebHostEnvironment environment, IPublisherService publisherService)
+        public UserProfileController(IUserProfileService userProfileService, IAccountService accountService, IGameSaleService gameSaleService, IMapper mapper, IWebHostEnvironment environment, IPublisherService publisherService,SignInManager<AppUser> signInManager,UserManager<AppUser> userManager)
         {
             _userProfileService = userProfileService;
             _accountService = accountService;
@@ -23,6 +27,8 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
             _mapper = mapper;
             _environment = environment;
             _publisherService = publisherService;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         private async Task<UserViewModel?> GetAuthenticatedUserAsync()
@@ -193,22 +199,20 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> BecomePublisher(PublisherViewModel model)
         {
-            // Ensure the user is authenticated
+            
             var user = await GetAuthenticatedUserAsync();
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            // Set the UserId in the model
-            //model.UserId = user.Id;
+            
             ModelState.Remove("User");
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-
-            // Delegate the registration of the publisher to the PublisherService
+           
             var result = await _publisherService.CreatePublisherAsync(model, user.Id);
             if (!result)
             {
@@ -216,8 +220,15 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
                 return View(model);
             }
 
-            // Change the user's role to "Publisher"
+            
             await _accountService.AssignRoleToUserAsync(user.Id.ToString(), "Publisher");
+            var appUser = await _userManager.FindByIdAsync(user.Id.ToString());
+    if (appUser == null)
+    {
+        return RedirectToAction("Login", "Account");
+    }
+            await _signInManager.SignOutAsync(); // Sign out the user
+            await _signInManager.SignInAsync(appUser, isPersistent: false); // Sign them back in
 
             return RedirectToAction("Index", new { Message = "You have successfully registered as a publisher." });
         }

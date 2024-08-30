@@ -1,8 +1,12 @@
 ﻿@model IEnumerable<UserViewModel>
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var roles = ViewBag.Roles as List<GameSaleProject_Entity.ViewModels.RoleViewModel>;
+}
+@section Sidebar {
+    @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
 }
 @if (TempData["SuccessMessage"] != null)
 {
@@ -17,7 +21,7 @@
     <thead>
         <tr>
             <th>User ID</th>
-            <th>Username</th>
+            <th>Username</th>            
             <th>Email</th>
             <th>Roles</th>
             <th>Add Role</th>

@@ -104,12 +104,14 @@ button:focus,
 textarea:focus {
 	outline: none;
 }
-
+a {
+    text-decoration: none;
+}
 a:hover,
 a:focus {
 	text-decoration: none;
 	outline: none;
-	color: #ffffff;
+	
 }
 
 ul,
@@ -156,7 +158,9 @@ ol {
 	background-size: cover;
 	background-position: top center;
 }
-
+.bg-custom-red {
+    background-color: #E53637;
+}
 .spad {
 	padding-top: 100px;
 	padding-bottom: 100px;
