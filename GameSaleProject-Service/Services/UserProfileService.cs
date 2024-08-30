@@ -58,7 +58,11 @@ namespace GameSaleProject_Service.Services
 
             return _mapper.Map<UserViewModel>(user);
         }
-
+        public async Task<int?> FindUserIdByUserNameAsync(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            return user?.Id;
+        }
         public async Task<bool> RefundGameAsync(int userId, int gameId)
         {
             var gameSaleDetail = await _context.GameSaleDetails
