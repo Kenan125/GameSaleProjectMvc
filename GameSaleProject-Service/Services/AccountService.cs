@@ -172,29 +172,49 @@ namespace GameSaleProject_Service.Services
         }
         public async Task DeleteUserAndRelatedDataAsync(int userId)
         {
+            // Retrieve the Publisher associated with the User
             var publisher = await _unitOfWork.GetRepository<Publisher>()
                                              .Get(p => p.UserId == userId);
 
             if (publisher != null)
             {
+                // Retrieve and delete all games associated with the Publisher
                 var games = await _unitOfWork.GetRepository<Game>()
                                              .GetAllAsync(g => g.PublisherId == publisher.Id);
-                foreach (var game in games)
+
+                if (games.Any())
                 {
-                    _unitOfWork.GetRepository<Game>().Delete(game);
+                    foreach (var game in games)
+                    {
+                        _unitOfWork.GetRepository<Game>().Delete(game);
+                    }
+                    // Commit the deletion of games before attempting to delete the publisher
+                    await _unitOfWork.CommitAsync();
                 }
 
+                // Now delete the Publisher associated with the User
                 _unitOfWork.GetRepository<Publisher>().Delete(publisher);
+
+                // Commit the deletion of the publisher before attempting to delete the user
+                await _unitOfWork.CommitAsync();
             }
 
+            // Retrieve the User
             var user = await _unitOfWork.GetRepository<AppUser>().GetByIdAsync(userId);
             if (user != null)
             {
+                // Delete the User
                 _unitOfWork.GetRepository<AppUser>().Delete(user);
-            }
 
-            await _unitOfWork.CommitAsync();
+                // Commit the deletion of the user
+                await _unitOfWork.CommitAsync();
+            }
         }
+
+
+
+
+
         public async Task<bool> RemoveRoleFromUserAsync(string userId, string roleName)
         {
             var user = await _userManager.FindByIdAsync(userId);

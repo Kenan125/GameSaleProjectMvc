@@ -4,6 +4,7 @@ using GameSaleProject_DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameSaleProject_DataAccess.Migrations
 {
     [DbContext(typeof(GameSaleProjectDbContext))]
-    partial class GameSaleProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240830173559_newseeddata")]
+    partial class newseeddata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,7 +56,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2253),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(697),
                             Description = "Action games",
                             IsDeleted = false,
                             Name = "Action"
@@ -61,7 +64,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2265),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(708),
                             Description = "Adventure games",
                             IsDeleted = false,
                             Name = "Adventure"
@@ -69,7 +72,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2266),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(709),
                             Description = "Role-playing games",
                             IsDeleted = false,
                             Name = "RPG"
@@ -77,7 +80,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2267),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(710),
                             Description = "Strategy games",
                             IsDeleted = false,
                             Name = "Strategy"
@@ -85,7 +88,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2268),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(712),
                             Description = "Simulation games",
                             IsDeleted = false,
                             Name = "Simulation"
@@ -93,7 +96,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2269),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(713),
                             Description = "High-speed racing games",
                             IsDeleted = false,
                             Name = "Racing"
@@ -101,34 +104,34 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2269),
-                            Description = "Survival games",
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(714),
+                            Description = "Survival games with challenging gameplay",
                             IsDeleted = false,
                             Name = "Survival"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2270),
-                            Description = "Puzzle-solving games",
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(714),
+                            Description = "Puzzle-solving games with various challenges",
                             IsDeleted = false,
                             Name = "Puzzle"
                         },
                         new
                         {
                             Id = 9,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2271),
-                            Description = "First-person and third-person shooters",
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(715),
+                            Description = "Games set in dark, mysterious worlds",
                             IsDeleted = false,
-                            Name = "Shooter"
+                            Name = "Dark Fantasy"
                         },
                         new
                         {
                             Id = 10,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2272),
-                            Description = "Sports games",
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(776),
+                            Description = "Sci-fi games with space exploration",
                             IsDeleted = false,
-                            Name = "Sports"
+                            Name = "Sci-Fi"
                         });
                 });
 
@@ -314,155 +317,155 @@ namespace GameSaleProject_DataAccess.Migrations
                         {
                             Id = 10,
                             CategoryId = 2,
-                            CreatedDate = new DateTime(2018, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "An action-adventure game",
-                            Developer = "Santa Monica Studio",
+                            CreatedDate = new DateTime(2016, 2, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "A farming simulation game",
+                            Developer = "ConcernedApe",
                             Discount = 0,
-                            GameName = "God of War",
+                            GameName = "Stardew Valley",
                             IsDeleted = false,
-                            Platform = "PS4",
-                            Price = 49.99m,
+                            Platform = "PC",
+                            Price = 14.99m,
                             PublisherId = 8
                         },
                         new
                         {
                             Id = 11,
-                            CategoryId = 2,
-                            CreatedDate = new DateTime(2017, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "An open-world adventure game",
-                            Developer = "Nintendo",
-                            Discount = 0,
-                            GameName = "The Legend of Zelda: Breath of the Wild",
+                            CategoryId = 9,
+                            CreatedDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "An epic journey through enchanted lands.",
+                            Developer = "Enchanted Studios",
+                            Discount = 15,
+                            GameName = "Mystic Quest",
                             IsDeleted = false,
-                            Platform = "Switch",
-                            Price = 59.99m,
+                            Platform = "PC, PS5, Xbox",
+                            Price = 29.99m,
                             PublisherId = 9
                         },
                         new
                         {
                             Id = 12,
-                            CategoryId = 2,
-                            CreatedDate = new DateTime(2020, 11, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "A Viking-themed action RPG",
-                            Developer = "Ubisoft Montreal",
-                            Discount = 10,
-                            GameName = "Assassin's Creed Valhalla",
-                            IsDeleted = false,
-                            Platform = "PC, PS4, Xbox One",
-                            Price = 59.99m,
-                            PublisherId = 10
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CategoryId = 9,
-                            CreatedDate = new DateTime(2019, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "A first-person shooter",
-                            Developer = "Infinity Ward",
+                            CategoryId = 10,
+                            CreatedDate = new DateTime(2023, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Explore the far reaches of the galaxy.",
+                            Developer = "Galaxy Games",
                             Discount = 20,
-                            GameName = "Call of Duty: Modern Warfare",
+                            GameName = "Space Odyssey",
                             IsDeleted = false,
-                            Platform = "PC, PS4, Xbox One",
-                            Price = 59.99m,
-                            PublisherId = 11
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CategoryId = 9,
-                            CreatedDate = new DateTime(2020, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "A fast-paced first-person shooter",
-                            Developer = "id Software",
-                            Discount = 15,
-                            GameName = "DOOM Eternal",
-                            IsDeleted = false,
-                            Platform = "PC, PS4, Xbox One",
+                            Platform = "PC, Xbox",
                             Price = 49.99m,
                             PublisherId = 12
                         },
                         new
                         {
-                            Id = 15,
+                            Id = 13,
                             CategoryId = 3,
-                            CreatedDate = new DateTime(2020, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "A reimagining of the classic RPG",
-                            Developer = "Square Enix",
+                            CreatedDate = new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "A fast-paced cyberpunk adventure.",
+                            Developer = "Neon Visions",
                             Discount = 10,
-                            GameName = "Final Fantasy VII Remake",
+                            GameName = "Cyber Runner",
                             IsDeleted = false,
-                            Platform = "PS4",
-                            Price = 59.99m,
+                            Platform = "PC, PS5",
+                            Price = 39.99m,
                             PublisherId = 13
                         },
                         new
                         {
-                            Id = 16,
-                            CategoryId = 9,
-                            CreatedDate = new DateTime(2021, 12, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "A sci-fi first-person shooter",
-                            Developer = "343 Industries",
-                            Discount = 5,
-                            GameName = "Halo Infinite",
+                            Id = 14,
+                            CategoryId = 2,
+                            CreatedDate = new DateTime(2023, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Uncover the secrets of lost civilizations.",
+                            Developer = "Relic Games",
+                            Discount = 25,
+                            GameName = "Ancient Ruins",
                             IsDeleted = false,
-                            Platform = "PC, Xbox Series X/S",
-                            Price = 59.99m,
+                            Platform = "PC",
+                            Price = 24.99m,
                             PublisherId = 14
                         },
                         new
                         {
-                            Id = 17,
-                            CategoryId = 2,
-                            CreatedDate = new DateTime(2020, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "A VR action-adventure game",
-                            Developer = "Valve",
-                            Discount = 20,
-                            GameName = "Half-Life: Alyx",
+                            Id = 15,
+                            CategoryId = 3,
+                            CreatedDate = new DateTime(2023, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Build and manage your own fantasy empire.",
+                            Developer = "Kingdom Creations",
+                            Discount = 30,
+                            GameName = "Fantasy Kingdom",
                             IsDeleted = false,
-                            Platform = "PC",
-                            Price = 59.99m,
+                            Platform = "PC, PS5",
+                            Price = 19.99m,
                             PublisherId = 15
                         },
                         new
                         {
-                            Id = 18,
+                            Id = 16,
                             CategoryId = 3,
-                            CreatedDate = new DateTime(2020, 11, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "A turn-based RPG",
-                            Developer = "Ryu Ga Gotoku Studio",
-                            Discount = 10,
-                            GameName = "Yakuza: Like a Dragon",
+                            CreatedDate = new DateTime(2023, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Hunt down ferocious dragons in an epic RPG.",
+                            Developer = "Mythic Studios",
+                            Discount = 20,
+                            GameName = "Dragon Slayer",
                             IsDeleted = false,
-                            Platform = "PC, PS4, Xbox One",
+                            Platform = "PC, Xbox, PS5",
                             Price = 59.99m,
                             PublisherId = 16
                         },
                         new
                         {
-                            Id = 19,
-                            CategoryId = 1,
-                            CreatedDate = new DateTime(2019, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "A fighting game",
-                            Developer = "NetherRealm Studios",
-                            Discount = 10,
-                            GameName = "Mortal Kombat 11",
+                            Id = 17,
+                            CategoryId = 6,
+                            CreatedDate = new DateTime(2023, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "High-speed racing across various terrains.",
+                            Developer = "Speedy Devs",
+                            Discount = 15,
+                            GameName = "Racing Thunder",
                             IsDeleted = false,
-                            Platform = "PC, PS4, Xbox One",
-                            Price = 49.99m,
+                            Platform = "PC, Xbox, Switch",
+                            Price = 34.99m,
                             PublisherId = 17
                         },
                         new
                         {
-                            Id = 20,
+                            Id = 18,
                             CategoryId = 7,
-                            CreatedDate = new DateTime(2021, 5, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "A survival horror game",
-                            Developer = "Capcom",
-                            Discount = 15,
-                            GameName = "Resident Evil Village",
+                            CreatedDate = new DateTime(2023, 9, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Survive the zombie apocalypse.",
+                            Developer = "Apocalypse Now",
+                            Discount = 25,
+                            GameName = "Zombie Survival",
                             IsDeleted = false,
-                            Platform = "PC, PS5, Xbox Series X/S",
-                            Price = 59.99m,
+                            Platform = "PC, PS5, Xbox",
+                            Price = 14.99m,
                             PublisherId = 18
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CategoryId = 8,
+                            CreatedDate = new DateTime(2023, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Solve challenging puzzles in this mind-bending game.",
+                            Developer = "Mind Games",
+                            Discount = 10,
+                            GameName = "Puzzle Master",
+                            IsDeleted = false,
+                            Platform = "PC",
+                            Price = 9.99m,
+                            PublisherId = 19
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CategoryId = 9,
+                            CreatedDate = new DateTime(2023, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "An epic RPG where you become the hero.",
+                            Developer = "Heroic Studios",
+                            Discount = 15,
+                            GameName = "Hero's Journey",
+                            IsDeleted = false,
+                            Platform = "PC, PS5, Xbox",
+                            Price = 44.99m,
+                            PublisherId = 10
                         });
                 });
 
@@ -578,7 +581,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2571),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1057),
                             GameId = 1,
                             ImageType = "card",
                             ImageUrl = "/images/witcher3.jpg",
@@ -588,7 +591,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2574),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1059),
                             GameId = 2,
                             ImageType = "card",
                             ImageUrl = "/images/gtav.jpg",
@@ -598,7 +601,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2575),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1060),
                             GameId = 3,
                             ImageUrl = "/images/cyberpunk2077.jpg",
                             IsDeleted = false,
@@ -607,7 +610,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2576),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1061),
                             GameId = 4,
                             ImageType = "card",
                             ImageUrl = "/images/rdr2.jpg",
@@ -617,7 +620,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2578),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1062),
                             GameId = 5,
                             ImageType = "card",
                             ImageUrl = "/images/civ6.jpg",
@@ -627,7 +630,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2579),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1063),
                             GameId = 6,
                             ImageType = "card",
                             ImageUrl = "/images/sims4.jpg",
@@ -637,7 +640,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2580),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1064),
                             GameId = 7,
                             ImageType = "card",
                             ImageUrl = "/images/darksouls3.jpg",
@@ -647,7 +650,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2581),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1065),
                             GameId = 8,
                             ImageType = "card",
                             ImageUrl = "/images/minecraft.jpg",
@@ -657,7 +660,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 9,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2582),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1066),
                             GameId = 9,
                             ImageType = "card",
                             ImageUrl = "/images/fortnite.jpg",
@@ -667,112 +670,42 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 10,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2584),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1067),
                             GameId = 10,
                             ImageType = "card",
-                            ImageUrl = "/images/godofwar.jpg",
+                            ImageUrl = "/images/stardewvalley.jpg",
                             IsDeleted = false,
-                            Name = "godofwar"
+                            Name = "stardewvalley"
                         },
                         new
                         {
                             Id = 11,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2585),
-                            GameId = 11,
-                            ImageType = "card",
-                            ImageUrl = "/images/zelda.jpg",
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1067),
+                            GameId = 7,
+                            ImageType = "carousel",
+                            ImageUrl = "/images/darksouls3Caus.jpg",
                             IsDeleted = false,
-                            Name = "zelda"
+                            Name = "darksouls3Caus"
                         },
                         new
                         {
                             Id = 12,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2586),
-                            GameId = 12,
-                            ImageType = "card",
-                            ImageUrl = "/images/assassinscreed.jpg",
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1068),
+                            GameId = 4,
+                            ImageType = "carousel",
+                            ImageUrl = "/images/rdr2Caus.jpg",
                             IsDeleted = false,
-                            Name = "assassinscreed"
+                            Name = "rdr2Caus"
                         },
                         new
                         {
                             Id = 13,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2587),
-                            GameId = 13,
-                            ImageType = "card",
-                            ImageUrl = "/images/cod.jpg",
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1069),
+                            GameId = 9,
+                            ImageType = "carousel",
+                            ImageUrl = "/images/fortniteCaus.jpg",
                             IsDeleted = false,
-                            Name = "cod"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2588),
-                            GameId = 14,
-                            ImageType = "card",
-                            ImageUrl = "/images/doom.jpg",
-                            IsDeleted = false,
-                            Name = "doom"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2589),
-                            GameId = 15,
-                            ImageType = "card",
-                            ImageUrl = "/images/ff7.jpg",
-                            IsDeleted = false,
-                            Name = "ff7"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2590),
-                            GameId = 16,
-                            ImageType = "card",
-                            ImageUrl = "/images/halo.jpg",
-                            IsDeleted = false,
-                            Name = "halo"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2591),
-                            GameId = 17,
-                            ImageType = "card",
-                            ImageUrl = "/images/halflife.jpg",
-                            IsDeleted = false,
-                            Name = "halflife"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2592),
-                            GameId = 18,
-                            ImageType = "card",
-                            ImageUrl = "/images/yakuza.jpg",
-                            IsDeleted = false,
-                            Name = "yakuza"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2593),
-                            GameId = 19,
-                            ImageType = "card",
-                            ImageUrl = "/images/mk11.jpg",
-                            IsDeleted = false,
-                            Name = "mk11"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2594),
-                            GameId = 20,
-                            ImageType = "card",
-                            ImageUrl = "/images/residentevil.jpg",
-                            IsDeleted = false,
-                            Name = "residentevil"
+                            Name = "fortniteCaus"
                         });
                 });
 
@@ -807,142 +740,142 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2524),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1012),
                             IsDeleted = false,
                             Name = "CD Projekt"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2525),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1013),
                             IsDeleted = false,
                             Name = "Rockstar Games"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2526),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1014),
                             IsDeleted = false,
                             Name = "2K Games"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2527),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1015),
                             IsDeleted = false,
                             Name = "Electronic Arts"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2528),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1016),
                             IsDeleted = false,
                             Name = "Bandai Namco Entertainment"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2529),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1017),
                             IsDeleted = false,
                             Name = "Mojang"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2529),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1017),
                             IsDeleted = false,
                             Name = "Epic Games"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2530),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1018),
                             IsDeleted = false,
-                            Name = "Sony Interactive Entertainment"
+                            Name = "ConcernedApe"
                         },
                         new
                         {
                             Id = 9,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2530),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1018),
                             IsDeleted = false,
-                            Name = "Nintendo"
+                            Name = "Enchanted Publishing"
                         },
                         new
                         {
                             Id = 10,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2531),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1019),
                             IsDeleted = false,
-                            Name = "Ubisoft"
+                            Name = "Heroic Media"
                         },
                         new
                         {
                             Id = 11,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2532),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1020),
                             IsDeleted = false,
-                            Name = "Activision"
+                            Name = "Dark Realm Publishing"
                         },
                         new
                         {
                             Id = 12,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2533),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1020),
                             IsDeleted = false,
-                            Name = "Bethesda Softworks"
+                            Name = "StarForge Media"
                         },
                         new
                         {
                             Id = 13,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2533),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1021),
                             IsDeleted = false,
-                            Name = "Square Enix"
+                            Name = "Silent Shadows Inc."
                         },
                         new
                         {
                             Id = 14,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2535),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1021),
                             IsDeleted = false,
-                            Name = "Microsoft Studios"
+                            Name = "Sandstorm Media"
                         },
                         new
                         {
                             Id = 15,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2536),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1022),
                             IsDeleted = false,
-                            Name = "Valve"
+                            Name = "Royal Publishing"
                         },
                         new
                         {
                             Id = 16,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2536),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1023),
                             IsDeleted = false,
-                            Name = "SEGA"
+                            Name = "Black Flag Studios"
                         },
                         new
                         {
                             Id = 17,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2537),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1023),
                             IsDeleted = false,
-                            Name = "Warner Bros. Interactive Entertainment"
+                            Name = "Crawl Publishers"
                         },
                         new
                         {
                             Id = 18,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2538),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1024),
                             IsDeleted = false,
-                            Name = "Capcom"
+                            Name = "Urban Creations"
                         },
                         new
                         {
                             Id = 19,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2539),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1025),
                             IsDeleted = false,
-                            Name = "Blizzard Entertainment"
+                            Name = "Wild Hunt Publishing"
                         },
                         new
                         {
                             Id = 20,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2539),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1025),
                             IsDeleted = false,
-                            Name = "Take-Two Interactive"
+                            Name = "NeoSpeed Studios"
                         });
                 });
 
@@ -1030,7 +963,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2625),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1134),
                             GameId = 2,
                             Graphics = "NVIDIA GTX 660 2GB",
                             IsDeleted = false,
@@ -1042,7 +975,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2628),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1137),
                             GameId = 3,
                             Graphics = "NVIDIA GTX 1060 6GB",
                             IsDeleted = false,
@@ -1054,7 +987,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2629),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1139),
                             GameId = 4,
                             Graphics = "NVIDIA GTX 770 2GB",
                             IsDeleted = false,
@@ -1066,7 +999,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2630),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1140),
                             GameId = 5,
                             Graphics = "Intel HD Graphics 4000",
                             IsDeleted = false,
@@ -1078,7 +1011,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2632),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1141),
                             GameId = 6,
                             Graphics = "AMD Radeon HD 6870",
                             IsDeleted = false,
@@ -1090,7 +1023,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2633),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1142),
                             GameId = 7,
                             Graphics = "Intel HD Graphics 4000",
                             IsDeleted = false,
@@ -1102,7 +1035,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2634),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1143),
                             GameId = 8,
                             Graphics = "Intel HD Graphics 620",
                             IsDeleted = false,
@@ -1114,7 +1047,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2635),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1145),
                             GameId = 9,
                             Graphics = "Intel HD Graphics 3000",
                             IsDeleted = false,
@@ -1126,7 +1059,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 9,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2636),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1146),
                             GameId = 10,
                             Graphics = "NVIDIA GTX 1080 8GB",
                             IsDeleted = false,
@@ -1138,7 +1071,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 10,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2637),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1147),
                             GameId = 11,
                             Graphics = "NVIDIA GTX 1050 Ti",
                             IsDeleted = false,
@@ -1150,7 +1083,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 11,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2639),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1148),
                             GameId = 12,
                             Graphics = "NVIDIA GTX 1660 Super",
                             IsDeleted = false,
@@ -1162,7 +1095,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 12,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2640),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1149),
                             GameId = 13,
                             Graphics = "NVIDIA RTX 2060",
                             IsDeleted = false,
@@ -1174,7 +1107,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 13,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2641),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1150),
                             GameId = 14,
                             Graphics = "NVIDIA GTX 1060",
                             IsDeleted = false,
@@ -1186,7 +1119,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 14,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2642),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1151),
                             GameId = 15,
                             Graphics = "NVIDIA GTX 1050 Ti",
                             IsDeleted = false,
@@ -1198,7 +1131,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 15,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2643),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1152),
                             GameId = 16,
                             Graphics = "NVIDIA RTX 2070 Super",
                             IsDeleted = false,
@@ -1210,7 +1143,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 16,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2644),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1153),
                             GameId = 17,
                             Graphics = "NVIDIA GTX 1650",
                             IsDeleted = false,
@@ -1222,7 +1155,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 17,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2646),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1154),
                             GameId = 18,
                             Graphics = "NVIDIA GTX 1050",
                             IsDeleted = false,
@@ -1234,7 +1167,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 18,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2647),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1155),
                             GameId = 19,
                             Graphics = "Intel UHD Graphics 630",
                             IsDeleted = false,
@@ -1246,7 +1179,7 @@ namespace GameSaleProject_DataAccess.Migrations
                         new
                         {
                             Id = 19,
-                            CreatedDate = new DateTime(2024, 8, 30, 20, 58, 28, 957, DateTimeKind.Local).AddTicks(2648),
+                            CreatedDate = new DateTime(2024, 8, 30, 20, 35, 58, 539, DateTimeKind.Local).AddTicks(1156),
                             GameId = 20,
                             Graphics = "NVIDIA RTX 2060 Super",
                             IsDeleted = false,
