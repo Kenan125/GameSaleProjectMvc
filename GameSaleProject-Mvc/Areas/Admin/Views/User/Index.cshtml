@@ -6,7 +6,18 @@
     var roles = ViewBag.Roles as List<GameSaleProject_Entity.ViewModels.RoleViewModel>;
 }
 @section Sidebar {
-    @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
+    @if (User.IsInRole("Admin"))
+    {
+        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
+    }
+    else if (User.IsInRole("Publisher"))
+    {
+        @await Html.PartialAsync("~/Areas/Publisher/Views/Shared/Components/_Sidebar.cshtml")
+    }
+    else
+    {
+        @await Html.PartialAsync("~/Views/Shared/Components/SideBar/_Sidebar.cshtml")
+    }
 }
 @if (TempData["SuccessMessage"] != null)
 {

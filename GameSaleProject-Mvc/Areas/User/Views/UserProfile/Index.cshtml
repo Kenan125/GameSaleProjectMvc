@@ -4,7 +4,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Sidebar {
-    @await Html.PartialAsync("~/Views/Shared/Components/SideBar/_Sidebar.cshtml")
+    @if (User.IsInRole("Admin"))
+    {
+        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
+    }
+    else if (User.IsInRole("Publisher"))
+    {
+        @await Html.PartialAsync("~/Areas/Publisher/Views/Shared/Components/_Sidebar.cshtml")
+    }
+    else
+    {
+        @await Html.PartialAsync("~/Views/Shared/Components/SideBar/_Sidebar.cshtml")
+    }
 }
 <div class="p-4" style="background-color: #2C2D49; color: white; padding: 10px; border-radius: 8px;">
     <h2 class="mb-3">@Model.FirstName's Profile</h2>

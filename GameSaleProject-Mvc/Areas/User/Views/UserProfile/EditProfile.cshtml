@@ -5,7 +5,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Sidebar {
-    @await Html.PartialAsync("~/Views/Shared/Components/SideBar/_Sidebar.cshtml")
+    @if (User.IsInRole("Admin"))
+    {
+        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
+    }
+    else if (User.IsInRole("Publisher"))
+    {
+        @await Html.PartialAsync("~/Areas/Publisher/Views/Shared/Components/_Sidebar.cshtml")
+    }
+    else
+    {
+        @await Html.PartialAsync("~/Views/Shared/Components/SideBar/_Sidebar.cshtml")
+    }
 }
 <h2 class="text-white">Edit Profile</h2>
 
