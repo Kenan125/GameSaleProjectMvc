@@ -27,16 +27,17 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Get admin profile information
+            ViewBag.ActivePage = "Dashboard";
+            
             var adminUser = await _accountService.FindByUserNameAsync(User.Identity.Name);
             var adminProfile = await _userProfileService.GetUserProfileAsync(adminUser.Id);
 
-            // Get total counts and revenue
-            var totalGames = (await _gameService.GetAllGamesAsync()).Count;
+            
+            var totalGames = await _context.Games.CountAsync();
             var totalUsers = (await _accountService.GetAllUsers()).Count;
             var totalSales = await _gameSaleService.GetTotalSalesCountAsync();
             var totalRevenue = await _gameSaleService.GetTotalRevenueAsync();
-            // Get sales grouped by date (e.g., daily or monthly)
+            
             var salesByDate = await _context.GameSales
     .GroupBy(gs => gs.CreatedDate.Date)
     .Select(group => new SalesByDateViewModel
@@ -54,38 +55,22 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
                 TotalUsers = totalUsers,
                 TotalSales = totalSales,
                 TotalRevenue = totalRevenue,
-                SalesByDate = salesByDate // Assign the grouped sales data
+                SalesByDate = salesByDate 
             };
 
             return View(model);
         }
 
-        // Manage Games
+        
         public async Task<IActionResult> ManageGames()
         {
-            var games = await _gameService.GetAllGamesAsync();
+            ViewBag.ActivePage = "ManageGames";
+            var games = await _gameService.GetAllGamesAsync(true);
             return View(games);
         }
+               
 
-        // Manage Categories
-        public IActionResult ManageCategories()
-        {
-            return View();
-        }
-
-        // Manage Publishers
-        public IActionResult ManagePublishers()
-        {
-            return View();
-        }
-
-        // View Sales
-        public IActionResult ViewSales()
-        {
-            return View();
-        }
-
-        // Manage Users
+        
         public IActionResult ManageUsers()
         {
             return View();

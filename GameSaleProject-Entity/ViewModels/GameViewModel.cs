@@ -26,10 +26,12 @@
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public bool IsInLibrary { get; set; }
         public bool IsDeleted { get; set; }
+        public double AverageRating { get; set; }
 
         //new prop
         public List<ImageViewModel>? Images { get; set; } = new List<ImageViewModel>();
         public ICollection<ReviewViewModel>? Reviews { get; set; } = new List<ReviewViewModel>();
+        public ReviewViewModel? NewReview { get; set; }
         public SystemRequirementViewModel? SystemRequirements { get; set; }
         public PublisherViewModel? Publisher { get; set; }
         public CategoryViewModel Category { get; set; }

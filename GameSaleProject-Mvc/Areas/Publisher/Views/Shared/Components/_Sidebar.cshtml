@@ -121,10 +121,10 @@
         <a class="sidebar-item__title" asp-area="User" asp-controller="UserProfile" asp-action="EditProfile">Edit Profile</a>
     </div>
     <div class="sidebar-item @(ViewBag.ActivePage == "AddGame" ? "sidebar-item__active" : "")">
-        <a class="sidebar-item__icon" asp-area="Publisher" asp-controller="PublisherProfile" asp-action="AddGame">
+        <a class="sidebar-item__icon"  asp-controller="Game" asp-action="AddGame">
             <i class="bi bi-pencil-square"></i>
         </a>
-        <a class="sidebar-item__title" asp-area="Publisher" asp-controller="PublisherProfile" asp-action="AddGame">Add Game</a>
+        <a class="sidebar-item__title"  asp-controller="Game" asp-action="AddGame">Add Game</a>
     </div>
         
 </div>

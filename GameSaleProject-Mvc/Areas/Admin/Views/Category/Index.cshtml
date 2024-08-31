@@ -1,0 +1,62 @@
+﻿@model IEnumerable<GameSaleProject_Entity.ViewModels.CategoryViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+@section Sidebar {
+    @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
+}
+<h3>
+    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseAddCategory" role="button" aria-expanded="false" aria-controls="collapseAddCategory">
+        Add New Category
+    </a>
+</h3>
+<div class="collapse" id="collapseAddCategory">
+    <div class="card card-body">
+        @using (Html.BeginForm("AddCategory", "Category", FormMethod.Post))
+        {
+            @Html.Partial("_AddCategory", new GameSaleProject_Entity.ViewModels.CategoryViewModel())
+        }
+    </div>
+</div>
+<h2 class=" text-white">Categories</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Name</td>
+                <td>
+                    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseUpdateCategory_@category.Id" role="button" aria-expanded="false" aria-controls="collapseUpdateCategory_@category.Id">
+                        Update
+                    </a>
+                    <div class="collapse" id="collapseUpdateCategory_@category.Id">
+                        <div class="card card-body">
+                            @using (Html.BeginForm("UpdateCategory", "Category", FormMethod.Post))
+                            {
+                                @Html.Partial("_UpdateCategory", new GameSaleProject_Entity.ViewModels.CategoryViewModel
+                              {
+                                     Id = category.Id,
+                                      Name = category.Name,
+                                         Description = category.Description
+                               })
+                            }
+                        </div>
+                    </div>
+                    <a asp-action="Delete" asp-route-id="@category.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

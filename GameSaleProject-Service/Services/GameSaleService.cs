@@ -17,7 +17,17 @@ namespace GameSaleProject_Service.Services
             _context = context;
             _mapper = mapper;
         }
+        public async Task<List<GameSaleViewModel>> GetAllSalesAsync()
+        {
+            var gameSales = await _context.GameSales
+                .Include(gs => gs.User)
+                .Include(gs => gs.GameSaleDetails)
+                    .ThenInclude(gsd => gsd.Game)
+                    .ThenInclude(g => g.Images)
+                .ToListAsync();
 
+            return _mapper.Map<List<GameSaleViewModel>>(gameSales);
+        }
         public async Task CreateGameSaleAsync(GameSale gameSale)
         {
             _context.GameSales.Add(gameSale);

@@ -50,7 +50,7 @@ namespace GameSaleProject_Mvc.Controllers
 
                     if (signInResult.Succeeded)
                     {
-                        // Redirect to the ReturnUrl or to the home page if ReturnUrl is not specified
+
                         return LocalRedirect(model.ReturnUrl ?? Url.Content("~/"));
                     }
                     else
@@ -64,7 +64,7 @@ namespace GameSaleProject_Mvc.Controllers
                 }
             }
 
-            // If we got this far, something failed, redisplay form
+
             return View(model);
         }
 

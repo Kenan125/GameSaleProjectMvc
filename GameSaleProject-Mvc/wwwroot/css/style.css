@@ -46,7 +46,7 @@ h4,
 h5,
 h6 {
 	margin: 0;
-	color: #111111;
+	/*color: #111111;*/
 	font-weight: 400;
 	font-family: "Mulish", sans-serif;
 }
@@ -78,14 +78,24 @@ h6 {
 p {
 	font-size: 15px;
 	font-family: "Mulish", sans-serif;
-	color: #3d3d3d;
+	/*color: #3d3d3d;*/
 	font-weight: 400;
 	line-height: 25px;
-	margin: 0 0 15px 0;
+	/*margin: 0 0 15px 0;*/
 }
 
 img {
 	max-width: 100%;
+}
+.ck-content ul,
+.ck-content ol {
+	padding-left: 20px; /* Adjust as needed */
+	margin-left: 0; /* Ensure there is no negative margin */
+}
+
+/* Ensure that list items are not cut off by overflow */
+.ck-content {
+	overflow: visible;
 }
 
 input:focus,
@@ -94,12 +104,14 @@ button:focus,
 textarea:focus {
 	outline: none;
 }
-
+a {
+    text-decoration: none;
+}
 a:hover,
 a:focus {
 	text-decoration: none;
 	outline: none;
-	color: #ffffff;
+	
 }
 
 ul,
@@ -146,13 +158,15 @@ ol {
 	background-size: cover;
 	background-position: top center;
 }
-
+.bg-custom-red {
+    background-color: #E53637;
+}
 .spad {
 	padding-top: 100px;
 	padding-bottom: 100px;
 }
 
-.text-white h1,
+/*.text-white h1,
 .text-white h2,
 .text-white h3,
 .text-white h4,
@@ -163,7 +177,7 @@ ol {
 .text-white li,
 .text-white a {
 	color: #fff;
-}
+}*/
 .text-shadow {
 	color: white;
 	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Adds a black shadow with opacity */

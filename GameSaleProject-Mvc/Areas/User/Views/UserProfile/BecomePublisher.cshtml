@@ -5,18 +5,29 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Sidebar {
-    @await Html.PartialAsync("~/Views/Shared/Components/SideBar/_Sidebar.cshtml")
+    @if (User.IsInRole("Admin"))
+    {
+        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
+    }
+    else if (User.IsInRole("Publisher"))
+    {
+        @await Html.PartialAsync("~/Areas/Publisher/Views/Shared/Components/_Sidebar.cshtml")
+    }
+    else
+    {
+        @await Html.PartialAsync("~/Views/Shared/Components/SideBar/_Sidebar.cshtml")
+    }
 }
-<h2>Become a Publisher</h2>
+<h2 class="text-info text-center">Become a Publisher</h2>
 
-<form asp-action="BecomePublisher" method="post">
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" placeholder="Enter Publisher Name" />
+<form asp-action="BecomePublisher" method="post" class="row justify-content-center align-items-center vh-100">
+    <div class="form-group w-25 text-center">
+        <label asp-for="Name" class="text-warning"></label>
+        <input asp-for="Name" class="form-control text-center" placeholder="Enter Publisher Name" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Register as Publisher</button>
+    <button type="submit" class="btn btn-primary mt-3">Register as Publisher</button>
 </form>
 
 <div class="mt-3">

@@ -15,20 +15,21 @@ namespace GameSaleProject_Service.Extensions
         public static void AddExtensions(this IServiceCollection services)
         {
             services.AddIdentity<AppUser, AppRole>(
-                opt =>
-                {
-                    opt.Password.RequiredLength = 3;    //default 6 karakter
+                 opt =>
+                 {
+                    opt.Password.RequiredLength = 6;
                     opt.Password.RequireNonAlphanumeric = false;
-                    opt.Password.RequireUppercase = false;
-                    opt.Password.RequireLowercase = false;
-                    opt.Password.RequireDigit = false;
+                    opt.Password.RequireUppercase = true;
+                    opt.Password.RequireLowercase = true;
+                    opt.Password.RequireDigit = true;
 
-                    opt.User.RequireUniqueEmail = true;  //aynı email adresinin tekrar kullanılmasına izin vermez.
-                    opt.User.AllowedUserNameCharacters = "zxcvbnmasdfghjklqwertyuiop1234567890"; //kullanıcı adı girilirken bunlardan başka birkarakter girilmesine izin vermez.
-                    opt.Lockout.MaxFailedAccessAttempts = 3;  //default 5
-                    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); //default 5
+                    opt.User.RequireUniqueEmail = true;
+                    opt.User.AllowedUserNameCharacters = "zxcvbnmasdfghjklqwertyuiop1234567890";
+                    opt.Lockout.MaxFailedAccessAttempts = 3;
+                    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
 
-                }).AddEntityFrameworkStores<GameSaleProjectDbContext>();
+                 }
+            ).AddEntityFrameworkStores<GameSaleProjectDbContext>();
 
             services.AddScoped<IGameService, GameService>();
             services.AddScoped<IGameSaleService, GameSaleService>();
@@ -42,9 +43,7 @@ namespace GameSaleProject_Service.Extensions
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<ISystemRequirementService, SystemRequirementService>();
             services.AddScoped<IUserProfileService, UserProfileService>();
-
             services.AddAutoMapper(typeof(MappingProfile));
-
             services.AddScoped<RoleInitializer>();
 
         }

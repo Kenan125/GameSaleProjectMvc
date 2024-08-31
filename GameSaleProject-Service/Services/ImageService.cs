@@ -32,14 +32,6 @@ namespace GameSaleProject_Service.Services
             return $"/images/{fileName}";
         }
 
-        public async Task DeleteImageAsync(string imageUrl)
-        {
-            var filePath = Path.Combine(_environment.WebRootPath, imageUrl.TrimStart('/'));
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
-            await Task.CompletedTask;
-        }
+        
     }
 }

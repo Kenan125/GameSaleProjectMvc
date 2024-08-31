@@ -18,6 +18,7 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
+            ViewBag.ActivePage = "AddRole";
             var roles = await _accountService.GetAllRoles();
             return View(roles);
         }
@@ -38,6 +39,13 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
                 ModelState.AddModelError("", msg);
             }
             return View(model);
+        }
+
+        
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _accountService.DeleteRoleAsync(id);
+            return RedirectToAction("Index");
         }
     }
 }

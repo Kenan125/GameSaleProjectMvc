@@ -1,0 +1,102 @@
+﻿@model List<GameSaleProject_Entity.ViewModels.GameSaleViewModel>
+
+@{
+    ViewBag.Title = "Sales List";
+}
+@section Sidebar {
+    @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/_Sidebar.cshtml")
+}
+<h2>Sales List</h2>
+
+@if (Model != null && Model.Any())
+{
+    <div class="table-responsive text-white">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Sale ID</th>
+                    <th>User Name</th>
+                    <th>Total Price</th>
+                    <th>Total Quantity</th>
+                    <th>Created Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sale in Model)
+                {
+                    <tr class="text-white">
+                        <td>@sale.Id</td>
+                        <td>@sale.User.UserName</td>
+                        <td>
+                            @if (sale.TotalPrice == 0)
+                            {
+                                <span class="text-success">Free</span>
+                            }else{
+                                @sale.TotalPrice.ToString("C")
+                            }
+                            
+                            </td>
+                        <td>@sale.TotalQuantity</td>
+                        <td>@sale.CreatedDate.ToString("dd MMMM yyyy")</td>
+                        <td>
+                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#details-@sale.Id" aria-expanded="false" aria-controls="details-@sale.Id">
+                                View Details
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-white">
+                            <div class="collapse" id="details-@sale.Id">
+                                <div class="card card-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Game Name</th>
+                                                <th>Unit Price</th>
+                                                <th>Discount</th>
+                                                <th>Final Price</th>
+                                                <th>Is Refunded</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var detail in sale.GameSaleDetails)
+                                            {
+                                                <tr>
+                                                    <td>@detail.Game.GameName</td>
+                                                    <td>
+                                                        @(((decimal)detail.UnitPrice / (decimal)(1 - (decimal)detail.Discount / 100)).ToString("C"))
+                                                        </td>
+                                                    <td>
+                                                        @if (detail.Discount > 0)
+                                                        {
+                                                            @($"{detail.Discount}%")
+                                                        }
+                                                        else
+                                                        {
+                                                            @("No Discount")
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @detail.UnitPrice.ToString("C")
+                                                        </td>
+                                                    <td>@(detail.IsRefunded ? "Yes" : "No")</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        No sales available.
+    </div>
+}

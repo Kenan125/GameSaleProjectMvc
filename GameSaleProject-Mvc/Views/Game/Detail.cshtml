@@ -1,14 +1,17 @@
 ﻿@model GameViewModel
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var words = Model.GameName.Split(' ');
+    var sortedReviews = Model.Reviews.OrderByDescending(r => r.CreatedDate).ToList();
 }
 
 <div class="container mt-4">
     <div class="row">
-        <!-- Left Side: Image Carousel -->
-        <div class="col-md-8">
+
+        <div class="col-lg-8">
             <section class="hero">
                 <div class="container">
                     <div class="hero__slider owl-carousel">
@@ -18,8 +21,10 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="hero__text">
-                                            <h2 class="text-shadow fw-bold">@Model.GameName</h2>
-                                            <p class="text-shadow">@Model.Description</p>
+                                            <h2 class="text-shadow fw-bold">
+                                                <span id="gameNamePart1">@string.Join(" ", words.Take(words.Length / 2))</span>
+                                                <span id="gameNamePart2">@string.Join(" ", words.Skip(words.Length / 2))</span>
+                                            </h2>
                                         </div>
                                     </div>
                                 </div>
@@ -28,116 +33,323 @@
                     </div>
                 </div>
             </section>
-        </div>
 
-        <!-- Right Side: Card Image and Game Info -->
-        <div class="col-md-4">
-            <div class="card text-white bg-dark mb-3">
-                <img src="@Url.Content(Model.Images.FirstOrDefault(i => i.ImageType == "card")?.ImageUrl ?? "/images/placeholder.png")" class="card-img-top" alt="@Model.GameName">
-                <div class="card-body">
-                    <h5 class="card-title">@Model.GameName</h5>
-                    <p class="card-text">
-                        @if (Model.Price == 0)
-                        {
-                            <span class="text-success">Free</span>
-                        }
-                        @if (Model.Discount > 0)
-                        {
-                            <span class="text-decoration-line-through">@Model.Price.ToString("C")</span>
-                            <span class="text-danger">@(((decimal)Model.Price * (decimal)(1 - (decimal)Model.Discount / 100)).ToString("C"))</span>
-                        }
-                        else if (Model.Price != 0)
-                        {
-                            <span>@Model.Price.ToString("C")</span>
-                        }
-                    </p>
-
-                    <!-- Conditionally display "In Library" or "Add to Cart" -->
-                    @if (Model.IsInLibrary)
-                    {
-                        <button class="btn btn-success" disabled>In Library</button>
-                    }
-                    else
-                    {
-                        <!-- Add to Cart Button -->
-                        <form action="@Url.Action("AddToCart", "Cart")" method="post" style="display:inline;">
-                            <input type="hidden" name="gameId" value="@Model.Id" />
-                            <input type="hidden" name="price" value="@(((decimal)Model.Price * (decimal)(1 - (decimal)Model.Discount / 100)))" />
-                            <button type="submit" class="btn btn-primary">Add to Cart</button>
-                        </form>
-                    }
-                    <ul class="list-group list-group-flush mt-3 bg-dark">
-                        <li class="list-group-item bg-dark"><strong>Developer:</strong> @Model.Developer</li>
-                        <li class="list-group-item bg-dark"><strong>Publisher:</strong> @Model.Publisher?.Name</li>
-                        <li class="list-group-item bg-dark"><strong>Category:</strong> @Model.Category?.Name</li>
-                        <li class="list-group-item bg-dark"><strong>Release Date:</strong> @Model.CreatedDate.ToString("MM/dd/yyyy")</li>
-                        <li class="list-group-item bg-dark"><strong>Platform:</strong> @Model.Platform</li>
-                    </ul>
-                </div>
+            <!-- Game Description -->
+            <div class="game-description mt-4">
+                <h2 class="text-white mb-3">Description</h2>
+                <p class="text-white">@Model.Description</p>
             </div>
 
             <!-- System Requirements -->
-            <div class="card mt-4 text-white bg-dark">
-                <div class="card-header">
+            <div class="system-requirements mt-5 p-4" style="background-color: #2C2D49; border-radius: 8px;">
+                <h2 class="text-white mb-3">
+                    @if (words.Length > 1)
+                    {
+                        <span>@string.Join(" ", words.Take(words.Length / 2))</span>
+                        <span id="dominantColorText">@string.Join(" ", words.Skip(words.Length / 2))</span>
+                    }
+                    else
+                    {
+                        <span id="dominantColorText">@Model.GameName</span>
+                    }
                     System Requirements
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush bg-dark">
-                        <li class="list-group-item bg-dark"><strong>OS:</strong> @Model.SystemRequirements?.OS</li>
-                        <li class="list-group-item bg-dark"><strong>Processor:</strong> @Model.SystemRequirements?.SystemProcessor</li>
-                        <li class="list-group-item bg-dark"><strong>Memory:</strong> @Model.SystemRequirements?.SystemMemory</li>
-                        <li class="list-group-item bg-dark"><strong>Graphics:</strong> @Model.SystemRequirements?.Graphics</li>
-                        <li class="list-group-item bg-dark"><strong>Storage:</strong> @Model.SystemRequirements?.Storage</li>
+                </h2>
+
+                <hr style="border-color: #007bff;">
+                <div class="platform-section text-white mt-4">
+                    <h4>Recommended</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+
+                            <ul class="list-unstyled ml-4 mt-2">
+                                <li><span style="color: #b0b0b0;">OS version</span> <div style="padding-left: 20px;">@Model.SystemRequirement?.OS</div></li>
+                                <li><span style="color: #b0b0b0;">Processor</span> <div style="padding-left: 20px;">@Model.SystemRequirement?.SystemProcessor</div></li>
+                                <li><span style="color: #b0b0b0;">Memory</span> <div style="padding-left: 20px;">@Model.SystemRequirement?.SystemMemory</div></li>
+                                <li><span style="color: #b0b0b0;">Graphics</span> <div style="padding-left: 20px;">@Model.SystemRequirement?.Graphics</div></li>
+                                <li><span style="color: #b0b0b0;">Storage</span> <div style="padding-left: 20px;">@Model.SystemRequirement?.Storage</div></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- User Reviews -->
-    <div class="mt-5 text-white">
-        <h4>User Reviews</h4>
-        @foreach (var review in Model.Reviews)
-        {
-            <div class="mb-3">
-                <div>
-                    @for (int i = 0; i < review.Rating; i++)
+        
+        <div class="col-lg-4">
+            <div class="game-info p-4 text-white rounded" style="background-color: #2C2D49;">
+                
+                <div class="card-image mt-4">
+                    <img id="gameCardImage"
+                         src="@Url.Content(Model.Images.FirstOrDefault(i => i.ImageType == "card")?.ImageUrl ?? "/images/placeholder.png")"
+                         alt="@Model.GameName"
+                         class="img-fluid rounded">
+                </div>
+                <h1 class="mb-3" style="font-size: 1.5rem;">
+                    <span class="text-white" id="gameNameRightPart1">@string.Join(" ", words.Take(words.Length / 2))</span>
+                    <span id="gameNameRightPart2">@string.Join(" ", words.Skip(words.Length / 2))</span>
+                </h1>
+                <div class="average-rating mb-3">
+                    @if (Model.Reviews.Any())
                     {
-                        <span class="fa fa-star checked"></span>
+                        <div class="d-flex align-items-center">
+                            @{
+                                double averageRating = Model.Reviews.Average(r => r.Rating);
+                                int fullStars = (int)Math.Floor(averageRating);
+                                bool hasHalfStar = (averageRating % 1) != 0;
+                                int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                            }
+
+                            @for (int i = 0; i < fullStars; i++)
+                            {
+                                <span class="fa fa-star text-warning"></span>
+                            }
+                            @if (hasHalfStar)
+                            {
+                                <span class="fa fa-star-half-alt text-warning"></span>
+                            }
+                            @for (int i = 0; i < emptyStars; i++)
+                            {
+                                <span class="fa fa-star text-muted"></span>
+                            }
+                            <span class="ms-2 text-white">@averageRating.ToString("0.0") out of 5</span>
+                        </div>
                     }
-                    @for (int i = review.Rating; i < 5; i++)
+                    else
                     {
-                        <span class="fa fa-star"></span>
+                        <span class="text-muted">No ratings yet.</span>
                     }
                 </div>
-                @if (!string.IsNullOrEmpty(review.CustomerReview))
-                {
-                    <p>@review.CustomerReview</p>
-                }
-            </div>
-        }
-
-        <!-- Add Review Form -->
-        <h5>Add Your Review</h5>
-        <form asp-action="AddReview" method="post">
-            <div class="form-group">
-                <label>Stars</label>
-                <select class="form-control" name="Rating">
-                    @for (int i = 1; i <= 5; i++)
+                <div class="price-section mb-4">
+                    @if (Model.Discount > 0)
                     {
-                        <option value="@i">@i Star@(i > 1 ? "s" : "")</option>
+                        <div class="d-flex align-items-center">
+                            <span class="text-decoration-line-through text-white me-2">@Model.Price.ToString("C")</span>
+                            <span class="badge bg-danger text-white" style="font-size: 0.875rem; padding: 0.25rem 0.5rem;">
+                                @Model.Discount% OFF
+                            </span>
+                        </div>
+
+                        <div class="text-danger fw-bold">@(((decimal)Model.Price * (decimal)(1 - (decimal)Model.Discount / 100)).ToString("C"))</div>
                     }
-                </select>
+                    else if (Model.Price == 0)
+                    {
+                        <div class="text-success fw-bold">Free</div>
+                    }
+                    else
+                    {
+                        <div class="text-white fw-bold">@Model.Price.ToString("C")</div>
+                    }
+                </div>
+
+                
+                @if (Model.IsInLibrary)
+                {
+                    <button class="btn btn-success btn-lg w-100 mb-3" disabled>In Library</button>
+                }
+                else
+                {
+                    <form action="@Url.Action("AddToCart", "Cart")" method="post">
+                        <input type="hidden" name="gameId" value="@Model.Id" />
+                        <input type="hidden" name="price" value="@(((decimal)Model.Price * (decimal)(1 - (decimal)Model.Discount / 100)))" />
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">Add to Cart</button>
+                    </form>
+                }
+
+                <div class="details-list">
+                    <ul class="list-unstyled">
+                        <li class="d-flex justify-content-between py-2 border-bottom border-light">
+                            <strong style="color: #b0b0b0;">Developer</strong>
+                            <span>@Model.Developer</span>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom border-light">
+                            <strong style="color: #b0b0b0;">Publisher</strong>
+                            <span>@Model.Publisher?.Name</span>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom border-light">
+                            <strong style="color: #b0b0b0;">Category</strong>
+                            <span>@Model.Category?.Name</span>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom border-light">
+                            <strong style="color: #b0b0b0;">Release Date</strong>
+                            <span>@Model.CreatedDate.ToString("dd-MM-yyyy").Replace("-", "/")</span>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom border-light">
+                            <strong style="color: #b0b0b0;">Platform</strong>
+                            <span>@Model.Platform</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="form-group mt-2">
-                <label>Comment (optional)</label>
-                <textarea class="form-control" name="CustomerReview" rows="3"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary mt-2">Submit Review</button>
-        </form>
+        </div>
+
+
+
+
+    </div>    
+    <div class="mt-5" style="background-color: #2C2D49; border-radius: 8px;">
+        <div class="mt-5 p-4" style="background-color: #c0392b; border-radius: 8px;">
+            <h5 class="text-dark mb-3"><span class="r p-1" style="background-color: #a499c9; border-radius: 5px;">Add Your Review</span></h5>
+
+            <form asp-action="SubmitReview" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    
+                    <div id="starRating" class="d-flex align-items-center">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <span class="fa fa-star star-rating text-muted" data-value="@i" style="cursor: pointer; font-size: 24px;"></span>
+                        }
+                    </div>
+                    <input type="hidden" name="Rating" id="Rating" required />
+                </div>
+
+                <div class="form-group mt-2">
+                    <label class="text-dark">Comment (optional)</label>
+                    <textarea class="form-control" name="CustomerReview" rows="3" style="color: black;"></textarea>
+                </div>
+
+                <input type="hidden" name="GameId" value="@Model.Id" />
+                <input type="hidden" name="UserId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
+                <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
+            </form>
+        </div>
+        <h4 class="text-white text-center">User Reviews</h4>
+        @if (sortedReviews.Any())
+        {
+           
+            
+                @foreach (var review in sortedReviews)
+                {
+                    <div style="border-bottom: 1px solid #ccc;">
+                        <div class="review mb-3 mt-3 d-flex align-items-start" style="margin-left: 20px; padding-bottom: 10px;">
+                        @if(review.User != null)
+                        {
+                            <img src="@review.User.ProfilePictureUrl" alt="@review.User.ProfilePictureUrl" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                            <div class="ml-3 flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center text-white">
+                                    <h5 class="text-white mb-1" style="margin-left: 10px;">@review.User.UserName</h5>
+                                    <span class="text-white" style="font-size: 0.9rem; margin-right:10px">@review.CreatedDate.ToString("dd MMM, yyyy")</span>
+                                </div>
+                                <div style="margin-left: 10px;">
+                                    @for (int i = 0; i < review.Rating; i++)
+                                    {
+                                        <span class="fa fa-star checked text-warning"></span>
+                                    }
+                                    @for (int i = review.Rating; i < 5; i++)
+                                    {
+                                        <span class="fa fa-star text-muted"></span>
+                                    }
+                                </div>
+                                @if (!string.IsNullOrEmpty(review.CustomerReview))
+                                {
+                                    <div class="mt-2" style="color: white;">
+                                        @Html.Raw(review.CustomerReview)
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <img src="/images/default-profile.png" alt="Deleted User" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                            <h5 class="text-white mb-1" style="margin-left: 10px;">Deleted User</h5>
+                        }
+
+                            
+                        </div>
+                    </div>
+                }
+            
+
+        }
+        else
+        {
+            <p class="text-muted">No reviews yet. Be the first to review this game!</p>
+        }
     </div>
+
+
+
+
+
 </div>
 
 @section Scripts {
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- For star icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor.create(document.querySelector('[name="CustomerReview"]'), {
+            toolbar: {
+                items: [
+                    
+                    'heading', '|',
+                    'bold', 'italic', '|',
+                    'blockQuote', 'insertTable', 'undo', 'redo'
+                ]
+            },
+            removePlugins: ['ImageUpload', 'MediaEmbed', 'Image', 'EasyImage', 'VideoEmbed'],
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                    { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                    { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+                ]
+            }
+        })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+    
+
+
+    <script>
+        
+        ClassicEditor.create(document.querySelector('[name="CustomerReview"]'));
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var img = document.getElementById('gameCardImage');
+            var colorThief = new ColorThief();
+
+            img.addEventListener('load', function () {
+                var dominantColor = colorThief.getColor(img);
+                var colorString = 'rgb(' + dominantColor.join(',') + ')';
+
+                document.getElementById('gameNamePart2').style.color = colorString;
+                document.getElementById('gameNameRightPart2').style.color = colorString;
+                document.getElementById('dominantColorText').style.color = colorString;
+            });
+
+            if (img.complete) {
+                img.dispatchEvent(new Event('load'));
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const stars = document.querySelectorAll('.star-rating');
+            const ratingInput = document.getElementById('Rating');
+
+            stars.forEach(star => {
+                star.addEventListener('click', function () {
+                    const ratingValue = this.getAttribute('data-value');
+                    ratingInput.value = ratingValue;
+
+                    // Reset all stars
+                    stars.forEach(s => {
+                        s.classList.remove('text-warning');
+                        s.classList.add('text-muted');
+                    });
+
+                    // Highlight the selected stars
+                    for (let i = 0; i < ratingValue; i++) {
+                        stars[i].classList.remove('text-muted');
+                        stars[i].classList.add('text-warning');
+                    }
+                });
+            });
+        });
+    </script>
+
 }
+

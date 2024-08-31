@@ -7,7 +7,7 @@ namespace GameSaleProject_Entity.Entities
     {
 
         public int GameId { get; set; }
-        public int CustomerId { get; set; }
+        public int UserId { get; set; }
 
         public int Rating { get; set; }
         public string CustomerReview { get; set; }

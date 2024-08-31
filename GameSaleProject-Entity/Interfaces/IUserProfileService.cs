@@ -7,6 +7,7 @@ namespace GameSaleProject_Entity.Interfaces
         Task<List<GameViewModel>> GetOwnedGamesAsync(int userId);
         Task<List<GameSaleViewModel>> GetPurchaseHistoryAsync(int userId);
         Task<UserViewModel> GetUserProfileAsync(int userId);
+        Task<int?> FindUserIdByUserNameAsync(string username);
         Task<bool> RefundGameAsync(int userId, int gameId);
         Task<bool> UpdateUserProfileAsync(int userId, UserViewModel model);
     }

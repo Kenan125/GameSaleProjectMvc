@@ -111,29 +111,41 @@
         </a>
         <a class="sidebar-item__title" asp-area="Admin" asp-controller="Admin" asp-action="Index">Dashboard</a>
     </div>
+    <div class="sidebar-item @(ViewBag.ActivePage == "ManageCategories" ? "sidebar-item__active" : "")">
+        <a class="sidebar-item__icon" asp-area="Admin" asp-controller="Category" asp-action="Index">
+            <i class="fa-solid fa-gears"></i>
+        </a>
+        <a class="sidebar-item__title"  asp-area="Admin" asp-controller="Category" asp-action="Index">Categories</a>
+    </div>
     <div class="sidebar-item @(ViewBag.ActivePage == "ManageUsers" ? "sidebar-item__active" : "")">
-        <a class="sidebar-item__icon" asp-area="Admin" asp-controller="UserManagement" asp-action="Index">
+        <a class="sidebar-item__icon" asp-area="Admin" asp-controller="User" asp-action="Index">
             <i class="bi bi-people"></i>
         </a>
-        <a class="sidebar-item__title" asp-area="Admin" asp-controller="UserManagement" asp-action="Index">Manage Users</a>
+        <a class="sidebar-item__title" asp-area="Admin" asp-controller="User" asp-action="Index">Users</a>
     </div>
     <div class="sidebar-item @(ViewBag.ActivePage == "ManageGames" ? "sidebar-item__active" : "")">
         <a class="sidebar-item__icon" asp-area="Admin" asp-controller="Admin" asp-action="ManageGames">
             <i class="bi bi-controller"></i>
         </a>
-        <a class="sidebar-item__title" asp-area="Admin" asp-controller="Admin" asp-action="ManageGames">Manage Games</a>
+        <a class="sidebar-item__title" asp-area="Admin" asp-controller="Admin" asp-action="ManageGames">Games</a>
     </div>
     <div class="sidebar-item @(ViewBag.ActivePage == "SalesStats" ? "sidebar-item__active" : "")">
         <a class="sidebar-item__icon" asp-area="Admin" asp-controller="SalesStats" asp-action="Index">
             <i class="bi bi-bar-chart"></i>
         </a>
-        <a class="sidebar-item__title" asp-area="Admin" asp-controller="SalesStats" asp-action="Index">Sales Stats</a>
+        <a class="sidebar-item__title" asp-area="Admin" asp-controller="Sales" asp-action="Index">Sales Stats</a>
     </div>
     <div class="sidebar-item @(ViewBag.ActivePage == "AddGame" ? "sidebar-item__active" : "")">
-        <a class="sidebar-item__icon" asp-area="Admin" asp-controller="Admin" asp-action="AddGame">
-            <i class="bi bi-bar-chart"></i>
+        <a class="sidebar-item__icon"  asp-controller="Game" asp-action="AddGame">
+            <i class="bi bi-plus-square"></i>
         </a>
-        <a class="sidebar-item__title" asp-area="Admin" asp-controller="Admin" asp-action="AddGame">Add Game</a>
+        <a class="sidebar-item__title"  asp-controller="Game" asp-action="AddGame">Add Game</a>
+    </div>
+    <div class="sidebar-item @(ViewBag.ActivePage == "AddRole" ? "sidebar-item__active" : "")">
+        <a class="sidebar-item__icon" asp-area="Admin" asp-controller="Role" asp-action="Index">
+            <i class="bi bi-plus-square"></i>
+        </a>
+        <a class="sidebar-item__title" asp-area="Admin" asp-controller="Role" asp-action="Index">Add Role</a>
     </div>
 </div>
 

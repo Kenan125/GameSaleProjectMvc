@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using GameSaleProject_Entity.Identity;
 using GameSaleProject_Entity.Interfaces;
 using GameSaleProject_Entity.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameSaleProject_Mvc.Areas.User.Controllers
@@ -12,28 +14,35 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
         private readonly IAccountService _accountService;
         private readonly IGameSaleService _gameSaleService;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _environment;
         private readonly IPublisherService _publisherService;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public UserProfileController(IUserProfileService userProfileService, IAccountService accountService, IGameSaleService gameSaleService, IMapper mapper, IWebHostEnvironment environment, IPublisherService publisherService)
+        public UserProfileController(
+            IUserProfileService userProfileService,
+            IAccountService accountService,
+            IGameSaleService gameSaleService,
+            IMapper mapper,
+            IPublisherService publisherService,
+            SignInManager<AppUser> signInManager,
+            UserManager<AppUser> userManager)
         {
             _userProfileService = userProfileService;
             _accountService = accountService;
             _gameSaleService = gameSaleService;
             _mapper = mapper;
-            _environment = environment;
             _publisherService = publisherService;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         private async Task<UserViewModel?> GetAuthenticatedUserAsync()
         {
             var userName = User.Identity.Name;
-
             if (string.IsNullOrEmpty(userName))
             {
                 return null;
             }
-
             return await _accountService.FindByUserNameAsync(userName);
         }
 
@@ -46,14 +55,11 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
         public async Task<IActionResult> Index()
         {
             SetActivePage("UserDetails");
-
             var user = await GetAuthenticatedUserAsync();
-
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
             }
-
             return View(user);
         }
 
@@ -61,16 +67,12 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
         public async Task<IActionResult> OwnedGames()
         {
             SetActivePage("OwnedGames");
-
             var user = await GetAuthenticatedUserAsync();
-
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
             }
-
             var userPurchases = await _gameSaleService.GetUserPurchasesAsync(user.UserName);
-
             var ownedGames = userPurchases
                 .SelectMany(purchase => purchase.GameSaleDetails)
                 .Where(detail => detail.Game != null)
@@ -84,131 +86,115 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
         public async Task<IActionResult> PurchaseHistory()
         {
             SetActivePage("PurchaseHistory");
-
             var user = await GetAuthenticatedUserAsync();
-
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
             }
-
             var userPurchases = await _gameSaleService.GetUserPurchasesAsync(user.UserName);
-
             if (!userPurchases.Any())
             {
                 ViewBag.Message = "You have not made any purchases yet.";
                 return View(new List<GameSaleViewModel>());
             }
-
-            // Directly return the list of GameSaleViewModel for the view to consume
             return View(userPurchases);
         }
 
         [HttpGet]
         public async Task<IActionResult> EditProfile()
         {
-            SetActivePage("EditProfile");
+            var username = User.Identity.Name; 
+            var userId = await _userProfileService.FindUserIdByUserNameAsync(username);
 
-            var user = await GetAuthenticatedUserAsync();
-
-            if (user == null)
+            if (userId == null)
             {
+                TempData["ErrorMessage"] = "User not found.";
                 return RedirectToAction("Login", "Account");
             }
 
-            return View(user);
+            var userProfile = await _userProfileService.GetUserProfileAsync(userId.Value);
+
+            if (userProfile == null)
+            {
+                TempData["ErrorMessage"] = "User profile not found.";
+                return RedirectToAction("EditProfile");
+            }
+
+            return View(userProfile);
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> EditProfile(UserViewModel model, IFormFile ProfilePicture)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(UserViewModel model, IFormFile? profilePicture)
         {
-            ModelState.Remove("ProfilePicture");
+            
+            if (model == null)
+            {
+                TempData["ErrorMessage"] = "Invalid user data.";
+                return RedirectToAction("EditProfile");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var user = await GetAuthenticatedUserAsync();
-            if (user == null)
+            var username = User.Identity.Name; 
+            var userId = await _userProfileService.FindUserIdByUserNameAsync(username);
+
+            if (userId == null)
             {
+                TempData["ErrorMessage"] = "User not found.";
                 return RedirectToAction("Login", "Account");
             }
-
-            // Check if the new password matches the confirmation
-            if (!string.IsNullOrEmpty(model.NewPassword) && model.NewPassword != model.ConfirmNewPassword)
+           
+            if (profilePicture != null && profilePicture.Length > 0)
             {
-                ModelState.AddModelError("ConfirmNewPassword", "The new password and confirmation password do not match.");
-                return View(model);
+                var profilePictureUrl = await _accountService.SaveProfilePictureAsync(profilePicture);
+                model.ProfilePictureUrl = profilePictureUrl;
+            }
+            var updateSucceeded = await _userProfileService.UpdateUserProfileAsync(userId.Value, model);
+
+            if (updateSucceeded)
+            {
+                TempData["SuccessMessage"] = "Profile updated successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to update profile. Please check your details.";
             }
 
-            // Upload the profile picture if provided
-            if (ProfilePicture != null && ProfilePicture.Length > 0)
-            {
-                model.ProfilePictureUrl = await UploadImageAsync(ProfilePicture, "ProfilePicture");
-            }
-
-            var result = await _userProfileService.UpdateUserProfileAsync(user.Id, model);
-
-            if (result)
-            {
-                return RedirectToAction("Index", new { Message = "Profile updated successfully." });
-            }
-
-            ModelState.AddModelError("", "Failed to update profile. Please check the input and try again.");
-            return View(model);
-        }
-        private async Task<string> UploadImageAsync(IFormFile imageFile, string imageType)
-        {
-            var fileName = $"{Path.GetFileNameWithoutExtension(imageFile.FileName)}_{DateTime.Now.Ticks}{Path.GetExtension(imageFile.FileName)}";
-            var filePath = Path.Combine(_environment.WebRootPath, "images", fileName);
-
-            if (!Directory.Exists(Path.Combine(_environment.WebRootPath, "images")))
-            {
-                Directory.CreateDirectory(Path.Combine(_environment.WebRootPath, "images"));
-            }
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await imageFile.CopyToAsync(stream);
-            }
-
-            return $"/images/{fileName}";
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
         public async Task<IActionResult> BecomePublisher()
         {
             SetActivePage("BecomePublisher");
-
             var user = await GetAuthenticatedUserAsync();
-
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
             }
-
-            // Render the view for becoming a publisher
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> BecomePublisher(PublisherViewModel model)
         {
-            // Ensure the user is authenticated
             var user = await GetAuthenticatedUserAsync();
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            // Set the UserId in the model
-            //model.UserId = user.Id;
             ModelState.Remove("User");
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            // Delegate the registration of the publisher to the PublisherService
             var result = await _publisherService.CreatePublisherAsync(model, user.Id);
             if (!result)
             {
@@ -216,15 +202,16 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
                 return View(model);
             }
 
-            // Change the user's role to "Publisher"
             await _accountService.AssignRoleToUserAsync(user.Id.ToString(), "Publisher");
+            var appUser = await _userManager.FindByIdAsync(user.Id.ToString());
+            if (appUser == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            await _signInManager.SignOutAsync();
+            await _signInManager.SignInAsync(appUser, isPersistent: false);
 
             return RedirectToAction("Index", new { Message = "You have successfully registered as a publisher." });
         }
-
-
-
-
-
     }
 }

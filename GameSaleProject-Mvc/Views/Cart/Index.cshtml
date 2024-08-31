@@ -35,7 +35,7 @@
                                             }
                                         </td>
                                         <td class="text-end">
-                                            <!-- Remove Button -->
+                                            
                                             <form action="@Url.Action("RemoveFromCart", "Cart")" method="post" style="display:inline;">
                                                 <input type="hidden" name="gameId" value="@item.GameId" />
                                                 <button type="submit" class="btn btn-danger btn-sm">Remove</button>
@@ -63,7 +63,7 @@
                         </div>
                     </div>
 
-                    <!-- Collapsible Payment Form Section -->
+                   
                     @if (Model.TotalPrice > 0)
                     {
                         <div class="collapse w-100 mt-3" id="paymentFormSection">
@@ -110,25 +110,25 @@
 </section>
 @section Scripts {
     <script>
-        // Format card number input
+        
         document.getElementById('CardNumber').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, '').substring(0, 16); // Remove non-digits and limit to 16 digits
-            e.target.value = value !== '' ? value.match(/.{1,4}/g).join(' ') : ''; // Add space every 4 digits
+            let value = e.target.value.replace(/\D/g, '').substring(0, 16); 
+            e.target.value = value !== '' ? value.match(/.{1,4}/g).join(' ') : ''; 
         });
 
         // Validate expiry date input
         document.getElementById('ExpiryDate').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, '').substring(0, 4); // Remove non-digits and limit to 4 digits (MMYY)
+            let value = e.target.value.replace(/\D/g, '').substring(0, 4); 
             if (value.length > 2) {
-                value = value.substring(0, 2) + '/' + value.substring(2, 4); // Add slash after month
+                value = value.substring(0, 2) + '/' + value.substring(2, 4); 
             }
-            e.target.value = value; // Limit to 5 characters (MM/YY)
+            e.target.value = value; 
         });
 
         // Ensure CVV is only 3 digits
         document.getElementById('CVV').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, '').substring(0, 3); // Remove non-digits and limit to 3 digits
-            e.target.value = value; // Set formatted value
+            let value = e.target.value.replace(/\D/g, '').substring(0, 3); 
+            e.target.value = value; 
         });
 
         document.getElementById('paymentForm').addEventListener('submit', function (e) {
@@ -153,7 +153,7 @@
             if (month === undefined || year === undefined || month.length !== 2 || year.length !== 2) return false;
 
             const inputDate = new Date(`20${year}-${month}-01`);
-            return inputDate > new Date('2000-01-01'); // Ensure that the date is valid
+            return inputDate > new Date('2000-01-01');
         }
 
         function isExpired(month, year) {

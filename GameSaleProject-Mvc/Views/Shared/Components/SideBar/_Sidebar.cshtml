@@ -134,10 +134,10 @@
     {
         <!-- Add Game Button for Publishers -->
         <div class="sidebar-item become-publisher @(ViewBag.ActivePage == "AddGame" ? "sidebar-item__active" : "")">
-            <a class="sidebar-item__icon" asp-area="Publisher" asp-controller="PublisherProfile" asp-action="AddGame">
+            <a class="sidebar-item__icon"  asp-controller="Game" asp-action="AddGame">
                 <i class="bi bi-plus-circle"></i>
             </a>
-            <a class="sidebar-item__title" asp-area="Publisher" asp-controller="PublisherProfile" asp-action="AddGame">Add Game</a>
+            <a class="sidebar-item__title"  asp-controller="Game" asp-action="AddGame">Add Game</a>
         </div>
     }
     else

@@ -79,12 +79,15 @@
     /*------------------
         search
     --------------------*/
-    const searchBarContainerEl = document.querySelector(".search-bar-container");
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchBarContainerEl = document.querySelector(".search-bar-container");
+        const magnifierEl = document.querySelector(".magnifier");
 
-    const magnifierEl = document.querySelector(".magnifier");
-
-    magnifierEl.addEventListener("click", () => {
-        searchBarContainerEl.classList.toggle("active");
+        if (magnifierEl && searchBarContainerEl) {
+            magnifierEl.addEventListener("click", () => {
+                searchBarContainerEl.classList.toggle("active");
+            });
+        }
     });
     /*------------------
         Video Player
@@ -106,5 +109,22 @@
         $("html, body").animate({ scrollTop: 0 }, "fast");
         return false;
      });
+     /*------------------
+         Dominant Color
+     --------------------*/
+    document.addEventListener("DOMContentLoaded", function () {
+        var img = document.getElementById('gameCardImage');
+        var colorThief = new ColorThief();
+
+        img.addEventListener('load', function () {
+            var dominantColor = colorThief.getColor(img);
+            var colorString = 'rgb(' + dominantColor.join(',') + ')';
+            document.getElementById('gameTitle').style.color = colorString;
+        });
+
+        if (img.complete) {
+            img.dispatchEvent(new Event('load'));
+        }
+    });
 
 })(jQuery);

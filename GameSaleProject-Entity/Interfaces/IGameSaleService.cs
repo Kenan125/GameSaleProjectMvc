@@ -12,5 +12,6 @@ namespace GameSaleProject_Entity.Interfaces
         Task<int> GetTotalSalesCountAsync();
         Task<decimal> GetTotalRevenueAsync();
         Task<DateTime?> GetFirstGameSaleDateAsync();
+        Task<List<GameSaleViewModel>> GetAllSalesAsync();
     }
 }
