@@ -24,7 +24,7 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
         }
 
         
-        public async Task<IActionResult> AddCategory()
+        public  IActionResult AddCategory()
         {
             var model = new CategoryViewModel();
             return PartialView("_AddCategory", model); 
