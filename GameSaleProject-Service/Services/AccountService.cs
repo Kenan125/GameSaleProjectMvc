@@ -210,11 +210,6 @@ namespace GameSaleProject_Service.Services
                 await _unitOfWork.CommitAsync();
             }
         }
-
-
-
-
-
         public async Task<bool> RemoveRoleFromUserAsync(string userId, string roleName)
         {
             var user = await _userManager.FindByIdAsync(userId);

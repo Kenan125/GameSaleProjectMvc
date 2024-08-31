@@ -45,7 +45,7 @@ namespace GameSaleProject_Service.Services
         {
             var repository = _unitOfWork.GetRepository<Game>();
 
-            // This ensures that the hard delete method is called
+            
             repository.Delete(gameId);
 
             await _unitOfWork.CommitAsync();
@@ -60,14 +60,11 @@ namespace GameSaleProject_Service.Services
             {
                 return "Game not found.";
             }
-
-            // Update the IsDeleted property to true instead of deleting the record
+            
             game.IsDeleted = true;
-
-            // Update the game in the repository
+         
             repository.Update(game);
-
-            // Commit the changes to the database
+            
             await _unitOfWork.CommitAsync();
 
             return "Game marked as deleted successfully.";
@@ -179,7 +176,7 @@ namespace GameSaleProject_Service.Services
                         game.Images.Add(_mapper.Map<Image>(modelImage));
                 }
             }
-            // Handle SystemRequirements
+            
             if (model.SystemRequirement != null)
             {
                 var existingSystemRequirement = (await _unitOfWork.GetRepository<SystemRequirement>()
@@ -192,7 +189,6 @@ namespace GameSaleProject_Service.Services
                     existingSystemRequirement.Storage = model.SystemRequirement.Storage;
                     existingSystemRequirement.Graphics = model.SystemRequirement.Graphics;
                     existingSystemRequirement.OS = model.SystemRequirement.OS;
-
                     _unitOfWork.GetRepository<SystemRequirement>().Update(existingSystemRequirement);
                 }
                 else

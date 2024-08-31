@@ -55,7 +55,7 @@ namespace GameSaleProject_Service.Services
             }
             catch (Exception)
             {
-                // Handle exceptions, log them if necessary
+                
                 return false;
             }
         }

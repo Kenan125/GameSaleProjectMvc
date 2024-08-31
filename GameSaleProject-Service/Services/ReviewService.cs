@@ -30,7 +30,7 @@ namespace GameSaleProject_Service.Services
             {
                 _context.Entry(review).Reference(r => r.User).Load();
             }
-            // Use AutoMapper to map the list of Review entities to a list of ReviewViewModel
+            
             return _mapper.Map<List<ReviewViewModel>>(reviews);
         }
         public async Task SubmitReviewAsync(ReviewViewModel reviewModel)
@@ -40,13 +40,13 @@ namespace GameSaleProject_Service.Services
                 throw new InvalidOperationException("A star rating is required to submit a review.");
             }
 
-            // Use AutoMapper to map ReviewViewModel to Review entity
+            
             var review = _mapper.Map<Review>(reviewModel);
 
-            // Set any additional properties not handled by AutoMapper
+            
             review.CreatedDate = DateTime.UtcNow;
 
-            // Add and commit the review to the database
+            
             await _unitOfWork.GetRepository<Review>().Add(review);
             await _unitOfWork.CommitAsync();
         }
