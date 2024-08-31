@@ -8,7 +8,7 @@
 <section>
     <div class="container">
         <div class="title">
-            <p>User Registration</p>
+            <p>Registration</p>
         </div>
         <form asp-action="Register" asp-controller="Account" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -38,11 +38,19 @@
                     <input asp-for="Email" class="form-control" placeholder="Enter your email address" required />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-                <div style="display: flex;flex-wrap:wrap;gap:20px">
+                <div style="display: flex; flex-wrap:wrap; gap:20px">
                     <div class="input_box">
                         <label asp-for="Password" class="control-label">Password</label>
-                        <input asp-for="Password" class="form-control" placeholder="Enter your password" required />
+                        <input asp-for="Password" class="form-control" id="Password" placeholder="Enter your password" required />
                         <span asp-validation-for="Password" class="text-danger"></span>
+
+                        <!-- Password requirements list -->
+                        <ul id="password-requirements" class="text-muted">
+                            <li id="req-length">At least 6 characters long</li>
+                            <li id="req-uppercase">Contains at least one uppercase letter</li>
+                            <li id="req-lowercase">Contains at least one lowercase letter</li>
+                            <li id="req-digit">Contains at least one digit</li>
+                        </ul>
                     </div>
                     <div class="input_box">
                         <label asp-for="ConfirmPassword" class="control-label">Confirm Password</label>
@@ -66,4 +74,38 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        document.getElementById('Password').addEventListener('input', function () {
+            var password = this.value;
+
+            // Check for at least 6 characters
+            if (password.length >= 6) {
+                document.getElementById('req-length').style.display = 'none';
+            } else {
+                document.getElementById('req-length').style.display = 'block';
+            }
+
+            // Check for at least one uppercase letter
+            if (/[A-Z]/.test(password)) {
+                document.getElementById('req-uppercase').style.display = 'none';
+            } else {
+                document.getElementById('req-uppercase').style.display = 'block';
+            }
+
+            // Check for at least one lowercase letter
+            if (/[a-z]/.test(password)) {
+                document.getElementById('req-lowercase').style.display = 'none';
+            } else {
+                document.getElementById('req-lowercase').style.display = 'block';
+            }
+
+            // Check for at least one digit
+            if (/\d/.test(password)) {
+                document.getElementById('req-digit').style.display = 'none';
+            } else {
+                document.getElementById('req-digit').style.display = 'block';
+            }
+        });
+    </script>
 }

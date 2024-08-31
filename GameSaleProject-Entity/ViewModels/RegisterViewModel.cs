@@ -1,34 +1,31 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-
 namespace GameSaleProject_Entity.ViewModels
 {
     public class RegisterViewModel
     {
         public int Id { get; set; }
-        [Required(ErrorMessage = "İsim alanı boş geçilemez!")]
+        [Required(ErrorMessage = "First name cannot be empty!")]
         public string FirstName { get; set; }
-        [Required(ErrorMessage = "Soyisim alanı boş geçilemez!")]
+        [Required(ErrorMessage = "Last name cannot be empty!")]
         public string LastName { get; set; }
-        [Required(ErrorMessage = "Kullanıcı Adı boş geçilemez!")]
-        [Display(Name = "Kullanıcı Adı")]
+        [Required(ErrorMessage = "Username cannot be empty!")]
+        [Display(Name = "Username")]
         public string UserName { get; set; }
-        [Required(ErrorMessage = "Telefon numarası boş geçilemez!")]
+        [Required(ErrorMessage = "Phone number cannot be empty!")]
         public string PhoneNumber { get; set; }
-        [Required(ErrorMessage = "Email adresi boş geçilemez!")]
-        [EmailAddress(ErrorMessage = "Email formatına uygun değil!")]
+        [Required(ErrorMessage = "Email address cannot be empty!")]
+        [EmailAddress(ErrorMessage = "Invalid email format!")]
         public string Email { get; set; }
-        [Required(ErrorMessage = "Şifre alanı boş geçilemez!")]
-        [Display(Name = "Şifre")]
+        [Required(ErrorMessage = "Password cannot be empty!")]
+        [Display(Name = "Password")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        [Required(ErrorMessage = "Tekrar Şifresi boş geçilemez!")]
-        [Display(Name = "Şifre Tekrar")]
+        [Required(ErrorMessage = "Confirm password cannot be empty!")]
+        [Display(Name = "Confirm Password")]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Şifreler uyuşmuyor!")]
+        [Compare("Password", ErrorMessage = "Passwords do not match!")]
         public string ConfirmPassword { get; set; }
-
-
 
         public string? ProfilePictureUrl { get; set; } = "/images/DefaultPfp.png";
     }
