@@ -103,7 +103,7 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
         [HttpGet]
         public async Task<IActionResult> EditProfile()
         {
-            var username = User.Identity.Name; // Assuming the username is stored here
+            var username = User.Identity.Name; 
             var userId = await _userProfileService.FindUserIdByUserNameAsync(username);
 
             if (userId == null)
@@ -140,7 +140,7 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
                 return View(model);
             }
 
-            var username = User.Identity.Name; // Assuming the username is stored here
+            var username = User.Identity.Name; 
             var userId = await _userProfileService.FindUserIdByUserNameAsync(username);
 
             if (userId == null)
@@ -167,10 +167,6 @@ namespace GameSaleProject_Mvc.Areas.User.Controllers
 
             return RedirectToAction("Index");
         }
-
-
-
-
 
         [HttpGet]
         public async Task<IActionResult> BecomePublisher()

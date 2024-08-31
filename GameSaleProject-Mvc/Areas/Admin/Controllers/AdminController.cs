@@ -28,16 +28,16 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             ViewBag.ActivePage = "Dashboard";
-            // Get admin profile information
+            
             var adminUser = await _accountService.FindByUserNameAsync(User.Identity.Name);
             var adminProfile = await _userProfileService.GetUserProfileAsync(adminUser.Id);
 
-            // Get total counts and revenue
+            
             var totalGames = await _context.Games.CountAsync();
             var totalUsers = (await _accountService.GetAllUsers()).Count;
             var totalSales = await _gameSaleService.GetTotalSalesCountAsync();
             var totalRevenue = await _gameSaleService.GetTotalRevenueAsync();
-            // Get sales grouped by date (e.g., daily or monthly)
+            
             var salesByDate = await _context.GameSales
     .GroupBy(gs => gs.CreatedDate.Date)
     .Select(group => new SalesByDateViewModel
@@ -55,13 +55,13 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
                 TotalUsers = totalUsers,
                 TotalSales = totalSales,
                 TotalRevenue = totalRevenue,
-                SalesByDate = salesByDate // Assign the grouped sales data
+                SalesByDate = salesByDate 
             };
 
             return View(model);
         }
 
-        // Manage Games
+        
         public async Task<IActionResult> ManageGames()
         {
             ViewBag.ActivePage = "ManageGames";
@@ -70,7 +70,7 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
         }
                
 
-        // Manage Users
+        
         public IActionResult ManageUsers()
         {
             return View();

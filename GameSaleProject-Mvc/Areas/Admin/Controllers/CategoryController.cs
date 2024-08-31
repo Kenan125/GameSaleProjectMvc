@@ -15,7 +15,7 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
             _categoryService = categoryService;
         }
 
-        // Action to list all categories
+        
         public async Task<IActionResult> Index()
         {
             ViewBag.ActivePage = "ManageCategories";
@@ -23,11 +23,11 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
             return View(categories);
         }
 
-        // Action to load the Add/Edit form in the modal
+        
         public async Task<IActionResult> AddCategory()
         {
             var model = new CategoryViewModel();
-            return PartialView("_AddCategory", model); // Use the new partial view
+            return PartialView("_AddCategory", model); 
         }
         [HttpPost]
         public async Task<IActionResult> AddCategory(CategoryViewModel category)
@@ -37,7 +37,7 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
                  await _categoryService.AddCategoryAsync(category);
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("Index"); // Return the view with the model to display validation errors
+            return RedirectToAction("Index"); 
         }
 
         [HttpGet]
@@ -49,7 +49,7 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            return PartialView("_UpdateCategory", category); // Use the new partial view
+            return PartialView("_UpdateCategory", category); 
         }
         [HttpPost]
         public async Task<IActionResult> UpdateCategory(CategoryViewModel model)
@@ -64,14 +64,14 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
         
 
 
-        // Action to delete a category
+        
         public async Task<IActionResult> Delete(int id)
         {
             await _categoryService.DeleteCategoryAsync(id);
             return RedirectToAction("Index");
         }
 
-        // Utility method to render a view as a string
+        
         
     }
 }

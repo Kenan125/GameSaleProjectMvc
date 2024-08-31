@@ -13,14 +13,14 @@ namespace GameSaleProject_Mvc.Areas.Admin.Controllers
             _gameSaleService = gameSaleService;
         }
 
-        // GET: Admin/Sales
+        
         public async Task<IActionResult> Index()
         {
             ViewBag.ActivePage = "SalesStats";
             var sales = await _gameSaleService.GetAllSalesAsync(); // Fetch all sales
             return View(sales);
         }
-        // GET: Admin/Sales/Details/5
+        
         public async Task<IActionResult> Details(int id)
         {
             var sale = await _gameSaleService.GetGameSaleByIdAsync(id);

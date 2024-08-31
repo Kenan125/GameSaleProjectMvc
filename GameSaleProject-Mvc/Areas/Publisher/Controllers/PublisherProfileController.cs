@@ -71,12 +71,12 @@ namespace GameSaleProject_Mvc.Areas.Publisher.Controllers
         }
         public async Task<IActionResult> ManageGames()
         {
-            var userId = int.Parse(_userManager.GetUserId(User)); // Get the current user's Id
+            var userId = int.Parse(_userManager.GetUserId(User)); 
 
             var publisher = await _publisherService.GetPublisherByUserIdAsync(userId);
             if (publisher == null)
             {
-                return RedirectToAction("Index", "Home"); // Or display an error message
+                return RedirectToAction("Index", "Home"); 
             }
 
             var games = await _gameService.GetGamesByPublisherAsync(publisher.Id);
@@ -85,7 +85,7 @@ namespace GameSaleProject_Mvc.Areas.Publisher.Controllers
         [HttpGet]
         public async Task<IActionResult> AddGame()
         {
-            var categories = await _categoryService.GetAllCategoriesAsync(); // Assume this method returns a list of categories
+            var categories = await _categoryService.GetAllCategoriesAsync(); 
 
 
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
