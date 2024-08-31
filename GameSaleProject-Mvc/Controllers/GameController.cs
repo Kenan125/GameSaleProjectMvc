@@ -98,6 +98,8 @@ namespace GameSaleProject_Mvc.Controllers
 
             var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
             model.Reviews = reviews;
+            // Calculate the average rating
+            model.AverageRating = await _reviewService.GetAverageRatingByGameIdAsync(id);
 
             return View(model);
         }
@@ -107,6 +109,7 @@ namespace GameSaleProject_Mvc.Controllers
         [Authorize]
         public async Task<IActionResult> SubmitReview(ReviewViewModel reviewModel)
         {
+
             ModelState.Remove("User");
             if (!ModelState.IsValid)
             {

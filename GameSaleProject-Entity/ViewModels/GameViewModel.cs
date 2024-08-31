@@ -26,6 +26,7 @@
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public bool IsInLibrary { get; set; }
         public bool IsDeleted { get; set; }
+        public double AverageRating { get; set; }
 
         //new prop
         public List<ImageViewModel>? Images { get; set; } = new List<ImageViewModel>();

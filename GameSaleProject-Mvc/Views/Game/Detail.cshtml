@@ -88,6 +88,37 @@
                     <span class="text-white" id="gameNameRightPart1">@string.Join(" ", words.Take(words.Length / 2))</span>
                     <span id="gameNameRightPart2">@string.Join(" ", words.Skip(words.Length / 2))</span>
                 </h1>
+                <div class="average-rating mb-3">
+                    @if (Model.Reviews.Any())
+                    {
+                        <div class="d-flex align-items-center">
+                            @{
+                                double averageRating = Model.Reviews.Average(r => r.Rating);
+                                int fullStars = (int)Math.Floor(averageRating);
+                                bool hasHalfStar = (averageRating % 1) != 0;
+                                int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                            }
+
+                            @for (int i = 0; i < fullStars; i++)
+                            {
+                                <span class="fa fa-star text-warning"></span>
+                            }
+                            @if (hasHalfStar)
+                            {
+                                <span class="fa fa-star-half-alt text-warning"></span>
+                            }
+                            @for (int i = 0; i < emptyStars; i++)
+                            {
+                                <span class="fa fa-star text-muted"></span>
+                            }
+                            <span class="ms-2 text-white">@averageRating.ToString("0.0") out of 5</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="text-muted">No ratings yet.</span>
+                    }
+                </div>
                 <div class="price-section mb-4">
                     @if (Model.Discount > 0)
                     {
