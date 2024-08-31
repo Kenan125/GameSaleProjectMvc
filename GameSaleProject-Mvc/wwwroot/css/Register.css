@@ -88,6 +88,69 @@ body {
     transition: all 120ms ease-out 0s;
 }
 
+/* Custom styling for file input */
+.custom-file-input {
+    display: inline-block;
+    width: auto;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.custom-file-input {
+    display: inline-block;
+    width: auto;
+    padding: 5px;
+    cursor: pointer;
+}
+
+    .custom-file-input::-webkit-file-upload-button {
+        display: none;
+    }
+
+    .custom-file-input:before {
+        content: 'Choose File';
+        display: inline-block;
+        background: #6c757d;
+        color: white;
+        border-radius: 5px;
+        padding: 5px 10px;
+        outline: none;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    .custom-file-input:after {
+        content: 'No file chosen';
+        margin-left: 10px;
+    }
+
+    .custom-file-input:active:before {
+        background-color: #555555;
+    }
+
+    .custom-file-input:hover:before {
+        background-color: #555555;
+    }
+
+    .custom-file-input:focus:after {
+        content: attr(value);
+    }
+
+#imagePreviewContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#imagePreview {
+    display: none;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #6c757d;
+}
 
     .input_box input:focus,
     .input_box input:valid {

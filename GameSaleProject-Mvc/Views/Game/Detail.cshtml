@@ -10,7 +10,7 @@
 
 <div class="container mt-4">
     <div class="row">
-        <!-- Left Side: Image Carousel -->
+
         <div class="col-lg-8">
             <section class="hero">
                 <div class="container">
@@ -74,10 +74,10 @@
             </div>
         </div>
 
-        <!-- Right Side: Game Info and Purchase Options -->
+        
         <div class="col-lg-4">
             <div class="game-info p-4 text-white rounded" style="background-color: #2C2D49;">
-                <!-- Visible Card Image Under the Game Info -->
+                
                 <div class="card-image mt-4">
                     <img id="gameCardImage"
                          src="@Url.Content(Model.Images.FirstOrDefault(i => i.ImageType == "card")?.ImageUrl ?? "/images/placeholder.png")"
@@ -110,7 +110,7 @@
                     }
                 </div>
 
-                <!-- Conditionally display "In Library" or "Add to Cart" -->
+                
                 @if (Model.IsInLibrary)
                 {
                     <button class="btn btn-success btn-lg w-100 mb-3" disabled>In Library</button>
@@ -154,10 +154,7 @@
 
 
 
-    </div>
-
-    <!-- User Reviews -->
-    <!-- User Reviews -->
+    </div>    
     <div class="mt-5" style="background-color: #2C2D49; border-radius: 8px;">
         <div class="mt-5 p-4" style="background-color: #c0392b; border-radius: 8px;">
             <h5 class="text-dark mb-3"><span class="r p-1" style="background-color: #a499c9; border-radius: 5px;">Add Your Review</span></h5>
@@ -247,13 +244,13 @@
 </div>
 
 @section Scripts {
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- For star icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
     <script>
         ClassicEditor.create(document.querySelector('[name="CustomerReview"]'), {
             toolbar: {
                 items: [
-                    // List all the tools you want to keep, excluding 'imageUpload' and 'mediaEmbed'
+                    
                     'heading', '|',
                     'bold', 'italic', '|',
                     'blockQuote', 'insertTable', 'undo', 'redo'
@@ -276,7 +273,7 @@
 
 
     <script>
-        // Initialize CKEditor for the review textarea
+        
         ClassicEditor.create(document.querySelector('[name="CustomerReview"]'));
 
         document.addEventListener("DOMContentLoaded", function () {

@@ -21,16 +21,16 @@
 <style>
     .form-container {
         display: flex;
-        justify-content: center; /* Centers the divs horizontally */
-        align-items: flex-start; /* Aligns the divs to the top of the container */
-        gap: 20px; /* Adjust the space between the divs */
+        justify-content: center; 
+        align-items: flex-start; 
+        gap: 20px; 
         width: 100%;
-        margin: 0 auto; /* Center the form-container within the form */
+        margin: 0 auto; 
     }
 
     .main-form-section, .side-section {
         box-sizing: border-box;
-        flex: 1; /* Allow both sections to take up equal space */
+        flex: 1; 
     }
 
     .main-form-section {
@@ -52,7 +52,7 @@
 <form asp-action="AddGame" method="post" enctype="multipart/form-data">
     <div class="form-container">
         <div class="main-form-section">
-            <!-- Main Form Section -->
+            
             <div class="form-group text-white">
                 <label asp-for="GameName"></label>
                 <input asp-for="GameName" class="form-control" />
@@ -107,7 +107,7 @@
                 <span asp-validation-for="Platform" class="text-danger"></span>
             </div>
 
-            <!-- File input for the display images with preview and delete option -->
+            
             <div class="form-group text-white">
                 <label>Display Images</label>
                 <input type="file" name="DisplayImages" multiple class="form-control" id="displayImagesInput" />
@@ -116,7 +116,7 @@
         </div>
 
         <div class="side-section">
-            <!-- Side Section -->
+            
             <div class="form-group text-white">
                 <label>Card Image</label>
                 <input type="file" name="CardImage" class="form-control" id="cardImageInput" />
@@ -158,7 +158,7 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        // Preview and manage Card Image
+        
         const cardImageInput = document.getElementById('cardImageInput');
         const cardImagePreview = document.getElementById('cardImagePreview');
 
@@ -181,12 +181,10 @@
 
         cardImagePreview.addEventListener('click', function (event) {
             if (event.target.classList.contains('remove-card-image-btn')) {
-                cardImageInput.value = ''; // Clear the file input
-                cardImagePreview.innerHTML = ''; // Clear the preview
+                cardImageInput.value = '';
+                cardImagePreview.innerHTML = '';
             }
-        });
-
-        // Preview and manage Display Images
+        });      
         const displayImagesInput = document.getElementById('displayImagesInput');
         const previewContainer = document.getElementById('displayImagesPreview');
 

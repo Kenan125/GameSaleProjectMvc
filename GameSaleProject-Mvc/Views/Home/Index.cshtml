@@ -5,7 +5,7 @@
     Random random = new Random();
 }
 
-<!-- Hero Section Begin -->
+
 <section class="hero">
     <div class="container">
         <div class="hero__slider owl-carousel">
@@ -22,7 +22,7 @@
                                     <div class="label">@category</div>
                                     <h2 class="text-shadow fw-bold">@game.GameName</h2>
                                     <p class="text-shadow">@game.Description</p>
-                                    <a href="@Url.Action("Detail", "Game", new { id = game.Id })"><span>View Details</span> <i class="fa fa-angle-right"></i></a>
+                                    <a href="@Url.Action("Detail", "Game", new { id = game.Id })"><span>Detaylar</span> <i class="fa fa-angle-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -32,24 +32,23 @@
         </div>
     </div>
 </section>
-<!-- Hero Section End -->
 
-<!-- Game Cards Section -->
+
 <section class="product spad">
     <div class="container">
         <div class="row">
-            <!-- Trending Products Section -->
+           
             <div class="col-lg-8">
                 <div class="trending__product">
                     <div class="row">
                         <div class="col-lg-8 col-md-8 col-sm-8">
                             <div class="section-title">
-                                <h4>Trending Now</h4>
+                                <h4>En Çok Satanlar</h4>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <div class="btn__all">
-                                <a asp-action="Index" asp-controller="Game" class="primary-btn">View All <span class="arrow_right"></span></a>
+                                <a asp-action="Index" asp-controller="Game" class="primary-btn">Tümüne Göz At <span class="arrow_right"></span></a>
 
                             </div>
                         </div>
@@ -66,7 +65,7 @@
                                             <div class="product__item__pic set-bg" data-setbg="@Url.Content(cardImage.ImageUrl)" );">
                                                 @if (game.Discount > 0)
                                                 {
-                                                    <div class="ep">Discount: @game.Discount%</div>
+                                                    <div class="ep">İndirim: @game.Discount%</div>
                                                 }
 
                                                 <div class="comment"><i class="fa fa-comments"></i> @game.Reviews.Count</div>
@@ -78,7 +77,7 @@
                                     else
                                     {
                                         <div class="product__item__pic set-bg" style="background-image: url('/images/placeholder.png');">
-                                            <div class="ep">No Image</div>
+                                            <div class="ep">Fotoğraf yok</div>
                                             <div class="comment"><i class="fa fa-comments"></i> @game.Reviews.Count</div>
                                             <div class="view"><i class="fa fa-eye"></i> @random.Next(500, 3000)</div>
                                         </div>
@@ -94,7 +93,7 @@
                                         <p class="card-text">
                                             @if (game.Price == 0)
                                             {
-                                                <span class="text-success">Free</span>
+                                                <span class="text-success">Ücretsiz</span>
                                             }
                                             @if (game.Discount > 0)
                                             {
@@ -112,7 +111,7 @@
                         }
                         @if (Model.Count % 3 != 0)
                         {
-                            <!-- To maintain the grid structure, add empty columns if needed -->
+                           
                             @for (int i = 0; i < (3 - (Model.Count % 3)); i++)
                             {
                                 <div class="col-lg-4 col-md-6 col-sm-6"></div>
@@ -121,22 +120,22 @@
                     </div>
                 </div>
             </div>
-            <!-- Sidebar Section (optional, depending on your needs) -->
+            
             <div class="col-lg-4 col-md-6 col-sm-8">
                 <div class="product__sidebar">
                     <div class="product__sidebar__view">
                         <div class="section-title">
-                            <h5>Top Discounts</h5>
+                            <h5>Kaçınılmaz Fırsatlar</h5>
                         </div>          
                         
                         <div class="filter__gallery">
-                            @foreach (var game in Model.Take(3)) // Adjust this number based on the number of top viewed games you want to display
+                            @foreach (var game in Model.Take(3)) 
                             {
                                 @if (game.Discount >= 70)
                                 {
                                     <div class="product__sidebar__view__item set-bg mix" data-setbg="@Url.Content(game.Images.FirstOrDefault(img => img.ImageType == "card")?.ImageUrl ?? "/images/placeholder.png")">
 
-                                        <div class="ep">Discount: @game.Discount%</div>
+                                        <div class="ep">İndirim: @game.Discount%</div>
                                         <h5><a asp-action="Detail" asp-controller="Game" asp-route-id="@game.Id">@game.GameName</a></h5>
                                     </div>
                                 }
@@ -146,13 +145,13 @@
                     </div>
                 </div>
             </div>
-            <!-- Hot Disconts Section -->
+            
             <div class="col-lg-8">
                 <div class="trending__product">
                     <div class="row">
                         <div class="col-lg-8 col-md-8 col-sm-8">
                             <div class="section-title">
-                                <h4>Hot Discounts</h4>
+                                <h4>indirimli Oyunlar</h4>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
@@ -162,7 +161,7 @@
                     <div class="row">
                         @foreach (var game in Model)
                         {
-                            @if (game.Discount >= 30)
+                            @if (game.Discount > 0)
                             {
                                 <div class="col-lg-4 col-md-6 col-sm-6">
                                     <div class="product__item">
@@ -173,7 +172,7 @@
                                                 <div class="product__item__pic set-bg" data-setbg="@Url.Content(cardImage.ImageUrl)" );">
                                                     @if (game.Discount > 0)
                                                     {
-                                                        <div class="ep">Discount: @game.Discount%</div>
+                                                        <div class="ep">İndirim: @game.Discount%</div>
                                                     }
 
                                                     <div class="comment"><i class="fa fa-comments"></i> @game.Reviews.Count</div>
@@ -220,8 +219,7 @@
 
                         }
                         @if (Model.Count % 3 != 0)
-                        {
-                            <!-- To maintain the grid structure, add empty columns if needed -->
+                        {                           
                             @for (int i = 0; i < (3 - (Model.Count % 3)); i++)
                             {
                                 <div class="col-lg-4 col-md-6 col-sm-6"></div>

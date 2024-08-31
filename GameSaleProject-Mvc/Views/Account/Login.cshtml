@@ -8,7 +8,7 @@
 <section>
     <div class="container">
         <div class="title">
-            <p>Giriş Yap</p>
+            <p>Login</p>
         </div>
         <form asp-action="Login" asp-controller="Account" method="post">
             <input type="hidden" asp-for="ReturnUrl" value="@Model.ReturnUrl" />
@@ -16,19 +16,19 @@
             <div class="user_details">
 
                 <div class="input_box">
-                    <label asp-for="UserName" class="control-label">Kullanıcı Adı</label>
-                    <input asp-for="UserName" class="form-control" placeholder="Kullanıcı adınızı giriniz" required />
+                    <label asp-for="UserName" class="control-label">Username</label>
+                    <input asp-for="UserName" class="form-control" placeholder="Please Enter Your Username" required />
                     <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
 
                 <div class="input_box">
-                    <label asp-for="Password" class="control-label">Şifre</label>
-                    <input asp-for="Password" class="form-control" placeholder="Şifrenizi giriniz" required />
+                    <label asp-for="Password" class="control-label">Password</label>
+                    <input asp-for="Password" class="form-control" placeholder="Password" required />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
 
                 <div class="input_box" style="display: flex; align-items: center;">
-                    <label>Beni Hatırla</label>
+                    <label>Remember me</label>
                     <div class="switch" style="margin-left: 10px; position: relative; width: 60px; height: 30px; cursor: pointer;">
                         <input asp-for="RememberMe" type="checkbox" class="checkBox" style="opacity: 0; width: 60px; height: 30px; position: absolute; cursor: pointer;">
                         <div class="box" style="position: absolute; width: 100%; height: 100%; background-color: red; border-radius: 5px; transition: background-color 1s;"></div>
@@ -38,7 +38,10 @@
 
             </div>
             <div class="reg_btn">
-                <input type="submit" value="Giriş Yap">
+                <input type="submit" value="Login">
+            </div>
+            <div class="text-center mt-3">
+                <p>Don't have an Account? <a href="@Url.Action("Register", "Account")">Create Account</a></p>
             </div>
         </form>
     </div>

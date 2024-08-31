@@ -37,39 +37,37 @@ namespace GameSaleProject_Mvc.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string searchTerm, int? categoryId)
         {
-            // Determine if the user is an Admin
+
             bool isAdmin = User.IsInRole("Admin");
 
-            // Get the games based on searchTerm or categoryId
+
             List<GameViewModel> games = await _gameService.GetGamesAsync(searchTerm, categoryId, isAdmin);
 
-            // Fetch categories and publishers for the view model
+
             var categories = await _categoryService.GetAllCategoriesAsync();
             var publishers = await _publisherService.GetAllPublishersAsync();
 
-            
+
             if (categoryId.HasValue)
             {
-                // If a category is selected, fetch games by category
+
                 var currentCategoryId = ViewData["CurrentCategoryId"] as int?;
                 if (currentCategoryId.HasValue && currentCategoryId.Value == categoryId.Value)
                 {
-                    
+
                     ViewData["CurrentCategoryId"] = null;
                 }
                 else
                 {
-                    
+
                     ViewData["CurrentCategoryId"] = categoryId.Value;
                 }
             }
             else
             {
-                
+
                 ViewData["CurrentCategoryId"] = null;
             }
-
-            // Create the view model to pass to the view
             var model = new GameCategoryPublisherViewModel
             {
                 Games = games,
@@ -80,33 +78,29 @@ namespace GameSaleProject_Mvc.Controllers
             return View(model);
         }
 
-
-
-
-
         public async Task<IActionResult> Detail(int id)
-{
-    var userName = User.Identity.Name;
+        {
+            var userName = User.Identity.Name;
 
-    var game = await _gameService.GetGameByIdAsync(id);
-    if (game == null)
-    {
-        return NotFound();
-    }
+            var game = await _gameService.GetGameByIdAsync(id);
+            if (game == null)
+            {
+                return NotFound();
+            }
 
-    var model = _mapper.Map<GameViewModel>(game);
+            var model = _mapper.Map<GameViewModel>(game);
 
-    var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
-    var purchasedGameIds = userPurchases.SelectMany(purchase => purchase.GameSaleDetails)
-                                        .Select(detail => detail.GameId)
-                                        .ToHashSet();
-    model.IsInLibrary = purchasedGameIds.Contains(game.Id);
+            var userPurchases = await _gameSaleService.GetUserPurchasesAsync(userName);
+            var purchasedGameIds = userPurchases.SelectMany(purchase => purchase.GameSaleDetails)
+                                                .Select(detail => detail.GameId)
+                                                .ToHashSet();
+            model.IsInLibrary = purchasedGameIds.Contains(game.Id);
 
-    var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
-    model.Reviews = reviews;
+            var reviews = await _reviewService.GetReviewsByGameIdAsync(id);
+            model.Reviews = reviews;
 
-    return View(model);
-}
+            return View(model);
+        }
 
 
         [HttpPost]
@@ -147,7 +141,7 @@ namespace GameSaleProject_Mvc.Controllers
             ViewBag.Categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.ActivePage = "AddGame";
 
-            // Check if the user is a Publisher
+            
             if (User.IsInRole("Publisher"))
             {
                 var publisher = await _publisherService.GetPublisherByUserIdAsync(user.Id);
@@ -157,16 +151,16 @@ namespace GameSaleProject_Mvc.Controllers
                     return RedirectToAction("Index");
                 }
 
-                // Automatically set the PublisherId and hide the Publisher selection for publishers
+                
                 var model = new GameViewModel
                 {
-                    PublisherId = publisher.Id // Automatically set the PublisherId
+                    PublisherId = publisher.Id 
                 };
 
-                return View(model); // Return the view with the model containing the PublisherId
+                return View(model); 
             }
 
-            // Admin view: load all publishers and pass them to the view
+            
             ViewBag.Publishers = await _publisherService.GetAllPublishersAsync();
             if (ViewBag.Categories == null || ViewBag.Publishers == null)
             {
