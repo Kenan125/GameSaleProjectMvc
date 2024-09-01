@@ -22,7 +22,7 @@
                                     <div class="label">@category</div>
                                     <h2 class="text-shadow fw-bold">@game.GameName</h2>
                                     <p class="text-shadow">@game.Description</p>
-                                    <a href="@Url.Action("Detail", "Game", new { id = game.Id })"><span>Detaylar</span> <i class="fa fa-angle-right"></i></a>
+                                    <a href="@Url.Action("Detail", "Game", new { id = game.Id })"><span>Details</span> <i class="fa fa-angle-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -43,12 +43,12 @@
                     <div class="row">
                         <div class="col-lg-8 col-md-8 col-sm-8">
                             <div class="section-title">
-                                <h4>En Çok Satanlar</h4>
+                                <h4>Trending</h4>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <div class="btn__all">
-                                <a asp-action="Index" asp-controller="Game" class="primary-btn">Tümüne Göz At <span class="arrow_right"></span></a>
+                                <a asp-action="Index" asp-controller="Game" class="primary-btn">View All <span class="arrow_right"></span></a>
 
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                                             <div class="product__item__pic set-bg" data-setbg="@Url.Content(cardImage.ImageUrl)" );">
                                                 @if (game.Discount > 0)
                                                 {
-                                                    <div class="ep">İndirim: @game.Discount%</div>
+                                                    <div class="ep">Discount: @game.Discount%</div>
                                                 }
 
                                                 <div class="comment"><i class="fa fa-comments"></i> @game.Reviews.Count</div>
@@ -93,7 +93,7 @@
                                         <p class="card-text">
                                             @if (game.Price == 0)
                                             {
-                                                <span class="text-success">Ücretsiz</span>
+                                                <span class="text-success">Free</span>
                                             }
                                             @if (game.Discount > 0)
                                             {
@@ -125,7 +125,7 @@
                 <div class="product__sidebar">
                     <div class="product__sidebar__view">
                         <div class="section-title">
-                            <h5>Kaçınılmaz Fırsatlar</h5>
+                            <h5>Hot Discounts</h5>
                         </div>          
                         
                         <div class="filter__gallery">
@@ -151,7 +151,7 @@
                     <div class="row">
                         <div class="col-lg-8 col-md-8 col-sm-8">
                             <div class="section-title">
-                                <h4>indirimli Oyunlar</h4>
+                                <h4>Discounts</h4>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
